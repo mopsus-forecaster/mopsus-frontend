@@ -10,7 +10,7 @@ export const authReducer = (state: LoginState, action: Action) => {
         ...state,
         logged: true,
         user: payload.username,
-        role: payload.role,
+
         accessToken: payload.accessToken,
       };
 
