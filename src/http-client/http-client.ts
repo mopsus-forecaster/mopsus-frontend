@@ -18,7 +18,7 @@ export interface Options extends AxiosRequestConfig {
 }
 
 export const BasicResponseTransformInterceptor: Interceptor = [
-  (response: AxiosResponse): Response<any> => ({
+  (response: AxiosResponse): any => ({
     status: response.status,
     data: response.data,
     errors: [],
@@ -57,7 +57,7 @@ export const fetch = async (
     params,
     ...otherOptions
   }: Options = {}
-): Promise<Response<any>> => {
+): Promise<any> => {
   const { dev } = localConfig;
   const { config } = dev;
 

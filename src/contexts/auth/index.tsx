@@ -2,7 +2,7 @@ import { createContext, useReducer } from 'react';
 import { authReducer } from './utils/authReducer';
 import { Action, actionTypes } from './types/types';
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext(null);
 
 const init = () => {
   const userLocalStorage = sessionStorage.getItem('user');
