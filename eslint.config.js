@@ -31,8 +31,9 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/strict-boolean-expressions': 'off', // Permitir expresiones booleanas estrictas
       '@typescript-eslint/no-non-null-assertion': 'off', // Permitir null assertions
-      '@typescript-eslint/no-unused-vars': 'warn', // Variables no usadas
+      '@typescript-eslint/no-unused-vars': 'off', // Variables no usadas
       '@typescript-eslint/no-extra-semi': 'off', // Ignorar punto y coma extra
+      'react-refresh/only-export-components': 'off',
     },
   }
 );
