@@ -2,16 +2,28 @@ import { Route, Routes } from 'react-router-dom';
 import { PrivateRoutes } from './PrivateRoutes';
 
 import { Login, RecoverAccount, RegisterPage } from '../auth';
+import { PublicRoutes } from './PublicRoutes';
+import { LoginRoutes } from '../auth/routes';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts';
 
 export const AppRouter = () => {
+  const { auth } = useContext(AuthContext);
   return (
     <>
       <Routes>
-        {/* TODO: CAMBIA POR  PUBLIC ROUTES Y LOGIN ROUTES */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<RegisterPage />} />
-        <Route path="/recuperar-cuenta" element={<RecoverAccount />} />
-        <Route path="/*" element={<PrivateRoutes />} />
+        {!auth.logged ? (
+          <Route
+            path="/*"
+            element={
+              <PublicRoutes>
+                <LoginRoutes />
+              </PublicRoutes>
+            }
+          />
+        ) : (
+          <Route path="/*" element={<PrivateRoutes />} />
+        )}
       </Routes>
     </>
   );
