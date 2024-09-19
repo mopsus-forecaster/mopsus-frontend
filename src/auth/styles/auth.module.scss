@@ -30,7 +30,7 @@
 
 
 .logo{
-  background-image: url('/public/logo.png');
+  background-image: url('/public/logo/logo.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -55,9 +55,9 @@ h4{
 
 form{
   display: flex;
-  flex-direction: column; /* Alinea los elementos uno debajo del otro */
-  justify-content: center; /* Centra verticalmente */
-  align-items: center; /* Centra horizontalmente */
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;
 }
 
 
@@ -71,9 +71,9 @@ input{
   position: relative;
   width: 100%;
   outline: none;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #c0c0c0;
-  padding: 10px 20px;
+  padding: 1.5vh 3vw;
   border-radius: 32.5px;
   border: 1px solid #c0c0c0;
   background: transparent;
@@ -81,6 +81,20 @@ input{
   z-index: 1111;
 }
 
+.inputGroup input {
+  padding-left: 20px;
+}
+
+
+.icon {
+  position: absolute;
+  left: 15vw;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 23px;
+  height: auto;
+  pointer-events: none;
+}
 
 .labelline{
   position: absolute;
@@ -92,7 +106,7 @@ input{
   transition: 0.2s ease;
   pointer-events: none;
   background: transparent;
-  z-index: 0;
+  z-index: 1;
 }
 
 input:focus ~ .labelline,
@@ -110,7 +124,7 @@ input:not(:placeholder-shown) ~ .labelline {
 .btn{
   position: relative;
   width: 100%;
-  padding: 10px 20px;
+  padding: 1.5vh 5vw;
   font-size: 1.2rem;  
   border-radius: 32.5px;
   border: #202020;
@@ -131,12 +145,4 @@ input:not(:placeholder-shown) ~ .labelline {
   font-size: 1rem;
   text-decoration: none;
   cursor: pointer
-}
-
-.aBlock{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 3vh;
 }
