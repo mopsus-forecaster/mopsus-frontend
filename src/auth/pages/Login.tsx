@@ -6,7 +6,7 @@ import { useForm } from '../../Hooks/useForm';
 
 interface FormData {
   email: string;
-  password: string
+  password: string;
 }
 
 export const Login = () => {
@@ -14,7 +14,7 @@ export const Login = () => {
 
   const { form, handleChange } = useForm<FormData>({
     email: '',
-    password: ''
+    password: '',
   });
 
   const navigate = useNavigate();
@@ -36,26 +36,53 @@ export const Login = () => {
       <h4>Bienvenido</h4>
       <form onSubmit={onLogin}>
         <div className={styles.inputGroup}>
-          <input type="email" name='email' onChange={handleChange} value={form.email} placeholder=' ' required />
+          <input
+            type="email"
+            name="email"
+            onChange={handleChange}
+            value={form.email}
+            placeholder=" "
+            required
+          />
           <div className={styles.labelline}>Correo</div>
-          <img src="/public/iconos/correo-48.png" alt="Ícono de Correo" className={styles.icon} />
+          <img
+            src="/public/iconos/correo-48.png"
+            alt="Ícono de Correo"
+            className={styles.icon}
+          />
         </div>
 
         <div className={styles.inputGroup}>
-          <input type="password" name='password' onChange={handleChange} value={form.password} placeholder=' ' pattern="[A-Za-z0-9áéíóúÁÉÍÓÚñÑ+-/*@#.,\s]+" required />
+          <input
+            type="password"
+            name="password"
+            onChange={handleChange}
+            value={form.password}
+            placeholder=" "
+            required
+          />
           <div className={styles.labelline}>Contraseña</div>
-          <img src="/public/iconos/candado-50.png" alt="Ícono de Correo" className={styles.icon} />
+          <img
+            src="/public/iconos/candado-50.png"
+            alt="Ícono de Correo"
+            className={styles.icon}
+          />
         </div>
 
         <div className={styles.inputGroup}>
-          <button type='submit' className={styles.btn}>Iniciar Sesión</button>
+          <button type="submit" className={styles.btn}>
+            Iniciar Sesión
+          </button>
         </div>
       </form>
       <div className={styles.aBlock}>
-        <p onClick={()=>navigate('/recuperar-cuenta')}>¿Olvidaste tu contraseña?</p>
-        <p onClick={()=>navigate('/registro')}><b>Crear una cuenta</b></p>
+        <p onClick={() => navigate('/recuperar-cuenta')}>
+          ¿Olvidaste tu contraseña?
+        </p>
+        <p onClick={() => navigate('/registro')}>
+          <b>Crear una cuenta</b>
+        </p>
       </div>
-
     </div>
   );
 };
