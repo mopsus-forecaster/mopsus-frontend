@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
 import styles from '../styles/auth.module.scss';
 import { useForm } from '../../Hooks/useForm';
+import { mopsusIcons } from '../../icons';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
 interface FormData {
   email: string;
@@ -11,7 +13,6 @@ interface FormData {
 
 export const Login = () => {
   const { login } = useContext(AuthContext);
-
   const { form, handleChange } = useForm<FormData>({
     email: '',
     password: '',
@@ -30,6 +31,11 @@ export const Login = () => {
     });
   };
 
+  const viewPass = () => {
+
+  }
+
+
   return (
     <div className={styles.loginContainer}>
       <div className={styles.logo}></div>
@@ -45,11 +51,7 @@ export const Login = () => {
             required
           />
           <div className={styles.labelline}>Correo</div>
-          <img
-            src="/public/iconos/correo-48.png"
-            alt="Ícono de Correo"
-            className={styles.icon}
-          />
+          <Icon icon={mopsusIcons.mail} className={styles.icon} />
         </div>
 
         <div className={styles.inputGroup}>
@@ -62,12 +64,13 @@ export const Login = () => {
             required
           />
           <div className={styles.labelline}>Contraseña</div>
-          <img
-            src="/public/iconos/candado-50.png"
-            alt="Ícono de Correo"
-            className={styles.icon}
-          />
+          <Icon icon={mopsusIcons.lockClose} className={styles.icon} onClick={viewPass} />
         </div>
+
+        <div className={styles.inputGroup}>
+          <p className={styles.errors}>Error</p>
+        </div>
+
 
         <div className={styles.inputGroup}>
           <button type="submit" className={styles.btn}>
@@ -79,10 +82,11 @@ export const Login = () => {
         <p onClick={() => navigate('/recuperar-cuenta')}>
           ¿Olvidaste tu contraseña?
         </p>
-        <p onClick={() => navigate('/registro')}>
-          <b>Crear una cuenta</b>
+        <p className={styles.blond} onClick={() => navigate('/registro')}>
+          Crear una cuenta
         </p>
       </div>
     </div>
   );
 };
+

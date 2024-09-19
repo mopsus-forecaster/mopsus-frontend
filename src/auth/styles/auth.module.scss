@@ -1,9 +1,11 @@
-*{
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
   font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
 }
 
-
-.backgroud{
+.backgroud {
   background-image: url('/public/Fondo.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -12,7 +14,7 @@
   height: 100%;
 }
 
-.loginContainer{
+.loginContainer {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -20,16 +22,15 @@
   width: 22.5vw;
   height: 66vh;
   background: rgba(46, 46, 46, 0.46);
-  border-radius: 16px;
+  border-radius: 30px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(12.5px);
   -webkit-backdrop-filter: blur(12.5px);
-  padding: 20px;
+  padding: 30px;
   box-sizing: border-box;
 }
 
-
-.logo{
+.logo {
   background-image: url('/public/logo/logo.png');
   background-repeat: no-repeat;
   background-position: center;
@@ -42,8 +43,7 @@
   margin: auto;
 }
 
-
-h4{
+h4 {
   font-size: 1.9rem;
   color: white;
   margin-bottom: 3vh;
@@ -53,21 +53,20 @@ h4{
   align-items: center;
 }
 
-form{
+form {
   display: flex;
-  flex-direction: column; 
-  justify-content: center; 
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
-
-.inputGroup{
+.inputGroup {
   width: 17vw;
   position: relative;
-  margin: 15px;
+  margin: 2%;
 }
 
-input{
+input {
   position: relative;
   width: 100%;
   outline: none;
@@ -81,11 +80,6 @@ input{
   z-index: 1111;
 }
 
-.inputGroup input {
-  padding-left: 20px;
-}
-
-
 .icon {
   position: absolute;
   left: 15vw;
@@ -93,10 +87,10 @@ input{
   transform: translateY(-50%);
   width: 23px;
   height: auto;
-  pointer-events: none;
+  cursor: pointer;
 }
 
-.labelline{
+.labelline {
   position: absolute;
   top: 50%;
   left: 20px;
@@ -120,12 +114,11 @@ input:not(:placeholder-shown) ~ .labelline {
   z-index: 1111111;
 }
 
-
-.btn{
+.btn {
   position: relative;
   width: 100%;
-  padding: 1.5vh 5vw;
-  font-size: 1.2rem;  
+  padding: 1.5vh 3vw;
+  font-size: 1.2rem;
   border-radius: 32.5px;
   border: #202020;
   background-color: #202020;
@@ -133,16 +126,31 @@ input:not(:placeholder-shown) ~ .labelline {
   cursor: pointer;
 }
 
-.btn:hover{
+.btn:hover {
   background-color: #292929;
 }
 
-
-.loginContainer p {
+.aBlock {
+  margin: 2vh;
   display: block;
   text-align: center;
   color: #d9d9d9;
-  font-size: 1rem;
+  font-size: 0.8rem;
   text-decoration: none;
-  cursor: pointer
+  cursor: pointer;
+}
+
+.blond {
+  font-weight: 600;
+}
+
+.loginContainer .errors {
+  width: 100%;
+  padding: 0.5vh 1vw;
+  margin: 0;
+  background-color: rgba(176, 68, 69, 0.8);
+  border: 1px solid #d71d1d;
+  border-radius: 32.5px;
+  color: white;
+  font-size: 1rem;
 }
