@@ -1,9 +1,21 @@
-import { useContext } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
+import styles from '../styles/auth.module.scss';
+import { useForm } from '../../Hooks/useForm';
+
+interface FormData {
+  email: string;
+  password: string
+}
 
 export const Login = () => {
   const { login } = useContext(AuthContext);
+
+  const { form, handleChange } = useForm<FormData>({
+    email: '',
+    password: ''
+  });
 
   const navigate = useNavigate();
   const onLogin = () => {
@@ -19,15 +31,29 @@ export const Login = () => {
   };
 
   return (
-    <div style={{ margin: '5rem' }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Login</h1>
-      <hr />
-      <button
-        onClick={onLogin}
-        style={{ marginTop: '2rem', padding: '1rem', fontSize: '1.2rem' }}
-      >
-        Ingresar
-      </button>
+    <div className={styles.loginContainer}>
+      <div className={styles.logo}></div>
+      <h4>Bienvenido</h4>
+      <form>
+        <div className={styles.inputGroup}>
+          <input type="email" name='email' onChange={handleChange} value={form.email} placeholder=' ' required />
+          <div className={styles.labelline}>Correo</div>
+        </div>
+
+        <div className={styles.inputGroup}>
+          <input type="password" name='password' onChange={handleChange} value={form.password} placeholder=' ' pattern="[A-Za-z0-9áéíóúÁÉÍÓÚñÑ+-/*@#.,\s]+" required />
+          <div className={styles.labelline}>Contraseña</div>
+        </div>
+
+        <div className={styles.inputGroup}>
+          <button className={styles.btn}>Iniciar Sesión</button>
+        </div>
+      </form>
+      <div className={styles.aBlock}>
+        <p onClick={()=>navigate('/recuperar-cuenta')}>¿Olvidaste tu contraseña?</p>
+        <p onClick={()=>navigate('/registro')}><b>Crear una cuenta</b></p>
+      </div>
+
     </div>
   );
 };
