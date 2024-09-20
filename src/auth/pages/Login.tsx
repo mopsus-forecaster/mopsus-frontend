@@ -59,7 +59,7 @@ export const Login = () => {
   };
 
   return (
-    <div className={styles.loginContainer}>
+    <section className={styles.loginContainer}>
       <div className={styles.logo}></div>
       <h4>Bienvenido</h4>
       <form noValidate
@@ -111,6 +111,6 @@ export const Login = () => {
           Crear una cuenta
         </p>
       </div>
-    </div>
+    </section>
   );
 };
