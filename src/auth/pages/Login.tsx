@@ -91,11 +91,7 @@ export const Login = () => {
           />
           <label className={styles.labelline}>Contraseña</label>
           <div onClick={() => setShowPwd(!showPwd)}>
-            {showPwd ? (
-              <Icon icon={mopsusIcons.lockOpen} className={styles.icon} />
-            ) : (
-              <Icon icon={mopsusIcons.lockClose} className={styles.icon} />
-            )}
+            <Icon icon={showPwd ? mopsusIcons.lockOpen : mopsusIcons.lockClose} className={styles.icon} />
           </div>
         </div>
         {errors.password && <p className={styles.errors}>{errors.password} </p>}
