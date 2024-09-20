@@ -19,8 +19,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 22.5vw;
-  height: 66vh;
+  width: 23.5vw;
+  height: fit-content;
   background: rgba(46, 46, 46, 0.46);
   border-radius: 30px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -61,33 +61,37 @@ form {
 }
 
 .inputGroup {
-  width: 17vw;
+  width: 95%;
   position: relative;
-  margin: 2%;
+  margin: 20px;
 }
 
 input {
   position: relative;
+  margin-bottom: -8px;
   width: 100%;
   outline: none;
   font-size: 1rem;
   color: #c0c0c0;
-  padding: 1.5vh 3vw;
+  padding: 1.5vh 3vw 1.5vh 1.5vw;
   border-radius: 32.5px;
   border: 1px solid #c0c0c0;
   background: transparent;
   transition: 0.1s ease;
-  z-index: 1111;
+  z-index: 1;
+}
+.pointer {
+  cursor: pointer;
 }
 
 .icon {
   position: absolute;
-  left: 15vw;
-  top: 50%;
+  left: 89%;
+  top: 60%;
   transform: translateY(-50%);
   width: 23px;
-  height: auto;
-  cursor: pointer;
+  height: 4vh;
+  z-index: 10;
 }
 
 .labelline {
@@ -107,7 +111,7 @@ input:focus ~ .labelline,
 input:not(:placeholder-shown) ~ .labelline {
   height: 30px;
   padding: 0 12px;
-  transform: translate(-5px, -43px) scale(0.88);
+  transform: translate(-5px, -40px) scale(0.8);
   background-color: #202020;
   border: 1px solid #c0c0c0;
   border-radius: 20px;
@@ -117,6 +121,7 @@ input:not(:placeholder-shown) ~ .labelline {
 .btn {
   position: relative;
   width: 100%;
+  margin-top: 10px;
   padding: 1.5vh 3vw;
   font-size: 1.2rem;
   border-radius: 32.5px;
@@ -131,7 +136,7 @@ input:not(:placeholder-shown) ~ .labelline {
 }
 
 .aBlock {
-  margin: 2vh;
+  margin: auto;
   display: block;
   text-align: center;
   color: #d9d9d9;
@@ -145,12 +150,12 @@ input:not(:placeholder-shown) ~ .labelline {
 }
 
 .loginContainer .errors {
-  width: 100%;
-  padding: 0.5vh 1vw;
-  margin: 0;
-  background-color: rgba(176, 68, 69, 0.8);
+  width: 95%;
+  padding: 0.2vw 1vh;
+  margin-bottom: 15px;
+  background-color: rgba(206, 57, 60, 0.6);
   border: 1px solid #d71d1d;
   border-radius: 32.5px;
   color: white;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }

@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
 import styles from '../styles/auth.module.scss';
@@ -11,14 +11,41 @@ interface FormData {
   password: string;
 }
 
+const validateForm = (form: FormData) => {
+  const errors: Partial<FormData> = {};
+
+  if (!form.email) {
+    errors.email = 'El correo es requerido';
+  } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+    errors.email = 'El correo no es válido';
+  } else if (form.email.length > 254) {
+    errors.email = 'El correo no debe tener mas de 254 caracteres'
+  }
+
+  if (!form.password) {
+    errors.password = 'La contraseña es requerida';
+  } else if (form.password.length < 8 || form.password.length > 32) {
+    errors.password = 'La contraseña debe tener entre 8 y 32 caracteres';
+  }
+
+  return errors;
+};
+
 export const Login = () => {
   const { login } = useContext(AuthContext);
-  const { form, handleChange } = useForm<FormData>({
-    email: '',
-    password: '',
-  });
+
+  const [showPwd, setShowPwd] = useState(false)
+
+  const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
+    {
+      email: '',
+      password: '',
+    },
+    validateForm
+  );
 
   const navigate = useNavigate();
+
   const onLogin = () => {
     login({
       id: 1,
@@ -31,16 +58,17 @@ export const Login = () => {
     });
   };
 
-  const viewPass = () => {
-
-  }
-
-
   return (
     <div className={styles.loginContainer}>
       <div className={styles.logo}></div>
       <h4>Bienvenido</h4>
-      <form onSubmit={onLogin}>
+      <form noValidate
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(onLogin);
+        }}
+
+      >
         <div className={styles.inputGroup}>
           <input
             type="email"
@@ -48,30 +76,29 @@ export const Login = () => {
             onChange={handleChange}
             value={form.email}
             placeholder=" "
-            required
           />
-          <div className={styles.labelline}>Correo</div>
+          <label className={styles.labelline}>Correo</label>
           <Icon icon={mopsusIcons.mail} className={styles.icon} />
         </div>
-
-        <div className={styles.inputGroup}>
+        {(errors.email) && <p className={styles.errors}>{errors.email}</p>}
+        <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
-            type="password"
+            type={showPwd ? "text" : "password"}
             name="password"
             onChange={handleChange}
             value={form.password}
             placeholder=" "
-            required
           />
-          <div className={styles.labelline}>Contraseña</div>
-          <Icon icon={mopsusIcons.lockClose} className={styles.icon} onClick={viewPass} />
+          <label className={styles.labelline}>Contraseña</label>
+          <div onClick={() => setShowPwd(!showPwd)}>
+            {showPwd ? (
+              <Icon icon={mopsusIcons.lockOpen} className={styles.icon} />
+            ) : (
+              <Icon icon={mopsusIcons.lockClose} className={styles.icon} />
+            )}
+          </div>
         </div>
-
-        <div className={styles.inputGroup}>
-          <p className={styles.errors}>Error</p>
-        </div>
-
-
+        {errors.password && <p className={styles.errors}>{errors.password} </p>}
         <div className={styles.inputGroup}>
           <button type="submit" className={styles.btn}>
             Iniciar Sesión
@@ -79,9 +106,7 @@ export const Login = () => {
         </div>
       </form>
       <div className={styles.aBlock}>
-        <p onClick={() => navigate('/recuperar-cuenta')}>
-          ¿Olvidaste tu contraseña?
-        </p>
+        <p onClick={() => navigate('/recuperar-cuenta')}>¿Olvidaste tu contraseña?</p>
         <p className={styles.blond} onClick={() => navigate('/registro')}>
           Crear una cuenta
         </p>
@@ -89,4 +114,3 @@ export const Login = () => {
     </div>
   );
 };
-
