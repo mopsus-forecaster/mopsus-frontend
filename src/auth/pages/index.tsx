@@ -1,4 +1,4 @@
 export * from './Login';
 export * from './RegisterPage';
-export * from './RecoverAccount';
+export * from './MFAContainer';
 export * from './LoginContainer';

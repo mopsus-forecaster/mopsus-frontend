@@ -2,9 +2,11 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
 import styles from '../styles/auth.module.scss';
-import { useForm } from '../../Hooks/useForm';
+import { useForm } from '../../hooks/useForm';
 import { mopsusIcons } from '../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import { LoginCommonHeader } from './components/LoginCommonHeader';
+import routes from '../../router/routes';
 
 interface FormData {
   email: string;
@@ -19,7 +21,7 @@ const validateForm = (form: FormData) => {
   } else if (!/\S+@\S+\.\S+/.test(form.email)) {
     errors.email = 'El correo no es válido';
   } else if (form.email.length > 254) {
-    errors.email = 'El correo no debe tener mas de 254 caracteres'
+    errors.email = 'El correo no debe tener mas de 254 caracteres';
   }
 
   if (!form.password) {
@@ -34,7 +36,7 @@ const validateForm = (form: FormData) => {
 export const Login = () => {
   const { login } = useContext(AuthContext);
 
-  const [showPwd, setShowPwd] = useState(false)
+  const [showPwd, setShowPwd] = useState(false);
 
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
     {
@@ -59,15 +61,14 @@ export const Login = () => {
   };
 
   return (
-    <section className={styles.loginContainer}>
-      <div className={styles.logo}></div>
-      <h4>Bienvenido</h4>
-      <form noValidate
+    <article>
+      <LoginCommonHeader title="Bienvenido" />
+      <form
+        noValidate
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit(onLogin);
         }}
-
       >
         <div className={styles.inputGroup}>
           <input
@@ -80,10 +81,10 @@ export const Login = () => {
           <label className={styles.labelline}>Correo</label>
           <Icon icon={mopsusIcons.mail} className={styles.icon} />
         </div>
-        {(errors.email) && <p className={styles.errors}>{errors.email}</p>}
+        {errors.email && <p className={styles.errors}>{errors.email}</p>}
         <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
-            type={showPwd ? "text" : "password"}
+            type={showPwd ? 'text' : 'password'}
             name="password"
             onChange={handleChange}
             value={form.password}
@@ -91,7 +92,10 @@ export const Login = () => {
           />
           <label className={styles.labelline}>Contraseña</label>
           <div onClick={() => setShowPwd(!showPwd)}>
-            <Icon icon={showPwd ? mopsusIcons.lockOpen : mopsusIcons.lockClose} className={styles.icon} />
+            <Icon
+              icon={showPwd ? mopsusIcons.lockOpen : mopsusIcons.lockClose}
+              className={styles.icon}
+            />
           </div>
         </div>
         {errors.password && <p className={styles.errors}>{errors.password} </p>}
@@ -102,11 +106,16 @@ export const Login = () => {
         </div>
       </form>
       <div className={styles.aBlock}>
-        <p onClick={() => navigate('/recuperar-cuenta')}>¿Olvidaste tu contraseña?</p>
-        <p className={styles.blond} onClick={() => navigate('/registro')}>
+        <p onClick={() => navigate(`/${routes.accountRecovery}`)}>
+          ¿Olvidaste tu contraseña?
+        </p>
+        <p
+          className={styles.blond}
+          onClick={() => navigate(`/${routes.register}`)}
+        >
           Crear una cuenta
         </p>
       </div>
-    </section>
+    </article>
   );
 };

@@ -96,7 +96,7 @@ input {
 
 .labelline {
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 20px;
   transform: translateY(-50%);
   font-size: 1.2rem;
@@ -140,8 +140,10 @@ input:not(:placeholder-shown) ~ .labelline {
   display: block;
   text-align: center;
   color: #d9d9d9;
-  font-size: 0.8rem;
-  text-decoration: none;
+  font-size: 1.1rem;
+
+  text-decoration: underline;
+
   cursor: pointer;
 }
 
@@ -151,11 +153,58 @@ input:not(:placeholder-shown) ~ .labelline {
 
 .loginContainer .errors {
   width: 95%;
-  padding: 0.2vw 1vh;
+  padding: 1vh 0.3vw 0.3vw 1vw;
   margin-bottom: 15px;
   background-color: rgba(206, 57, 60, 0.6);
   border: 1px solid #d71d1d;
   border-radius: 32.5px;
   color: white;
   font-size: 0.9rem;
+}
+
+.accountRecoveryText {
+  color: #c0c0c0;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.mfaContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5%;
+}
+
+.otpContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 5% 0 7.5% 0;
+  width: 90%;
+}
+
+.otpInput {
+  padding: 3% 1%;
+  text-align: center;
+  font-size: 1.25rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.otpInputError {
+  padding: 3% 1%;
+  text-align: center;
+  font-size: 1.25rem;
+  border: 2px solid rgba(215, 29, 29, 0.8);
+  border-radius: 8px;
+  color: #c0c0c0;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.otpInput:focus {
+  border-color: #00b4d8;
+  box-shadow: 0 0 5px rgba(0, 150, 199, 0.5);
 }

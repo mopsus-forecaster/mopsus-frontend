@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer, useState } from 'react';
 import { authReducer } from './utils/authReducer';
 import { Action, actionTypes } from './types/types';
 
@@ -21,6 +21,8 @@ const init = () => {
 
 export const AuthProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, {}, init);
+
+  const [recoverEmail, setRecoverEmail] = useState('');
 
   const login = (username: string, accessToken: string) => {
     const user = {
@@ -45,8 +47,14 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: actionTypes.logout });
   };
 
+  const handleSetRecoverEmail = (email: string) => {
+    setRecoverEmail(email);
+  };
+
   return (
-    <AuthContext.Provider value={{ login, logout, auth }}>
+    <AuthContext.Provider
+      value={{ login, logout, auth, handleSetRecoverEmail, recoverEmail }}
+    >
       {children}
     </AuthContext.Provider>
   );

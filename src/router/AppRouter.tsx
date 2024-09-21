@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { PrivateRoutes } from './PrivateRoutes';
 
-import { Login, RecoverAccount, RegisterPage } from '../auth';
+import { Login, MFAContainer, RegisterPage } from '../auth';
 import { PublicRoutes } from './PublicRoutes';
 import { LoginRoutes } from '../auth/routes';
 import { useContext } from 'react';
