@@ -1,6 +1,7 @@
 export enum MfaFlow {
   AccountRecovery = 'ACCOUNT_RECOVERY',
   BlockedAccountRecovery = 'BLOCKED_ACCOUNT',
+  RegisterPage = 'RegisterPage',
 }
 
 export type MFAContainerProps = {
@@ -14,4 +15,5 @@ export type LoginCommonHeaderProps = {
 
 export type MFAAuthenticatorProps = {
   email: string;
+  prevRoute: String;
 };

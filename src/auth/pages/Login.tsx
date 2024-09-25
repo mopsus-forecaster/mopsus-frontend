@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
 import styles from '../styles/auth.module.scss';
-import { useForm } from '../../hooks/useForm';
+import { useForm } from '../../Hooks';
 import { mopsusIcons } from '../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { LoginCommonHeader } from './components/LoginCommonHeader';

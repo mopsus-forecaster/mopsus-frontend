@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from '../../styles/auth.module.scss';
 import { LoginCommonHeader } from './LoginCommonHeader';
-import { MFAAuthenticatorProps } from '../../../types';
+import { MFAAuthenticatorProps, MfaFlow } from '../../../types';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../../router/routes';
 
@@ -9,6 +9,7 @@ const HARCODED_CODE = 180602;
 
 export const MFAAuthenticator: React.FC<MFAAuthenticatorProps> = ({
   email,
+  prevRoute,
 }) => {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(''));
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
@@ -66,7 +67,18 @@ export const MFAAuthenticator: React.FC<MFAAuthenticatorProps> = ({
       if (Number(finalOtp) !== HARCODED_CODE) {
         setErrors('El código introducido es incorrecto');
       } else {
-        navigate(`/${routes.changePassword}`);
+        switch (prevRoute) {
+          case MfaFlow.RegisterPage:
+            navigate(`/login`);
+            break
+          case MfaFlow.AccountRecovery:
+            navigate(`/${routes.changePassword}`)
+            break
+          case MfaFlow.BlockedAccountRecovery:
+            navigate(`/${routes.changePassword}`)
+          default:
+            break
+        }
       }
     }
   };
