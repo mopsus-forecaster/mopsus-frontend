@@ -70,14 +70,15 @@ export const MFAAuthenticator: React.FC<MFAAuthenticatorProps> = ({
         switch (prevRoute) {
           case MfaFlow.RegisterPage:
             navigate(`/login`);
-            break
+            break;
           case MfaFlow.AccountRecovery:
-            navigate(`/${routes.changePassword}`)
-            break
+            navigate(`/${routes.changePassword}`);
+            break;
           case MfaFlow.BlockedAccountRecovery:
-            navigate(`/${routes.changePassword}`)
+            navigate(`/${routes.changePassword}`);
+            break;
           default:
-            break
+            break;
         }
       }
     }

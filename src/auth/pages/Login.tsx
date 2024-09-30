@@ -1,12 +1,15 @@
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Await, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
 import styles from '../styles/auth.module.scss';
-import { useForm } from '../../Hooks';
 import { mopsusIcons } from '../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { LoginCommonHeader } from './components/LoginCommonHeader';
 import routes from '../../router/routes';
+import { useForm } from '../../Hooks';
+import { userLogin } from '../services/auth';
+import useModal from '../../Hooks/useModal';
+import Modal from '../../shared/modal/Modal';
 
 interface FormData {
   email: string;
@@ -47,17 +50,41 @@ export const Login = () => {
   );
 
   const navigate = useNavigate();
+  const { openModal, handleClose, handleOpen, modal, handleModalChange } =
+  useModal();
+  const onLogin = async () => {
+    try{
+      await userLogin(form.email, form.password).then((response) => {
+        if (response.status === 200) {
+          login(response.data.username, response.data.accessToken);
+          console.log('Usuario logeado');
+        }
+        if (response.status != 200) {
+          console.log('Usuario o contraseña incorrectos');
+          
+        }
 
-  const onLogin = () => {
-    login({
-      id: 1,
-      username: 'John Doe',
-      accessToken:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvbiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
-    });
-    navigate('/inicio', {
-      replace: true,
-    });
+      }
+      );
+      navigate('/inicio', {
+        replace: true,
+      });
+      
+    } catch (error) {
+      console.error(error);
+      handleModalChange({
+        accept: {
+          title: "Aceptar",
+          action: () => {},
+        },
+        title: "Error en los campos",
+        message: "Asegúrese de que los campos esten completados correctamente.",
+        icon: mopsusIcons.error,
+      });
+      handleOpen();
+      return
+    }
+
   };
 
   return (
@@ -116,6 +143,16 @@ export const Login = () => {
           Crear una cuenta
         </p>
       </div>
+      <Modal
+        title={modal.title}
+        icon={modal.icon}
+        show={openModal}
+        message={modal.message}
+        accept={{ title: modal.accept.title, action: modal.accept.action }}
+        reject={{ title: modal.reject?.title, action: modal.reject?.action }}
+        handleClose={handleClose}
+      />
     </article>
+    
   );
 };

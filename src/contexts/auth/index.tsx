@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, {}, init);
 
   const [recoverEmail, setRecoverEmail] = useState('');
-  const [prevRoute, setPrevRoute] = useState('')
+  const [prevRoute, setPrevRoute] = useState('');
 
   const login = (username: string, accessToken: string) => {
     const user = {
@@ -58,7 +58,15 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ login, logout, auth, handleSetRecoverEmail, recoverEmail, handlesetPrevRoute, prevRoute }}
+      value={{
+        login,
+        logout,
+        auth,
+        handleSetRecoverEmail,
+        recoverEmail,
+        handlesetPrevRoute,
+        prevRoute,
+      }}
     >
       {children}
     </AuthContext.Provider>

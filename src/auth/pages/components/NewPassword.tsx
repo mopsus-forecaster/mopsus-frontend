@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../../styles/auth.module.scss';
 import { LoginCommonHeader } from './LoginCommonHeader';
-import { useForm } from '../../../hooks';
+import { useForm } from '../../../Hooks';
 import { mopsusIcons } from '../../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useNavigate } from 'react-router-dom';

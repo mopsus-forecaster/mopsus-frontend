@@ -1,0 +1,185 @@
+@import "../../../styles/breakpoint";
+@import "../../../styles/global";
+
+.background {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.modal {
+  height: fit-content;
+  width: 30vw;
+  background-color: rgba(46, 46, 46);
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+
+  @include respond(desktop) {
+    width: 30vw;
+  }
+  @include respond(tab-land) {
+    width: 50vw;
+  }
+  @include respond(tab-port) {
+    width: 50vw;
+  }
+  @include respond(phone) {
+    width: 80vw;
+  }
+}
+
+.modalNoIcon {
+  height: fit-content;
+  width: 30vw;
+  background-color: rgba(46, 46, 46);
+  border-radius: 20px;
+  position: relative;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  @include respond(desktop) {
+    width: 50vw;
+  }
+  @include respond(tab-land) {
+    width: 50vw;
+  }
+  @include respond(tab-port) {
+    width: 50vw;
+  }
+  @include respond(phone) {
+    width: 80vw;
+  }
+}
+
+.icon {
+  font-size: 2.5rem;
+  margin-bottom: 1%;
+}
+
+.title {
+  font-size: 1.6rem; //1.7
+  color: white;
+  @include respond(phone) {
+    font-size: 1.4rem;
+  }
+}
+
+.titleNoIcon {
+  font-size: 1.6rem;
+  color: white;
+  @include respond(phone) {
+    font-size: 1.4rem;
+  }
+}
+
+.header {
+  width: 100%;
+  height: 9%; //20
+  text-align: center;
+}
+.headerNoIcon {
+  width: 100%;
+  height: 20%;
+  text-align: center;
+}
+.message {
+  color: rgba(202, 202, 202);
+  font-size: 1.2rem;
+  text-align: center;
+  font-family: "Inter";
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
+  @include respond(phone) {
+    font-size: 1rem;
+  }
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.footerFlex {
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+
+  justify-content: center;
+
+  @include respond(phone) {
+    gap: 1rem;
+  }
+}
+
+.confirmButton {
+  background-color: $color-primary;
+  color: white;
+  font-size: 1.4rem; //1.4
+  border: none;
+  padding: 1rem 1rem;
+  border-radius: 20px;
+  width: 60%;
+
+  @include respond(phone) {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+.confirmButton:hover {
+  cursor: pointer;
+}
+
+.confirmButtonFlex {
+  background-color: $color-primary;
+  color: white;
+  width: 50%;
+  font-size: 1.1rem; //1.4
+  border: none;
+  padding: 1rem 1rem;
+  border-radius: 20px;
+  @include respond(phone) {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 0.5rem 1.2rem;
+  }
+}
+
+.confirmButtonFlex:hover {
+  cursor: pointer;
+}
+
+.reject {
+  border: 3px solid #e3e4e6;
+  background-color: transparent;
+  color: #8d8f9b;
+  font-size: 1.1rem; //1.4
+  width: 50%;
+  padding: 1rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  @include respond(phone) {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 0.5rem 1.2rem;
+  }
+}
+
+.reject:hover {
+  cursor: pointer;
+}
