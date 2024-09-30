@@ -1,12 +1,13 @@
 import { LoginCommonHeader } from './LoginCommonHeader';
 import styles from '../../styles/auth.module.scss';
-import { useForm } from '../../../hooks';
+import { useForm } from '../../../Hooks';
 import { mopsusIcons } from '../../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../../router/routes';
 import { useContext } from 'react';
 import { AuthContext } from '../../../contexts';
+import { MfaFlow } from '../../../types';
 
 type FormData = {
   email: string;
@@ -35,12 +36,13 @@ export const AccountRecovery = () => {
     INITIAL_STATE,
     validateForm
   );
-  const { handleSetRecoverEmail } = useContext(AuthContext);
+  const { handleSetRecoverEmail, handlesetPrevRoute } = useContext(AuthContext);
   const { email } = form;
   const navigate = useNavigate();
 
   const handleNavigation = () => {
     handleSetRecoverEmail(email);
+    handlesetPrevRoute(MfaFlow.AccountRecovery)
     navigate(`/${routes.mfaAuthenticator}`);
   };
 

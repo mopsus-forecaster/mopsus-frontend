@@ -7,7 +7,8 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts';
 
 export const LoginRoutes = () => {
-  const { recoverEmail } = useContext(AuthContext);
+  const { recoverEmail, prevRoute = '' } = useContext(AuthContext);
+
   return (
     <Routes>
       <Route path="/" element={<LoginContainer />}>
@@ -22,7 +23,7 @@ export const LoginRoutes = () => {
         <Route path={routes.changePassword} element={<NewPassword />} />
         <Route
           path={routes.mfaAuthenticator}
-          element={<MFAAuthenticator email={recoverEmail} />}
+          element={<MFAAuthenticator prevRoute={prevRoute} email={recoverEmail} />}
         />
 
         <Route path="*" element={<Navigate to={routes.login} />} />

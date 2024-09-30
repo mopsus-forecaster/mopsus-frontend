@@ -64,11 +64,11 @@ form {
   width: 95%;
   position: relative;
   margin: 20px;
+  display: flex;
+  flex-direction: column; /* Cambiado para alinear mejor el input y el label */
 }
 
 input {
-  position: relative;
-  margin-bottom: -8px;
   width: 100%;
   outline: none;
   font-size: 1rem;
@@ -87,7 +87,7 @@ input {
 .icon {
   position: absolute;
   left: 89%;
-  top: 60%;
+  top: 50%;
   transform: translateY(-50%);
   width: 23px;
   height: 4vh;
@@ -96,28 +96,29 @@ input {
 
 .labelline {
   position: absolute;
-  top: 60%;
+  top: 50%;
   left: 20px;
   transform: translateY(-50%);
   font-size: 1.2rem;
   color: #c0c0c0;
-  transition: 0.2s ease;
+  transition: all 0.2s ease;
   pointer-events: none;
   background: transparent;
+  padding: 0 5px;
   z-index: 1;
 }
 
-input:focus ~ .labelline,
-input:not(:placeholder-shown) ~ .labelline {
-  height: 30px;
-  padding: 0 12px;
-  transform: translate(-5px, -40px) scale(0.8);
+input:focus + .labelline,
+input:not(:placeholder-shown) + .labelline {
+  top: -2px;
+  left: 25px;
+  font-size: 1rem;
   background-color: #202020;
-  border: 1px solid #c0c0c0;
+  padding: 0 9px;
   border-radius: 20px;
-  z-index: 1111111;
+  border: 1px solid #c0c0c0;
+  z-index: 1;
 }
-
 .btn {
   position: relative;
   width: 100%;
