@@ -1,7 +1,9 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from 'react';
 
-export const useForm = <T extends object>(initState: T, validate?: (form: T) => Partial<T>) => {
-
+export const useForm = <T extends object>(
+  initState: T,
+  validate?: (form: T) => Partial<T>
+) => {
   const [form, setForm] = useState(initState);
   const [errors, setErrors] = useState<Partial<T>>({});
 
@@ -22,7 +24,6 @@ export const useForm = <T extends object>(initState: T, validate?: (form: T) => 
       if (Object.keys(validationErrors).length === 0) {
         onSubmit();
       }
-
     } else {
       onSubmit();
     }

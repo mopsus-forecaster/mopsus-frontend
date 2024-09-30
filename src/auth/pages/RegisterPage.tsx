@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
-import { useForm } from "../../Hooks";
-import { useNavigate } from "react-router-dom";
-import { LoginCommonHeader } from "./components/LoginCommonHeader";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { mopsusIcons } from "../../icons";
-import routes from "../../router/routes";
+import { useContext, useState } from 'react';
+import { useForm } from '../../Hooks';
+import { useNavigate } from 'react-router-dom';
+import { LoginCommonHeader } from './components/LoginCommonHeader';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { mopsusIcons } from '../../icons';
+import routes from '../../router/routes';
 import styles from '../styles/auth.module.scss';
-import { AuthContext } from "../../contexts";
+import { AuthContext } from '../../contexts';
 import { MfaFlow } from '../../types';
 
 interface FormData {
@@ -33,7 +33,8 @@ const validateForm = (form: FormData) => {
   }
 
   if (!form.passwordConfirmation) {
-    errors.passwordConfirmation = 'La confirmación de la contraseña es requerida';
+    errors.passwordConfirmation =
+      'La confirmación de la contraseña es requerida';
   } else if (form.password !== form.passwordConfirmation) {
     errors.passwordConfirmation = 'Las contraseñas no coinciden';
   }
@@ -53,22 +54,19 @@ export const RegisterPage = () => {
     },
     validateForm
   );
-
   const { handleSetRecoverEmail, handlesetPrevRoute } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleNavigation = () => {
     handleSetRecoverEmail(form.email);
-    handlesetPrevRoute(MfaFlow.RegisterPage)
-    navigate(`/${routes.mfaAuthenticator}`)
-  }
+    handlesetPrevRoute(MfaFlow.RegisterPage);
+    navigate(`/${routes.mfaAuthenticator}`);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    handleSubmit(handleNavigation)
+    handleSubmit(handleNavigation);
   };
-
-
 
   return (
     <article className={styles.mfaContainer}>
@@ -116,21 +114,23 @@ export const RegisterPage = () => {
           <label className={styles.labelline}>Confirmar Contraseña</label>
           <div onClick={() => setShowConfirmPwd(!showConfirmPwd)}>
             <Icon
-              icon={showConfirmPwd ? mopsusIcons.lockOpen : mopsusIcons.lockClose}
+              icon={
+                showConfirmPwd ? mopsusIcons.lockOpen : mopsusIcons.lockClose
+              }
               className={styles.icon}
             />
           </div>
         </div>
-        {errors.passwordConfirmation && <p className={styles.errors}>{errors.passwordConfirmation}</p>}
+        {errors.passwordConfirmation && (
+          <p className={styles.errors}>{errors.passwordConfirmation}</p>
+        )}
         <div className={styles.inputGroup}>
           <button type="submit" className={styles.btn}>
             Crear Cuenta
           </button>
         </div>
         <div className={styles.aBlock}>
-          <p onClick={() => navigate(`/${routes.login}`)}>
-            ¿Ya tienes cuenta?
-          </p>
+          <p onClick={() => navigate(`/${routes.login}`)}>¿Ya tienes cuenta?</p>
         </div>
       </form>
     </article>
