@@ -8,6 +8,9 @@ import routes from '../../router/routes';
 import styles from '../styles/auth.module.scss';
 import { AuthContext } from '../../contexts';
 import { MfaFlow } from '../../types';
+import Modal from '../../shared/modal/Modal';
+import useModal from '../../Hooks/useModal';
+import { createUser } from '../services/auth';
 
 interface FormData {
   email: string;
@@ -41,8 +44,9 @@ const validateForm = (form: FormData) => {
 
   return errors;
 };
-
 export const RegisterPage = () => {
+  const { openModal, handleClose, handleOpen, modal, handleModalChange } =
+    useModal();
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirmPwd, setShowConfirmPwd] = useState(false);
 
@@ -57,7 +61,7 @@ export const RegisterPage = () => {
   const { handleSetRecoverEmail, handlesetPrevRoute } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleNavigation = () => {
+  const handleNavigation = async () => {
     handleSetRecoverEmail(form.email);
     handlesetPrevRoute(MfaFlow.RegisterPage);
     navigate(`/${routes.mfaAuthenticator}`);
@@ -133,6 +137,15 @@ export const RegisterPage = () => {
           <p onClick={() => navigate(`/${routes.login}`)}>¿Ya tienes cuenta?</p>
         </div>
       </form>
+      <Modal
+        title={modal.title}
+        icon={modal.icon}
+        show={openModal}
+        message={modal.message}
+        accept={{ title: modal.accept.title, action: modal.accept.action }}
+        reject={{ title: modal.reject?.title, action: modal.reject?.action }}
+        handleClose={handleClose}
+      />
     </article>
   );
 };
