@@ -45,7 +45,8 @@ const validateForm = (form: FormData) => {
   return errors;
 };
 export const RegisterPage = () => {
-  const { openModal, handleClose, handleOpen, modal, handleModalChange } = useModal();
+  const { openModal, handleClose, handleOpen, modal, handleModalChange } =
+    useModal();
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirmPwd, setShowConfirmPwd] = useState(false);
 
@@ -62,38 +63,10 @@ export const RegisterPage = () => {
 
   const handleNavigation = async () => {
     handleSetRecoverEmail(form.email);
-    try{
-      await createUser(form.email, form.password, form.email).then((response) => {
-        if (response.status === 200) {
-          console.log('Usuario creado');
-        }
-        if (response.status != 200) {
-          console.log('Usuario o contraseña incorrectos');
-          
-        }
-
-      }
- 
-      );
-      handlesetPrevRoute(MfaFlow.RegisterPage);
-      navigate(`/${routes.mfaAuthenticator}`);
-      
-    } catch (error) {
-      console.error(error);
-      handleModalChange({
-        accept: {
-          title: "Aceptar",
-          action: () => {},
-        },
-        title: "Error en los campos",
-        message: "Asegúrese de que los campos esten completados correctamente.",
-        icon: mopsusIcons.error,
-      });
-      handleOpen();
-      return
-    }
-
+    handlesetPrevRoute(MfaFlow.RegisterPage);
+    navigate(`/${routes.mfaAuthenticator}`);
   };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     handleSubmit(handleNavigation);

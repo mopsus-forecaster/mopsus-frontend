@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Await, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
 import styles from '../styles/auth.module.scss';
 import { mopsusIcons } from '../../icons';
@@ -51,9 +51,9 @@ export const Login = () => {
 
   const navigate = useNavigate();
   const { openModal, handleClose, handleOpen, modal, handleModalChange } =
-  useModal();
+    useModal();
   const onLogin = async () => {
-    try{
+    try {
       await userLogin(form.email, form.password).then((response) => {
         if (response.status === 200) {
           login(response.data.username, response.data.accessToken);
@@ -61,30 +61,25 @@ export const Login = () => {
         }
         if (response.status != 200) {
           console.log('Usuario o contraseña incorrectos');
-          
         }
-
-      }
-      );
+      });
       navigate('/inicio', {
         replace: true,
       });
-      
     } catch (error) {
       console.error(error);
       handleModalChange({
         accept: {
-          title: "Aceptar",
+          title: 'Aceptar',
           action: () => {},
         },
-        title: "Error en los campos",
-        message: "Asegúrese de que los campos esten completados correctamente.",
+        title: 'Error en los campos',
+        message: 'Asegúrese de que los campos esten completados correctamente.',
         icon: mopsusIcons.error,
       });
       handleOpen();
-      return
+      return;
     }
-
   };
 
   return (
@@ -153,6 +148,5 @@ export const Login = () => {
         handleClose={handleClose}
       />
     </article>
-    
   );
 };
