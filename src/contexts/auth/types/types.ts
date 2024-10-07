@@ -1,14 +1,16 @@
 export type Action = {
   type: string;
   payload?: {
-    username: string;
+    companyName: string;
     accessToken: string;
+    refreshToken?: string;
   };
 };
 
 export const actionTypes = {
   login: '[Auth] login',
   logout: '[Auth] logout',
+  refresh: '[Auth] refresh',
 };
 
 export interface LoginState {

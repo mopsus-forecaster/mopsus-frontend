@@ -1,38 +1,29 @@
 import { useContext, useState } from 'react';
-import { useForm } from '../../Hooks';
+import { useForm } from '../../../hooks';
 import { useNavigate } from 'react-router-dom';
-import { LoginCommonHeader } from './components/LoginCommonHeader';
+import { LoginCommonHeader } from './LoginCommonHeader';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { mopsusIcons } from '../../icons';
-import routes from '../../router/routes';
-import styles from '../styles/auth.module.scss';
-import { AuthContext } from '../../contexts';
-import { MfaFlow } from '../../types';
-import Modal from '../../shared/modal/Modal';
-import useModal from '../../Hooks/useModal';
-import { createUser } from '../services/auth';
+import { mopsusIcons } from '../../../icons';
+import routes from '../../../router/routes';
+import styles from '../../styles/auth.module.scss';
+import { AuthContext } from '../../../contexts';
+import { MfaFlow } from '../../../types';
+import { createUser } from '../../../services';
+import { ModalContext } from '../../../contexts/modal/ModalContext';
 
 interface FormData {
-  email: string;
   password: string;
   passwordConfirmation: string;
 }
 
 const validateForm = (form: FormData) => {
   const errors: Partial<FormData> = {};
-
-  if (!form.email) {
-    errors.email = 'El correo es requerido';
-  } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-    errors.email = 'El correo no es válido';
-  } else if (form.email.length > 254) {
-    errors.email = 'El correo no debe tener mas de 254 caracteres';
-  }
-
   if (!form.password) {
     errors.password = 'La contraseña es requerida';
   } else if (form.password.length < 8 || form.password.length > 32) {
     errors.password = 'La contraseña debe tener entre 8 y 32 caracteres';
+  } else if (!/[!@#$%^&*(),.?":{}|<>+\-]/.test(form.password)) {
+    errors.password = 'La contraseña debe contener al menos un símbolo';
   }
 
   if (!form.passwordConfirmation) {
@@ -44,27 +35,46 @@ const validateForm = (form: FormData) => {
 
   return errors;
 };
-export const RegisterPage = () => {
-  const { openModal, handleClose, handleOpen, modal, handleModalChange } =
-    useModal();
+export const RegisterPassword = () => {
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirmPwd, setShowConfirmPwd] = useState(false);
 
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
     {
-      email: '',
       password: '',
       passwordConfirmation: '',
     },
     validateForm
   );
-  const { handleSetRecoverEmail, handlesetPrevRoute } = useContext(AuthContext);
+  const { handleSetRecoverEmail, handlesetPrevRoute, registerData } =
+    useContext(AuthContext);
+
+  const { name, email } = registerData;
+  console.log(name, email);
+  const { handleOpen, handleModalChange } = useContext(ModalContext);
   const navigate = useNavigate();
 
   const handleNavigation = async () => {
-    handleSetRecoverEmail(form.email);
-    handlesetPrevRoute(MfaFlow.RegisterPage);
-    navigate(`/${routes.mfaAuthenticator}`);
+    try {
+      const response = await createUser(email, form.password, name);
+      if (response) {
+        handleSetRecoverEmail(email);
+        handlesetPrevRoute(MfaFlow.RegisterPage);
+        navigate(`/${routes.mfaAuthenticator}`);
+      }
+    } catch (error) {
+      handleModalChange({
+        accept: {
+          title: 'Aceptar',
+          action: () => {},
+        },
+        title: 'Error técnico',
+        message:
+          'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+        icon: mopsusIcons.error,
+      });
+      handleOpen();
+    }
   };
 
   const onSubmit = async (e) => {
@@ -76,19 +86,6 @@ export const RegisterPage = () => {
     <article className={styles.mfaContainer}>
       <LoginCommonHeader title="Registrar Usuario" />
       <form onSubmit={onSubmit}>
-        <div className={styles.inputGroup}>
-          <input
-            type="email"
-            name="email"
-            onChange={handleChange}
-            value={form.email}
-            placeholder=" "
-          />
-          <label className={styles.labelline}>Correo</label>
-          <Icon icon={mopsusIcons.mail} className={styles.icon} />
-        </div>
-        {errors.email && <p className={styles.errors}>{errors.email}</p>}
-
         <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
             type={showPwd ? 'text' : 'password'}
@@ -137,15 +134,6 @@ export const RegisterPage = () => {
           <p onClick={() => navigate(`/${routes.login}`)}>¿Ya tienes cuenta?</p>
         </div>
       </form>
-      <Modal
-        title={modal.title}
-        icon={modal.icon}
-        show={openModal}
-        message={modal.message}
-        accept={{ title: modal.accept.title, action: modal.accept.action }}
-        reject={{ title: modal.reject?.title, action: modal.reject?.action }}
-        handleClose={handleClose}
-      />
     </article>
   );
 };

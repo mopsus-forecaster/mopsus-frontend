@@ -1,7 +1,10 @@
-import React from 'react'
+import { useRefreshToken } from '../../../hooks/useRefreshToken/useRefreshToken';
 
 export const Home = () => {
+  const refresh = useRefreshToken();
   return (
-    <div>Home</div>
-  )
-}
+    <div>
+      <button onClick={refresh}>Refresh</button>
+    </div>
+  );
+};

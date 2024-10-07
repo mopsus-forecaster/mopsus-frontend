@@ -1,4 +1,4 @@
 export * from './Login';
-export * from './RegisterPage';
+export * from './components/RegisterNameEmail';
 export * from './MFAContainer';
 export * from './LoginContainer';

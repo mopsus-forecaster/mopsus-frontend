@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse, Canceler } from 'axios';
 import { Interceptor, InterceptorRecipe } from './api-client';
 import localConfig from '../config';
+import { useRefreshToken } from '../hooks/useRefreshToken/useRefreshToken';
 
 export interface Options extends AxiosRequestConfig {
   cancel?: (cancel: Canceler) => void;
@@ -87,6 +88,31 @@ export const fetch = async (
     instance.interceptors.response.use(resolve, reject);
   });
 
+  const retryRequest = async (prevRequest) => {
+    return instance(prevRequest);
+  };
+
+  instance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const prevRequest = error?.config;
+      if (error?.response?.status === 403 && !prevRequest?.sent) {
+        prevRequest.sent = true;
+        try {
+          const refresh = useRefreshToken();
+          const newAccessToken = await refresh();
+          prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+          return retryRequest(prevRequest);
+        } catch (err) {
+          window.location.href = '/login';
+          return Promise.reject(error);
+        }
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
   headers = {
     'Content-Type': 'application/json',
     ...headers,
@@ -111,6 +137,7 @@ export const fetch = async (
     if (axios.isCancel(err)) {
       throw new FetchError({ type: FetchError.CANCEL, baseError: err });
     } else {
+      console.log(err);
       const errors = err.response?.data?.errors
         ? err.response.data.errors.map((error) => ({
             message: error.message,
@@ -119,7 +146,7 @@ export const fetch = async (
         : [
             {
               message:
-                err.response?.data?.message || err.message || 'Unknown error',
+                err.response?.data?.error || err.message || 'Unknown error',
               status: err.response?.status,
             },
           ];
@@ -146,9 +173,6 @@ const makeMethod =
     });
 
 export const get = makeMethod('get');
-
 export const post = makeMethod('post');
-
 export const put = makeMethod('put');
-
 export const del = makeMethod('delete');

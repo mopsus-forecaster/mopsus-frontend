@@ -1,4 +1,5 @@
 import { del, get, post, put } from './http-client';
+import { AuthenticationInterceptor } from './interceptors';
 
 interface IAPIClientParam {
   api: string;
@@ -51,7 +52,7 @@ const apiClientCore = async (
 };
 
 const interceptors: InterceptorRecipe = {
-  requestInterceptors: [],
+  requestInterceptors: [AuthenticationInterceptor],
   responseInterceptors: [],
 };
 
