@@ -5,34 +5,45 @@ import {
   MFAContainer,
   RegisterNameEmail,
 } from '../pages';
-import { MfaFlow } from '../../types';
 import routes from '../../router/routes';
-import { MFAAuthenticator, NewPassword } from '../pages/components';
+import {
+  AccountRecovery,
+  MFAAuthenticator,
+  NewPassword,
+} from '../pages/components';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts';
+import { RegisterPassword } from '../pages/components/RegisterPassword';
 
 export const LoginRoutes = () => {
-  const { recoverEmail, prevRoute = '' } = useContext(AuthContext);
+  const { currentMfaFlow } = useContext(AuthContext);
+
   return (
     <Routes>
       <Route path="/" element={<LoginContainer />}>
-        <Route index element={<Navigate to={routes.login} replace />} />
+        <Route
+          index
+          element={
+            <Navigate to={routes.login} state={{ from: location }} replace />
+          }
+        />
 
         <Route path={routes.login} element={<Login />} />
         <Route
           path={routes.registerNameEmail}
           element={<RegisterNameEmail />}
         />
-        <Route
-          path={routes.accountRecovery}
-          element={<MFAContainer code={MfaFlow.AccountRecovery} />}
-        />
+
+        <Route path={routes.accountRecovery} element={<AccountRecovery />} />
+
+        <Route path={routes.mfaAuthenticator} element={<MFAAuthenticator />} />
+
+        <Route path={routes.registerPassword} element={<RegisterPassword />} />
+
         <Route path={routes.changePassword} element={<NewPassword />} />
         <Route
-          path={routes.mfaAuthenticator}
-          element={
-            <MFAAuthenticator prevRoute={prevRoute} email={recoverEmail} />
-          }
+          path={routes.mfaAContainer}
+          element={<MFAContainer code={currentMfaFlow} />}
         />
 
         <Route path="*" element={<Navigate to={routes.login} />} />

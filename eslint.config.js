@@ -34,6 +34,11 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': 'off', // Variables no usadas
       '@typescript-eslint/no-extra-semi': 'off', // Ignorar punto y coma extra
       'react-refresh/only-export-components': 'off',
+      // Reglas adicionales
+      'no-unused-expressions': 'off', // Desactivar no-unused-expressions
+      'react-hooks/exhaustive-deps': 'off', // Desactivar dependencias exhaustivas en hooks
+      'no-useless-escape': 'off', // Desactivar caracteres escapados innecesarios
+      '@typescript-eslint/no-unused-expressions': 'off', // Desactivar TS no-unused-expressions
     },
   }
 );
