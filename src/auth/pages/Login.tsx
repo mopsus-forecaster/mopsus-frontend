@@ -6,10 +6,10 @@ import { mopsusIcons } from '../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { LoginCommonHeader } from './components/LoginCommonHeader';
 import routes from '../../router/routes';
-import { useForm } from '../../Hooks';
-import { userLogin } from '../services/auth';
-import useModal from '../../Hooks/useModal';
-import Modal from '../../shared/modal/Modal';
+import { useForm } from '../../hooks';
+import { ModalContext } from '../../contexts/modal/ModalContext';
+import { resendCode, userLogin } from '../../services';
+import { MfaFlow } from '../../types';
 
 interface FormData {
   email: string;
@@ -37,10 +37,10 @@ const validateForm = (form: FormData) => {
 };
 
 export const Login = () => {
-  const { login } = useContext(AuthContext);
+  const { login, comesFrom } = useContext(AuthContext);
 
   const [showPwd, setShowPwd] = useState(false);
-
+  const from = comesFrom || routes.home;
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
     {
       email: '',
@@ -50,34 +50,107 @@ export const Login = () => {
   );
 
   const navigate = useNavigate();
-  const { openModal, handleClose, handleOpen, modal, handleModalChange } =
-    useModal();
+  const {
+    handleModalChange,
+    handleOpen,
+    handleSetRecoverEmail,
+    handlesetPrevRoute,
+  } = useContext(ModalContext);
   const onLogin = async () => {
     try {
-      await userLogin(form.email, form.password).then((response) => {
-        if (response.status === 200) {
-          login(response.data.username, response.data.accessToken);
-          console.log('Usuario logeado');
-        }
-        if (response.status != 200) {
-          console.log('Usuario o contraseña incorrectos');
-        }
-      });
-      navigate('/inicio', {
+      const {
+        access_token: accessToken,
+        name,
+        refresh_token: refreshToken,
+      } = await userLogin(form.email, form.password);
+      login(name, accessToken, refreshToken);
+      navigate(from, {
         replace: true,
       });
     } catch (error) {
-      console.error(error);
-      handleModalChange({
-        accept: {
-          title: 'Aceptar',
-          action: () => {},
-        },
-        title: 'Error en los campos',
-        message: 'Asegúrese de que los campos esten completados correctamente.',
-        icon: mopsusIcons.error,
-      });
-      handleOpen();
+      const { errors } = error;
+
+      switch (errors[0].status) {
+        case 400:
+          console.log(errors[0]);
+          if (errors[0].message === 'User is not confirmed.') {
+            handleModalChange({
+              accept: {
+                title: 'Ir a confirmar usuario',
+                action: () => {},
+              },
+              reject: {
+                title: 'Cancelar',
+                action: () => {},
+              },
+              title: 'Usuario no confirmado',
+              message:
+                'Debe ingresar un código de autenticación para poder logearse.',
+              icon: mopsusIcons.error,
+            });
+            handleOpen();
+          }
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => {},
+            },
+            title: 'Error en los campos',
+            message: 'Usuario y/o contraseña incorrectos.',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+          break;
+        case 401:
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: async () => {
+                try {
+                  const response = await resendCode(form.email);
+                  console.log(response);
+                  handleSetRecoverEmail(form.email);
+                  handlesetPrevRoute(MfaFlow.AccountRecovery);
+                  navigate(routes.mfaAuthenticator);
+                } catch (error) {
+                  console.log(error);
+                  handleModalChange({
+                    accept: {
+                      title: 'Aceptar',
+                      action: () => {},
+                    },
+                    title: 'Error técnico',
+                    message:
+                      'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+                    icon: mopsusIcons.error,
+                  });
+                  handleOpen();
+                }
+              },
+            },
+            title: 'Por seguridad hemos bloqueado su usuario',
+            message: 'Para recuperarlo debe restaurar su contraseña.',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+          break;
+
+        default:
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => {},
+            },
+            title: 'Error técnico',
+            message:
+              'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+
+          break;
+      }
+
       return;
     }
   };
@@ -133,20 +206,11 @@ export const Login = () => {
         </p>
         <p
           className={styles.blond}
-          onClick={() => navigate(`/${routes.register}`)}
+          onClick={() => navigate(`/${routes.registerNameEmail}`)}
         >
           Crear una cuenta
         </p>
       </div>
-      <Modal
-        title={modal.title}
-        icon={modal.icon}
-        show={openModal}
-        message={modal.message}
-        accept={{ title: modal.accept.title, action: modal.accept.action }}
-        reject={{ title: modal.reject?.title, action: modal.reject?.action }}
-        handleClose={handleClose}
-      />
     </article>
   );
 };

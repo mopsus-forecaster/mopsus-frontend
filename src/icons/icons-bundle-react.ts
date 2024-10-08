@@ -9810,7 +9810,7 @@ export const mopsusIcons = {
   user: {
     width: 24,
     height: 24,
-    body: '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></g>',
+    body: '<g fill="none" stroke="#c0c0c0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></g>',
   },
   'chevron-down': {
     width: 24,

@@ -1,6 +1,6 @@
 import { LoginCommonHeader } from './LoginCommonHeader';
 import styles from '../../styles/auth.module.scss';
-import { useForm } from '../../../Hooks';
+import { useForm } from '../../../hooks';
 import { mopsusIcons } from '../../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useNavigate } from 'react-router-dom';
@@ -42,7 +42,7 @@ export const AccountRecovery = () => {
 
   const handleNavigation = () => {
     handleSetRecoverEmail(email);
-    handlesetPrevRoute(MfaFlow.AccountRecovery)
+    handlesetPrevRoute(MfaFlow.AccountRecovery);
     navigate(`/${routes.mfaAuthenticator}`);
   };
 

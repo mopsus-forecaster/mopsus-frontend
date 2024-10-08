@@ -1,9 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import styles from '../../styles/auth.module.scss';
 import { LoginCommonHeader } from './LoginCommonHeader';
 import { MFAAuthenticatorProps, MfaFlow } from '../../../types';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../../router/routes';
+import { resendCode } from '../../../services';
+import { ModalContext } from '../../../contexts/modal/ModalContext';
+import { mopsusIcons } from '../../../icons';
 
 const HARCODED_CODE = 180602;
 
@@ -30,6 +33,37 @@ export const MFAAuthenticator: React.FC<MFAAuthenticatorProps> = ({
       navigate(`/${routes.login}`);
     }
   }, []);
+
+  const { handleOpen, handleModalChange } = useContext(ModalContext);
+
+  const onResendCode = async () => {
+    try {
+      const response = await resendCode(email);
+      if (response) {
+        handleModalChange({
+          accept: {
+            title: 'Aceptar',
+            action: () => {},
+          },
+          title: 'Código reenviado',
+          message: 'Revise su correo electrónico',
+        });
+        handleOpen();
+      }
+    } catch (error) {
+      handleModalChange({
+        accept: {
+          title: 'Aceptar',
+          action: () => {},
+        },
+        title: 'Error técnico',
+        message:
+          'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+        icon: mopsusIcons.error,
+      });
+      handleOpen();
+    }
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -117,6 +151,7 @@ export const MFAAuthenticator: React.FC<MFAAuthenticatorProps> = ({
           <p onClick={() => navigate(`/${routes.accountRecovery}`)}>
             Puse el correo incorrecto
           </p>
+          <p onClick={() => onResendCode}>Enviar código de nuevo</p>
           <p onClick={() => navigate(`/${routes.login}`)}>Volver al login</p>
         </div>
       </form>

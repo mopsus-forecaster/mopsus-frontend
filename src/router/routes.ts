@@ -1,7 +1,8 @@
 const routes = {
   home: '',
   login: 'login',
-  register: 'registro',
+  registerNameEmail: 'registro-datos-empresa',
+  registerPassword: 'registro-contraseña',
   accountRecovery: 'recuperar-cuenta',
   mfaAuthenticator: 'verificar-codigo',
   changePassword: 'cambiar-contraseña',
