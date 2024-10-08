@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import styles from '../../styles/auth.module.scss';
 import { LoginCommonHeader } from './LoginCommonHeader';
-import { useForm } from '../../../Hooks';
+import { useForm } from '../../../hooks';
 import { mopsusIcons } from '../../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../../router/routes';
+import { forgottenPassword } from '../../../services';
+import { AuthContext } from '../../../contexts';
+import { ModalContext } from '../../../contexts/modal/ModalContext';
+import { MfaFlow } from '../../../types';
 
 interface FormData {
   newPassword: string;
@@ -38,7 +42,12 @@ const INITIAL_STATE = {
 export const NewPassword = () => {
   const [showNewPwd, setShowNewPwd] = useState(false);
   const [showNewPwdConfirmation, setShowNewPwdConfirmation] = useState(false);
-
+  const {
+    recoverEmail: email,
+    setRecoverPassword,
+    handlesetPrevRoute,
+    currentMfaFlow,
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
@@ -47,10 +56,43 @@ export const NewPassword = () => {
   );
 
   const { newPassword, newPasswordConfirmation } = form;
-
-  const handleSetNewPassword = () => {
-    // pegarle al backend
-    alert('cambiaste la contra');
+  const { handleModalChange, handleOpen } = useContext(ModalContext);
+  const handleSetNewPassword = async () => {
+    try {
+      const response = await forgottenPassword(email);
+      if (response) {
+        handleModalChange({
+          accept: {
+            title: 'Aceptar',
+            action: () => {
+              if (currentMfaFlow === MfaFlow.AccountRecovery) {
+                handlesetPrevRoute(MfaFlow.AccountRecovery);
+              } else {
+                handlesetPrevRoute(MfaFlow.BlockedAccountRecovery);
+              }
+              setRecoverPassword(form.newPassword);
+              navigate(`/${routes.mfaAuthenticator}`);
+            },
+          },
+          title: 'Codigo enviado',
+          message:
+            'Hemos enviado un codigo a su correo para restaurar su clave',
+        });
+        handleOpen();
+      }
+    } catch (error) {
+      handleModalChange({
+        accept: {
+          title: 'Aceptar',
+          action: () => {},
+        },
+        title: 'Error técnico',
+        message:
+          'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+        icon: mopsusIcons.error,
+      });
+      handleOpen();
+    }
   };
 
   const onSubmit = (e) => {

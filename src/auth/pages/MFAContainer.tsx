@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { MFAContainerProps, MfaFlow } from '../../types';
-import { AccountRecovery, BlockedAccountRecovery } from './components';
+import { MFAAuthenticator } from './components';
+import { AuthContext } from '../../contexts';
 
-export const MFAContainer: React.FC<MFAContainerProps> = ({ code }) => {
+export const MFAContainer: React.FC<MFAContainerProps> = () => {
+  const { currentMfaFlow: code } = useContext(AuthContext);
   const componentMap = {
-    [MfaFlow.AccountRecovery]: AccountRecovery,
-    [MfaFlow.BlockedAccountRecovery]: BlockedAccountRecovery,
+    [MfaFlow.BlockedAccountRecovery]: MFAAuthenticator,
+    [MfaFlow.RegisterPage]: MFAAuthenticator,
   };
-
+  console.log(code);
   const ComponentToRender =
     componentMap[code] || (() => <div>Invalid MFA flow</div>);
 

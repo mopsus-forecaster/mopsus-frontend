@@ -37,7 +37,9 @@ export const AuthProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, {}, init);
   const [loading, setLoading] = useState(true); // Estado para manejar la carga
   const [comesFrom, setComesFrom] = useState('');
+  const [currentMfaFlow, setCurrentMfaFlow] = useState('');
   const [recoverEmail, setRecoverEmail] = useState('');
+  const [recoverPassword, setRecoverPassword] = useState('');
   const [registerData, setRegisterData] = useState({
     name: '',
     email: '',
@@ -106,7 +108,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleSetRegisterData = (email: string, name: string) => {
-    console.log(email, name);
     setRegisterData((prevRegisterData) => ({
       ...prevRegisterData,
       name,
@@ -137,6 +138,10 @@ export const AuthProvider = ({ children }) => {
         refresh,
         registerData,
         handleSetRegisterData,
+        currentMfaFlow,
+        setCurrentMfaFlow,
+        recoverPassword,
+        setRecoverPassword,
       }}
     >
       {children}

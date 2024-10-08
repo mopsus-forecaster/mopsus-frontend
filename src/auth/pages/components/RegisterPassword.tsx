@@ -46,11 +46,14 @@ export const RegisterPassword = () => {
     },
     validateForm
   );
-  const { handleSetRecoverEmail, handlesetPrevRoute, registerData } =
-    useContext(AuthContext);
+  const {
+    handleSetRecoverEmail,
+    handlesetPrevRoute,
+    registerData,
+    setCurrentMfaFlow,
+  } = useContext(AuthContext);
 
   const { name, email } = registerData;
-  console.log(name, email);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const navigate = useNavigate();
 
@@ -60,20 +63,40 @@ export const RegisterPassword = () => {
       if (response) {
         handleSetRecoverEmail(email);
         handlesetPrevRoute(MfaFlow.RegisterPage);
-        navigate(`/${routes.mfaAuthenticator}`);
+        setCurrentMfaFlow(MfaFlow.RegisterPage);
+        navigate(`/${routes.mfaAContainer}`);
       }
-    } catch (error) {
-      handleModalChange({
-        accept: {
-          title: 'Aceptar',
-          action: () => {},
-        },
-        title: 'Error técnico',
-        message:
-          'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
-        icon: mopsusIcons.error,
-      });
-      handleOpen();
+    } catch ({ errors }) {
+      switch (errors[0].status) {
+        case 400:
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => {
+                navigate(routes.login);
+              },
+            },
+            title: 'Usuario existente',
+            message: 'El correo que intenta usar se encuentra en uso',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+          break;
+
+        default:
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => {},
+            },
+            title: 'Error técnico',
+            message:
+              'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+          break;
+      }
     }
   };
 

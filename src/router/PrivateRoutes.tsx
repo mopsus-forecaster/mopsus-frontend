@@ -3,7 +3,6 @@ import { Navbar } from '../shared';
 import { Home, Inventory, Products, Sales } from '../modules';
 
 import RequireAuth from './components/RequireAuth';
-import { PersistLogin } from './components/PersistLogin';
 
 export const PrivateRoutes = () => {
   return (

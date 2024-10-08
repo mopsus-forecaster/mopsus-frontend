@@ -17,7 +17,6 @@ interface LocalConfig {
 }
 
 const BASE_URL = 'https://seraphic-camera-436421-v8.uc.r.appspot.com/api';
-console.log(BASE_URL);
 const localConfig: LocalConfig = {
   dev: {
     config: {

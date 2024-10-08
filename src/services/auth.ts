@@ -18,11 +18,6 @@ export const createUser = async (
   password: string,
   name: string
 ) => {
-  console.log({
-    email,
-    password,
-    name,
-  });
   const response = await apiClient({
     api: 'auth',
     service: '/register',
@@ -55,6 +50,48 @@ export const resendCode = async (email: string) => {
     verb: 'post',
     dataSend: {
       email,
+    },
+  });
+  return response;
+};
+
+export const forgottenPassword = async (email: string) => {
+  const response = await apiClient({
+    api: 'auth',
+    service: '/forgot_password',
+    verb: 'post',
+    dataSend: {
+      email,
+    },
+  });
+  return response;
+};
+export const validateCode = async (email, confirmation_code: string) => {
+  const response = await apiClient({
+    api: 'auth',
+    service: '/confirm_signup',
+    verb: 'post',
+    dataSend: {
+      email,
+      confirmation_code,
+    },
+  });
+  return response;
+};
+
+export const blockedUserVerificationCode = async (
+  email,
+  new_password: string,
+  confirmation_code: string
+) => {
+  const response = await apiClient({
+    api: 'auth',
+    service: '/forgot_password_confirmation',
+    verb: 'post',
+    dataSend: {
+      email,
+      new_password,
+      confirmation_code,
     },
   });
   return response;
