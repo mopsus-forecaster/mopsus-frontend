@@ -137,7 +137,6 @@ export const fetch = async (
     if (axios.isCancel(err)) {
       throw new FetchError({ type: FetchError.CANCEL, baseError: err });
     } else {
-      console.log(err);
       const errors = err.response?.data?.errors
         ? err.response.data.errors.map((error) => ({
             message: error.message,

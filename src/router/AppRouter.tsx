@@ -2,7 +2,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { PrivateRoutes } from './PrivateRoutes';
 
 import { PublicRoutes } from './PublicRoutes';
-import { LoginRoutes } from '../auth/routes';
+import { LoginRoutes } from '../auth/routes/LoginRoutes';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '../contexts';
 

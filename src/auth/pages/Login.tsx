@@ -37,7 +37,13 @@ const validateForm = (form: FormData) => {
 };
 
 export const Login = () => {
-  const { login, comesFrom } = useContext(AuthContext);
+  const {
+    login,
+    comesFrom,
+    handleSetRecoverEmail,
+    handlesetPrevRoute,
+    setCurrentMfaFlow,
+  } = useContext(AuthContext);
 
   const [showPwd, setShowPwd] = useState(false);
   const from = comesFrom || routes.home;
@@ -49,13 +55,43 @@ export const Login = () => {
     validateForm
   );
 
+  const onResendCode = async () => {
+    try {
+      const response = await resendCode(form.email);
+      if (response) {
+        handleModalChange({
+          accept: {
+            title: 'Aceptar',
+            action: () => {
+              handleSetRecoverEmail(form.email);
+              setCurrentMfaFlow(MfaFlow.RegisterPage);
+              handlesetPrevRoute(MfaFlow.RegisterPage);
+              navigate(`/${routes.mfaAuthenticator}`);
+            },
+          },
+          title: 'Codigo enviado',
+          message:
+            'Hemos enviado un codigo a su correo electronico. Pulse aceptar y podra continuar con el alta de la cuenta',
+        });
+        handleOpen();
+      }
+    } catch (error) {
+      handleModalChange({
+        accept: {
+          title: 'Aceptar',
+          action: () => {},
+        },
+        title: 'Error técnico',
+        message:
+          'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+        icon: mopsusIcons.error,
+      });
+      handleOpen();
+    }
+  };
+
   const navigate = useNavigate();
-  const {
-    handleModalChange,
-    handleOpen,
-    handleSetRecoverEmail,
-    handlesetPrevRoute,
-  } = useContext(ModalContext);
+  const { handleModalChange, handleOpen } = useContext(ModalContext);
   const onLogin = async () => {
     try {
       const {
@@ -72,24 +108,6 @@ export const Login = () => {
 
       switch (errors[0].status) {
         case 400:
-          console.log(errors[0]);
-          if (errors[0].message === 'User is not confirmed.') {
-            handleModalChange({
-              accept: {
-                title: 'Ir a confirmar usuario',
-                action: () => {},
-              },
-              reject: {
-                title: 'Cancelar',
-                action: () => {},
-              },
-              title: 'Usuario no confirmado',
-              message:
-                'Debe ingresar un código de autenticación para poder logearse.',
-              icon: mopsusIcons.error,
-            });
-            handleOpen();
-          }
           handleModalChange({
             accept: {
               title: 'Aceptar',
@@ -101,6 +119,26 @@ export const Login = () => {
           });
           handleOpen();
           break;
+        case 428:
+          handleModalChange({
+            accept: {
+              title: 'Ir a confirmar usuario',
+              action: () => {
+                onResendCode();
+              },
+            },
+            reject: {
+              title: 'Cancelar',
+              action: () => {},
+            },
+            title: 'Usuario no confirmado',
+            message:
+              'Debe ingresar un código de autenticación para poder logearse.',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+
+          break;
         case 401:
           handleModalChange({
             accept: {
@@ -108,10 +146,12 @@ export const Login = () => {
               action: async () => {
                 try {
                   const response = await resendCode(form.email);
-                  console.log(response);
-                  handleSetRecoverEmail(form.email);
-                  handlesetPrevRoute(MfaFlow.AccountRecovery);
-                  navigate(routes.mfaAuthenticator);
+                  if (response) {
+                    handleSetRecoverEmail(form.email);
+                    setCurrentMfaFlow(MfaFlow.BlockedAccountRecovery);
+                    handlesetPrevRoute(MfaFlow.BlockedAccountRecovery);
+                    navigate(`/${routes.changePassword}`);
+                  }
                 } catch (error) {
                   console.log(error);
                   handleModalChange({
@@ -201,7 +241,12 @@ export const Login = () => {
         </div>
       </form>
       <div className={styles.aBlock}>
-        <p onClick={() => navigate(`/${routes.accountRecovery}`)}>
+        <p
+          onClick={() => {
+            setCurrentMfaFlow(MfaFlow.AccountRecovery);
+            navigate(`/${routes.accountRecovery}`);
+          }}
+        >
           ¿Olvidaste tu contraseña?
         </p>
         <p

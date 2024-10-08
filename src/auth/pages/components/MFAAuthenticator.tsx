@@ -1,22 +1,34 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import styles from '../../styles/auth.module.scss';
 import { LoginCommonHeader } from './LoginCommonHeader';
-import { MFAAuthenticatorProps, MfaFlow } from '../../../types';
+import { MfaFlow } from '../../../types';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../../router/routes';
-import { resendCode } from '../../../services';
+import {
+  blockedUserVerificationCode,
+  resendCode,
+  validateCode,
+} from '../../../services';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import { mopsusIcons } from '../../../icons';
+import { AuthContext } from '../../../contexts';
 
-const HARCODED_CODE = 180602;
+export const MFAAuthenticator = () => {
+  const {
+    recoverEmail: email,
+    prevRoute = '',
+    recoverPassword,
+  } = useContext(AuthContext);
 
-export const MFAAuthenticator: React.FC<MFAAuthenticatorProps> = ({
-  email,
-  prevRoute,
-}) => {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(''));
-  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+  const successTitle =
+    prevRoute === MfaFlow.BlockedAccountRecovery
+      ? 'Cuenta activada con éxito'
+      : prevRoute === MfaFlow.AccountRecovery
+        ? 'Contraseña reestablecida con éxito'
+        : 'Cuenta creada con éxito';
 
+  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const navigate = useNavigate();
   const [errors, setErrors] = useState('');
   const censorEmail = (): string => {
@@ -91,30 +103,129 @@ export const MFAAuthenticator: React.FC<MFAAuthenticatorProps> = ({
     }
   };
 
+  const accountRecoveryBlockedUserCodeVerification = async (finalOtp) => {
+    try {
+      const response = await blockedUserVerificationCode(
+        email,
+        recoverPassword,
+        finalOtp
+      );
+      if (response) {
+        handleModalChange({
+          accept: {
+            title: 'Aceptar',
+            action: () => {
+              navigate(routes.login);
+            },
+          },
+          title: successTitle,
+          message: 'Puede volver al login para utilizar Mopsus',
+        });
+        handleOpen();
+      }
+    } catch ({ errors }) {
+      switch (errors[0].status) {
+        case 400:
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => {},
+            },
+            title: 'Código Incorrecto',
+            message:
+              'El código proporcionado no coincide con el enviado al correo. Intente uno diferente',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+          break;
+
+        default:
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => {},
+            },
+            title: 'Error técnico',
+            message:
+              'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+          break;
+      }
+    }
+  };
+
+  const registrationConfirmCodeVerification = async (finalOtp) => {
+    try {
+      const response = await validateCode(email, finalOtp);
+      if (response) {
+        handleModalChange({
+          accept: {
+            title: 'Aceptar',
+            action: () => {
+              navigate(routes.login);
+            },
+          },
+          title: successTitle,
+          message: 'Puede volver al login para utilizar Mopsus',
+        });
+        handleOpen();
+      }
+    } catch ({ errors }) {
+      switch (errors[0].status) {
+        case 400:
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => {},
+            },
+            title: 'Código Incorrecto',
+            message:
+              'El código proporcionado no coincide con el enviado al correo. Intente uno diferente',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+          break;
+
+        default:
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => {},
+            },
+            title: 'Error técnico',
+            message:
+              'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+          break;
+      }
+    }
+  };
+
+  const handleValidateCode = async (finalOtp) => {
+    if (
+      prevRoute === MfaFlow.BlockedAccountRecovery ||
+      prevRoute === MfaFlow.AccountRecovery
+    ) {
+      accountRecoveryBlockedUserCodeVerification(finalOtp);
+    } else {
+      registrationConfirmCodeVerification(finalOtp);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const finalOtp = otp.join('');
 
     if (!finalOtp) {
       setErrors('Debe introducir un código');
+    } else if (finalOtp.length !== 6) {
+      setErrors('El codigo debe ser de 6 digitos');
     } else {
-      if (Number(finalOtp) !== HARCODED_CODE) {
-        setErrors('El código introducido es incorrecto');
-      } else {
-        switch (prevRoute) {
-          case MfaFlow.RegisterPage:
-            navigate(`/login`);
-            break;
-          case MfaFlow.AccountRecovery:
-            navigate(`/${routes.changePassword}`);
-            break;
-          case MfaFlow.BlockedAccountRecovery:
-            navigate(`/${routes.changePassword}`);
-            break;
-          default:
-            break;
-        }
-      }
+      handleValidateCode(finalOtp);
     }
   };
 
@@ -151,7 +262,7 @@ export const MFAAuthenticator: React.FC<MFAAuthenticatorProps> = ({
           <p onClick={() => navigate(`/${routes.accountRecovery}`)}>
             Puse el correo incorrecto
           </p>
-          <p onClick={() => onResendCode}>Enviar código de nuevo</p>
+          <p onClick={onResendCode}>Enviar código de nuevo</p>
           <p onClick={() => navigate(`/${routes.login}`)}>Volver al login</p>
         </div>
       </form>

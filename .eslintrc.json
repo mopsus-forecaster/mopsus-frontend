@@ -26,6 +26,9 @@
     "typescript/no-unsafe-call": "off",
     "typescript/no-unsafe-return": "off",
     "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/ban-types": "off" // Desactiva la regla de tipos prohibidos
+    "@typescript-eslint/ban-types": "off", // Desactiva la regla de tipos prohibidos
+    "no-unused-expressions": "off", // Desactiva la regla no-unused-expressions
+    "react-hooks/exhaustive-deps": "off", // Desactiva el warning de dependencias en useEffect
+    "no-useless-escape": "off" // Desactiva la regla no-useless-escape
   }
 }

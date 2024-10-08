@@ -40,10 +40,10 @@ export const AccountRecovery = () => {
   const { email } = form;
   const navigate = useNavigate();
 
-  const handleNavigation = () => {
+  const handleNavigation = async () => {
     handleSetRecoverEmail(email);
     handlesetPrevRoute(MfaFlow.AccountRecovery);
-    navigate(`/${routes.mfaAuthenticator}`);
+    navigate(`/${routes.changePassword}`);
   };
 
   const onSubmit = (e) => {
@@ -73,7 +73,7 @@ export const AccountRecovery = () => {
         {errors.email && <p className={styles.errors}>{errors.email}</p>}
         <div className={styles.inputGroup}>
           <button type="submit" className={styles.btn}>
-            Enviar código
+            Siguiente paso
           </button>
         </div>
         <div className={styles.aBlock}>
