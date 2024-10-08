@@ -1,39 +1,43 @@
 import { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
+import styles from './Styles/navBar.module.scss'
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { mopsusIcons } from '../../icons';
 
 export const Navbar = () => {
   const { logout } = useContext(AuthContext);
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
-      <Link className="navbar-brand" to="/">
-        Mopsus
-      </Link>
-
-      <div className="navbar-collapse">
-        <div className="navbar-nav">
-          <NavLink className="nav-item nav-link" to="/inicio">
-            Inicio
-          </NavLink>
-          <NavLink className="nav-item nav-link" to="/ventas">
-            Ventas
-          </NavLink>
-          <NavLink className="nav-item nav-link" to="/productos">
-            Productos
-          </NavLink>
-          <NavLink className="nav-item nav-link" to="/inventario">
-            Inventario
-          </NavLink>
+    <div className={styles.navContainer}>
+      <nav className={styles.navBar}>
+        <Link className={styles.logo} to="/inicio">
+          <img src="public/logo/logoSinMopsus.png" alt="" />
+        </Link>
+        <div className="">
+          <div className="">
+            <NavLink className={styles.navItem} to="/ventas">
+              <Icon icon={mopsusIcons.sale} />
+            </NavLink>
+            <NavLink className={styles.navItem} to="/productos">
+              <Icon icon={mopsusIcons.products} />
+            </NavLink>
+            <NavLink className={styles.navItem} to="/">
+              <Icon icon={mopsusIcons.stats} />
+            </NavLink>
+            <NavLink className={styles.navItem} to="/inventario">
+              <Icon icon={mopsusIcons.inventory} />
+            </NavLink>
+          </div>
         </div>
-      </div>
 
-      <div className="navbar-collapse collapse w-100 order-3 dual-collapse2 d-flex justify-content-end">
-        <ul className="navbar-nav ml-auto">
-          <NavLink onClick={logout} className="nav-item nav-link" to="/login">
-            Logout
-          </NavLink>
-        </ul>
-      </div>
-    </nav>
+        <div className="">
+          <ul className="">
+            <NavLink onClick={logout} className="" to="/login">
+              Logout
+            </NavLink>
+          </ul>
+        </div>
+      </nav>
+    </div>
   );
 };
