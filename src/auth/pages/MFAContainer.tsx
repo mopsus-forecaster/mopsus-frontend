@@ -9,7 +9,6 @@ export const MFAContainer: React.FC<MFAContainerProps> = () => {
     [MfaFlow.BlockedAccountRecovery]: MFAAuthenticator,
     [MfaFlow.RegisterPage]: MFAAuthenticator,
   };
-  console.log(code);
   const ComponentToRender =
     componentMap[code] || (() => <div>Invalid MFA flow</div>);
 
