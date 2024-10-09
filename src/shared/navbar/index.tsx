@@ -8,14 +8,14 @@ import { mopsusIcons } from '../../icons';
 export const Navbar = () => {
   const { logout } = useContext(AuthContext);
   return (
-    <div className={styles.navContainer}>
-      <nav className={styles.navBar}>
-        <Link className={styles.logo} to="/inicio">
+    <div className={styles.backgroud}>
+      <nav className={styles.sideBar}>
+        <Link className={styles.logo} to="/">
           <img src="public/logo/logoSinMopsus.png" alt="" />
         </Link>
-        <div className="">
-          <div className="">
-            <NavLink className={styles.navItem} to="/ventas">
+        <div className={styles.navItems}>
+          <div>
+            <NavLink className={styles.navSale} to="/ventas">
               <Icon icon={mopsusIcons.sale} />
             </NavLink>
             <NavLink className={styles.navItem} to="/productos">
@@ -27,15 +27,13 @@ export const Navbar = () => {
             <NavLink className={styles.navItem} to="/inventario">
               <Icon icon={mopsusIcons.inventory} />
             </NavLink>
+            <hr />
           </div>
-        </div>
-
-        <div className="">
-          <ul className="">
-            <NavLink onClick={logout} className="" to="/login">
-              Logout
+          <div className={styles.ItemLog}>
+            <NavLink onClick={logout} className={styles.navLogOut} to="/login">
+              <Icon icon={mopsusIcons.logOut} />
             </NavLink>
-          </ul>
+          </div>
         </div>
       </nav>
     </div>
