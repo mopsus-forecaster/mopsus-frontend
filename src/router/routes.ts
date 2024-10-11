@@ -8,6 +8,9 @@ const routes = {
   mfaAuthenticator: 'verificar-codigo',
   mfaAContainer: 'verificacion-seguridad',
   changePassword: 'cambiar-contraseña',
+  sales: 'ventas',
+  stock: 'inventario',
+  products: 'productos',
 };
 
 export default routes;

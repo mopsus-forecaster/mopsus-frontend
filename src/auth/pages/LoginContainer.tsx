@@ -3,10 +3,8 @@ import { Outlet } from 'react-router-dom';
 
 export const LoginContainer = () => {
   return (
-    <section className={styles.backgroud}>
-      <div className={styles.loginContainer}>
-        <Outlet />
-      </div>
-    </section>
+    <div className={styles.loginContainer}>
+      <Outlet />
+    </div>
   );
 };

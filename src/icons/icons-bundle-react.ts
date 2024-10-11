@@ -1,5 +1,5 @@
 import { addCollection } from '@iconify/react';
-import { Products } from '../modules';
+import { ProductsPage } from '../modules';
 
 addCollection({
   prefix: 'tabler',

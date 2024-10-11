@@ -1,9 +1,9 @@
 import Box from '../../../shared/box';
 
-export const Home = () => {
+export const ProductsPage = () => {
   return (
     <Box>
-      <h1>Inicio</h1>
+      <h1>Productos</h1>
     </Box>
   );
 };

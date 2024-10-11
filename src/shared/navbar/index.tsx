@@ -1,53 +1,77 @@
 import { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
-import styles from './Styles/navBar.module.scss'
+import styles from './Styles/navBar.module.scss';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { mopsusIcons } from '../../icons';
+import routes from '../../router/routes';
 
 export const Navbar = () => {
   const { logout } = useContext(AuthContext);
   return (
-    <div className={styles.backgroud}>
-      <nav className={styles.sideBar}>
-        <Link className={styles.logo} to="/">
-          <img src="public/logo/logoSinMopsus.png" alt="" />
-        </Link>
-        <div className={styles.navItems}>
-          <div className={styles.itemContainer}>
-            <NavLink className={styles.navItem} to="/ventas">
-              <Icon icon={mopsusIcons.sale} />
-            </NavLink>
+    <nav className={styles.sideBar}>
+      <Link className={styles.logo} to="/">
+        <img src="public/logo/logoSinMopsus.png" alt="" />
+      </Link>
+
+      <div className={styles.navItems}>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? styles.itemContainerActive : styles.itemContainer
+          }
+          to={`/inicio`}
+        >
+          <div className={styles.navItem}>
+            <Icon icon={mopsusIcons.stats} />
+            <span>Inicio</span>
+          </div>
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? styles.itemContainerActive : styles.itemContainer
+          }
+          to={`/ventas`}
+        >
+          <div className={styles.navItem}>
+            <Icon icon={mopsusIcons.sale} />
             <span>Ventas</span>
           </div>
-          <div className={styles.itemContainer}>
-            <NavLink className={styles.navItem} to="/productos">
-              <Icon icon={mopsusIcons.products} />
-            </NavLink>
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? styles.itemContainerActive : styles.itemContainer
+          }
+          to={`/productos`}
+        >
+          <div className={styles.navItem}>
+            <Icon icon={mopsusIcons.products} />
             <span>Productos</span>
           </div>
-          <div className={styles.itemContainer}>
-            <NavLink className={styles.navItem} to="/">
-              <Icon icon={mopsusIcons.stats} />
-            </NavLink>
-            <span>Estadisticas</span>
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? styles.itemContainerActive : styles.itemContainer
+          }
+          to={`/inventario`}
+        >
+          <div className={styles.navItem}>
+            <Icon icon={mopsusIcons.inventory} />
+            <span>Stock</span>
           </div>
-          <div className={styles.itemContainer}>
-            <NavLink className={styles.navItem} to="/inventario">
-              <Icon icon={mopsusIcons.inventory} />
-            </NavLink>
-            <span>Inventario</span>
-          </div>
+        </NavLink>
 
-          <hr />
-          <div className={styles.itemContainer}>
-            <NavLink onClick={logout} className={styles.navItem} to="/login">
-              <Icon icon={mopsusIcons.logOut} />
-            </NavLink>
-            <span>Cerrar Sesion</span>
+        <hr />
+        <NavLink
+          onClick={logout}
+          className={styles.itemContainer}
+          to={`${routes.login}`}
+        >
+          <div className={styles.navItem}>
+            <Icon icon={mopsusIcons.logOut} />
+            <span>Cerrar sesion</span>
           </div>
-        </div>
-      </nav>
-    </div>
+        </NavLink>
+      </div>
+    </nav>
   );
 };
