@@ -55,7 +55,7 @@ export const MFAAuthenticator = () => {
         handleModalChange({
           accept: {
             title: 'Aceptar',
-            action: () => {},
+            action: () => { },
           },
           title: 'Código reenviado',
           message: 'Revise su correo electrónico',
@@ -66,7 +66,7 @@ export const MFAAuthenticator = () => {
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => {},
+          action: () => { },
         },
         title: 'Error técnico',
         message:
@@ -129,7 +129,7 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => { },
             },
             title: 'Código Incorrecto',
             message:
@@ -143,7 +143,7 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => { },
             },
             title: 'Error técnico',
             message:
@@ -178,7 +178,7 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => { },
             },
             title: 'Código Incorrecto',
             message:
@@ -192,7 +192,7 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => { },
             },
             title: 'Error técnico',
             message:
