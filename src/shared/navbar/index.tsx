@@ -14,25 +14,37 @@ export const Navbar = () => {
           <img src="public/logo/logoSinMopsus.png" alt="" />
         </Link>
         <div className={styles.navItems}>
-          <div>
-            <NavLink className={styles.navSale} to="/ventas">
+          <div className={styles.itemContainer}>
+            <NavLink className={styles.navItem} to="/ventas">
               <Icon icon={mopsusIcons.sale} />
             </NavLink>
+            <span>Ventas</span>
+          </div>
+          <div className={styles.itemContainer}>
             <NavLink className={styles.navItem} to="/productos">
               <Icon icon={mopsusIcons.products} />
             </NavLink>
+            <span>Productos</span>
+          </div>
+          <div className={styles.itemContainer}>
             <NavLink className={styles.navItem} to="/">
               <Icon icon={mopsusIcons.stats} />
             </NavLink>
+            <span>Estadisticas</span>
+          </div>
+          <div className={styles.itemContainer}>
             <NavLink className={styles.navItem} to="/inventario">
               <Icon icon={mopsusIcons.inventory} />
             </NavLink>
-            <hr />
+            <span>Inventario</span>
           </div>
-          <div className={styles.ItemLog}>
-            <NavLink onClick={logout} className={styles.navLogOut} to="/login">
+
+          <hr />
+          <div className={styles.itemContainer}>
+            <NavLink onClick={logout} className={styles.navItem} to="/login">
               <Icon icon={mopsusIcons.logOut} />
             </NavLink>
+            <span>Cerrar Sesion</span>
           </div>
         </div>
       </nav>

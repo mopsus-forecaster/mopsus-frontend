@@ -21,35 +21,33 @@
   left: 0;
   background-color: $box-background-color;
   border-radius: 24px;
+  align-items: center;
+  justify-content: center;
+  transition: width 1s ease;
+}
+
+.sideBar:hover {
+  width: +7%;
+  span {
+    opacity: 1;
+    transition: 0.1s ease;
+  }
 }
 
 .navItems {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 88%;
   text-align: center;
-}
-
-.navSale {
-  display: table;
-  padding: 3.5vh;
-  font-size: 220%;
-  transition: background-color 0.3s;
-}
-
-.navLogOut {
-  display: table;
-  padding: 3.5vh;
-  width: 100%;
-  font-size: 170%;
-  transition: background-color 0.3s;
+  align-items: center;
+  justify-content: space-between;
+  height: 85%;
 }
 
 .logo {
   display: flex;
   text-align: center;
   justify-content: center;
+  align-items: center;
   margin-top: 3vh;
   margin-bottom: 3vh;
 }
@@ -57,10 +55,20 @@
 .navItem {
   position: relative;
   display: table;
-  padding: 3.5vh;
+
   width: 100%;
   font-size: 180%;
-  transition: background-color 0.3s;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemContainer {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 10vh;
+  border-radius: 10px;
 }
 
 hr {
@@ -69,15 +77,18 @@ hr {
   background-color: $text-lines-color;
   width: 50%;
   margin: auto;
+  margin-top: 3vh;
 }
 
 ul {
   padding: 0;
-  margin: 0;
+  margin-top: 0;
 }
-
-.navItem:hover,
-.navSale:hover,
-.navLogOut:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+span {
+  position: relative;
+  justify-content: center;
+  text-align: center;
+  font-size: 1rem;
+  color: white;
+  opacity: 0;
 }
