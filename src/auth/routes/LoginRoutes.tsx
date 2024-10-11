@@ -21,12 +21,7 @@ export const LoginRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginContainer />}>
-        <Route
-          index
-          element={
-            <Navigate to={routes.login} state={{ from: location }} replace />
-          }
-        />
+        <Route index element={<Navigate to={routes.login} />} />
 
         <Route path={routes.login} element={<Login />} />
         <Route
