@@ -1,6 +1,7 @@
 @import '../../../styles/breakpoint';
 
 .box {
+  position: relative;
   width: 82.5vw;
   height: 90vh;
   background-color: $box-background-color;

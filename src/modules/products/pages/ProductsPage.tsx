@@ -2,10 +2,29 @@ import { mopsusIcons } from '../../../icons';
 import Box from '../../../shared/box';
 import styles from '../styles/products.module.scss';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import { NewProduct } from '../components';
+import { ProductFilters } from '../components';
+import { useState } from 'react';
 
 const PRODUCTS_AMOUNT = 145;
 
 export const ProductsPage = () => {
+  const [isOpenNewProduct, setIsOpenNewProduct] = useState(false)
+  const [isOpenFilter, setIsOpenFilter] = useState(false)
+
+
+  const handleOpenNewProduct = (e) => {
+    e.preventDefault()
+    setIsOpenNewProduct(true)
+  }
+
+  const handleOpenFilter = (e) => {
+    e.preventDefault()
+    setIsOpenFilter(true)
+  }
+
+
+
   return (
     <Box>
       <header className={`${styles.header}`}>
@@ -18,8 +37,6 @@ export const ProductsPage = () => {
         </div>
       </header>
 
-      {/* Aca se va a reemplazar todo por un componente llamado MopsusTable pero mientras lo vamos a ir trabajando aca */}
-
       <section className={styles.tableActionsContainer}>
         <div className={styles.tableSearchComponent}>
           <input
@@ -27,20 +44,24 @@ export const ProductsPage = () => {
             placeholder="Buscar por nombre"
             type="text"
           />
-          {/* Aca vas a gestionar un estado que abra el componente de Filters con un onClick => handleOpenProductFilters  */}
-          <button className={styles.filterButton}>
+          <button className={styles.filterButton} onClick={handleOpenFilter}>
             <Icon fontSize={20} icon={mopsusIcons.filters}></Icon>
             Filtros
           </button>
         </div>
-        {/* Aca vas a gestionar un estado que abra el componente de NewProduct con un onClick => handleOpenNewProuct */}
-        <button className={styles.buttonAdd}>Agregar producto</button>
+        <button className={styles.buttonAdd} onClick={handleOpenNewProduct}>Agregar producto</button>
       </section>
+      {
+        isOpenNewProduct && (
+          <NewProduct isOpenNewProduct={isOpenNewProduct} onClose={() => setIsOpenNewProduct(false)} />
+        )
+      }
+      {
+        isOpenFilter && (
+          <ProductFilters />
+        )
+      }
 
-      {/* Aca abajo te dejo los componentes, deberias tenerlos invisibles atado al isOpen */}
-
-      {/* <NewProduct isOpen={isOpen}/>
-      <ProductFilters  isOpen={isOpen}/> */}
     </Box>
   );
 };
