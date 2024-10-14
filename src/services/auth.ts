@@ -13,6 +13,15 @@ export const userLogin = async (email: string, password: string) => {
   return response.data;
 };
 
+export const getCategories = async () => {
+  const response = await apiClient({
+    api: 'products',
+    service: 'categories',
+    verb: 'get',
+  });
+  return response.data;
+}
+
 export const createUser = async (
   email: string,
   password: string,

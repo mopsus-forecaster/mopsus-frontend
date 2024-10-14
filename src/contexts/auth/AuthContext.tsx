@@ -79,7 +79,10 @@ export const AuthProvider = ({ children }) => {
       secure: false,
       sameSite: 'Strict',
     });
-
+    Cookies.set('accessToken', accessToken,{
+      secure: false,
+      sameSite: 'Strict',
+    })
     const action: Action = {
       type: actionTypes.login,
       payload: {
@@ -93,6 +96,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     Cookies.remove('refreshToken');
+    Cookies.remove('accessToken');
     dispatch({ type: actionTypes.logout });
   };
 
