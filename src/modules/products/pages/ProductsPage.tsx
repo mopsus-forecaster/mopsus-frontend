@@ -133,9 +133,10 @@ export const ProductsPage = () => {
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
-  const createSortHandler = (property: string, direction: Order) => {
+  const createSortHandler = (property: string) => {
+    const isAsc = valueToOrderBy === property && orderDirection === 'asc';
+    setOrderDirection(isAsc ? 'desc' : 'asc');
     setValueToOrderBy(property);
-    setOrderDirection(direction);
   };
   return (
     <Box>
@@ -168,7 +169,7 @@ export const ProductsPage = () => {
         <Table>
           <TableHead>
             <TableRow>
-              {productsTableColumns.map(({ value, text, orderBy: sort }) => (
+              {productsTableColumns.map(({ value, text }) => (
                 <TableCell
                   key={value}
                   sx={{
@@ -176,25 +177,48 @@ export const ProductsPage = () => {
                     borderBottom: '1px solid #979797',
                     color: '#979797',
                     fontFamily: 'Montserrat',
+                    fontWeight: 600,
                   }}
                   align="center"
                 >
-                  {sort ? (
-                    <TableSortLabel
-                      active={valueToOrderBy === value}
-                      direction={orderDirection}
-                      onClick={() =>
-                        createSortHandler(
-                          value,
-                          orderDirection === 'asc' ? 'desc' : 'asc'
-                        )
-                      }
-                    >
-                      {text}
-                    </TableSortLabel>
-                  ) : (
-                    <span>{text}</span>
-                  )}
+                  <TableSortLabel
+                    onClick={() => createSortHandler(value)}
+                    active={valueToOrderBy === value}
+                    sx={{
+                      opacity: 100,
+
+                      textAlign: 'center',
+                      '&.Mui-active': {
+                        color: '#979797',
+                        fontWeight: 600,
+                      },
+                      '& .MuiTableSortLabel-icon': {
+                        color: '#FFF',
+                        fontWeight: 600,
+                      },
+                      '&.Mui-active .MuiTableSortLabel-icon': {
+                        color: '#979797',
+                        fontWeight: 600,
+                      },
+                      '&:hover': {
+                        color: '#979797',
+                        fontWeight: 600,
+                        '& .MuiTableSortLabel-icon': {
+                          color: '#979797',
+                          fontWeight: 600,
+                        },
+                      },
+                    }}
+                    direction={
+                      valueToOrderBy === value
+                        ? orderDirection === 'asc'
+                          ? 'asc'
+                          : 'desc'
+                        : 'asc'
+                    }
+                  >
+                    {text}
+                  </TableSortLabel>
                 </TableCell>
               ))}
             </TableRow>
@@ -213,7 +237,7 @@ export const ProductsPage = () => {
                       backgroundColor: 'transparent',
                       border: 'none',
                       fontFamily: 'Montserrat',
-                      fontWeight: 600,
+                      textAlign: 'center',
                       color: '#FFF',
                     }}
                   >
