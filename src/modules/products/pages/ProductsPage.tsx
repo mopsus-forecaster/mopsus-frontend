@@ -2,28 +2,24 @@ import { mopsusIcons } from '../../../icons';
 import Box from '../../../shared/box';
 import styles from '../styles/products.module.scss';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { NewProduct } from '../components';
-import { ProductFilters } from '../components';
+import { NewProduct, ProductFilters } from '../components';
 import { useState } from 'react';
 
 const PRODUCTS_AMOUNT = 145;
 
 export const ProductsPage = () => {
-  const [isOpenNewProduct, setIsOpenNewProduct] = useState(false)
-  const [isOpenFilter, setIsOpenFilter] = useState(false)
-
+  const [isOpenNewProduct, setIsOpenNewProduct] = useState(false);
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
 
   const handleOpenNewProduct = (e) => {
-    e.preventDefault()
-    setIsOpenNewProduct(true)
-  }
+    e.preventDefault();
+    setIsOpenNewProduct(true);
+  };
 
   const handleOpenFilter = (e) => {
-    e.preventDefault()
-    setIsOpenFilter(true)
-  }
-
-
+    e.preventDefault();
+    setIsOpenFilter(true);
+  };
 
   return (
     <Box>
@@ -49,19 +45,20 @@ export const ProductsPage = () => {
             Filtros
           </button>
         </div>
-        <button className={styles.buttonAdd} onClick={handleOpenNewProduct}>Agregar producto</button>
+        <button className={styles.buttonAdd} onClick={handleOpenNewProduct}>
+          Agregar producto
+        </button>
       </section>
-      {
-        isOpenNewProduct && (
-          <NewProduct isOpenNewProduct={isOpenNewProduct} onClose={() => setIsOpenNewProduct(false)} />
-        )
-      }
-      {
-        isOpenFilter && (
-          <ProductFilters />
-        )
-      }
 
+      {isOpenNewProduct && (
+        <NewProduct isOpenNewProduct={isOpenNewProduct} onClose={() => setIsOpenNewProduct(false)} />
+      )}
+
+      {isOpenFilter && (
+        <ProductFilters isOpen={isOpenFilter} setIsOpen={setIsOpenFilter} onApplyFilters={() => { }} onDeleteFilters={() => { }} >
+          <h1>hoañ</h1>
+        </ProductFilters>
+      )}
     </Box>
   );
 };

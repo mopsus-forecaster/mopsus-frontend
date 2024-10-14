@@ -77,19 +77,20 @@
 
 .modal {
   position: fixed;
-  justify-content: center;
-  align-items: center;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(32, 32, 32, 0.7);
   display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
-
 .registerContainer {
   position: absolute;
+  justify-content: center;
+  align-items: center;
   width: 30vw;
   height: fit-content;
   border-radius: 30px;
@@ -115,7 +116,15 @@
 
 .iconClose {
   position: relative;
-  margin-left: 26vw;
+  margin-top: 2vh;
+  margin-left: 25vw;
+  cursor: pointer;
+}
+
+.iconCloseFilter {
+  position: relative;
+  margin-top: 2vh;
+  margin-left: 23vw;
   cursor: pointer;
 }
 
@@ -141,7 +150,7 @@ form {
   height: 5vh;
   color: $color-white;
   border-radius: 20px;
-  padding: 0.5% 1.5%;
+  padding: 10px 20px;
   font-weight: 600;
   transition:
     background-color 0.3s,
@@ -187,8 +196,33 @@ form {
   font-size: 0.9rem;
 }
 
-.modalExito {
-  color: green;
-  text-align: center;
-  font-size: 1rem;
+.filtersModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background-color: #282828;
+  margin-left: auto;
+}
+
+.modalFilter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(32, 32, 32, 0.7);
+  display: flex;
+  justify-content: right;
+  z-index: 1000;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+.headerContainer {
+  margin: 10px;
 }

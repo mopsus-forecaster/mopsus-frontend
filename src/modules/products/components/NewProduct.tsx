@@ -2,15 +2,18 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import styles from '../styles/products.module.scss';
 import { mopsusIcons } from '../../../icons';
 import { useForm } from '../../../Hooks/useForm';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import Modal from '../../../shared/modal';
+import { useNavigate } from 'react-router-dom';
+import { ModalContext } from '../../../contexts/modal/ModalContext';
+import routes from '../../../router/routes';
 
 interface FormData {
   nombreProducto: string;
-  precioVenta: string,
-  puntoReposicion: string,
-  stockActual: string
+  precioVenta: string;
+  puntoReposicion: string;
+  stockActual: string;
 }
-
 
 const validateForm = (form: FormData) => {
   const errors: Partial<FormData> = {};
@@ -32,11 +35,11 @@ const validateForm = (form: FormData) => {
   }
 
   return errors;
-}
-
+};
 
 export const NewProduct = ({ isOpenNewProduct, onClose }) => {
-  const [registrado, setRegistrado] = useState(false)
+  const [registrado, setRegistrado] = useState(false);
+  //const { handleOpen, handleModalChange } = useContext(ModalContext)
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
     {
       nombreProducto: '',
@@ -45,17 +48,63 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
       stockActual: '',
     },
     validateForm
-  )
+  );
 
+  const navigate = useNavigate()
 
   const onSubmit = async (e) => {
     e.preventDefault();
     handleSubmit(() => {
-      //back
-      console.log('Producto registrado', JSON.stringify(form))
-      setRegistrado(true)
-    })
-  }
+      /* try {
+        const res = await addProduct()
+        if (res) {
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => { navigate(`/${routes.products}`) },
+            },
+            title: 'Producto registrado con éxito',
+            message: 'Prodra ver el producto registrado en la tabla',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
+        }
+      } catch (error) {
+        switch (errors[0].status) {
+          case 400:
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: () => { },
+              },
+              title: 'Error en los campos',
+              message: 'Usuario y/o contraseña incorrectos.',
+              icon: mopsusIcons.error,
+            });
+            handleOpen();
+            break;
+          default:
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: () => { },
+              },
+              title: 'Error técnico',
+              message:
+                'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+              icon: mopsusIcons.error,
+            });
+            handleOpen();
+
+            break;
+        }
+
+      } */
+      console.log('Producto registrado', JSON.stringify(form));
+      setRegistrado(true);
+    });
+  };
+
   return (
     <div className={styles.modal}>
       <div className={styles.registerContainer}>
@@ -126,18 +175,24 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
             </form>
             {
               registrado && (
-                <div className={styles.modalExito}>
-                  <div>
-                    <p>¡Producto registrado con exito!</p>
-                  </div>
-                </div>
-
+                <Modal
+                  show={true}
+                  title="Éxito"
+                  accept={{
+                    title: 'Aceptar',
+                    action: () => { },
+                  }}
+                  message="Producto registrado con éxito"
+                  handleClose={() => {
+                    setRegistrado(false);
+                  }}
+                  icon={mopsusIcons.circleCheck}
+                />
               )
             }
           </div>
         </div>
       </div>
     </div>
-
   );
 };
