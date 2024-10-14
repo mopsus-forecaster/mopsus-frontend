@@ -1,4 +1,6 @@
+
 import Box from '../../../shared/box';
+
 
 export const Home = () => {
   return (

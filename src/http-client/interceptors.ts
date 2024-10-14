@@ -1,11 +1,12 @@
 import { Interceptor } from './api-client';
+import Cookies from 'js-cookie';
 
 export const AuthenticationInterceptor: Interceptor = [
   async (reqConf) => {
     if (!reqConf?.headers['Authorization']) {
-      const user = JSON.parse(sessionStorage.getItem('user'));
-      if (user) {
-        reqConf.headers['Authorization'] = `Bearer ${user?.accessToken}`;
+      const accessToken = Cookies.get('accessToken');
+      if (accessToken) {
+        reqConf.headers['Authorization'] = `${accessToken}`;
       }
     }
     return reqConf;
