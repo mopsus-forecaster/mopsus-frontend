@@ -82,7 +82,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
             },
           },
           title: 'Producto registrado con éxito',
-          message: 'Prodra ver el producto registrado en la tabla',
+          message: 'Podrá ver el producto registrado en la tabla',
         });
         handleOpen();
       }
@@ -124,7 +124,6 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
       try {
         const { categorias } = await getCategories();
         if (categorias) {
-          console.log(categorias);
           setCategories(categorias);
         }
       } catch (error) {
@@ -136,7 +135,6 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
       try {
         const { unidades } = await getUnits();
         if (unidades) {
-          console.log(unidades);
           setUnits(unidades);
         }
       } catch (error) {
@@ -158,25 +156,25 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
             className={styles.iconClose}
             onClick={onClose}
           />
-          <div></div>
           <h2 className={styles.titleRegister}>Registrar Producto</h2>
           <hr className={styles.line} />
           <form onSubmit={onSubmit}>
             <div>
               <div>
-                <label htmlFor="" className={styles.modalLabel}>
-                  Categorias
+                <label htmlFor="category" className={styles.modalLabel}>
+                  Categorías
                 </label>
                 <select
                   onChange={handleChange}
                   value={form.category}
                   name="category"
                   id="category"
+                  className={styles.select}
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     Selecciona una categoría
                   </option>
-                  {categories && categories.length > 0 ? (
+                  {categories.length > 0 ? (
                     categories.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.name} - {c.description}
@@ -189,8 +187,9 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   )}
                 </select>
               </div>
+
               <div>
-                <label htmlFor="" className={styles.modalLabel}>
+                <label htmlFor="unit" className={styles.modalLabel}>
                   Unidades
                 </label>
                 <select
@@ -198,11 +197,12 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   id="unit"
                   value={form.unit}
                   onChange={handleChange}
+                  className={styles.select}
                 >
                   <option value="" disabled>
                     Selecciona una unidad
                   </option>
-                  {units && units.length > 0 ? (
+                  {units.length > 0 ? (
                     units.map((unit) => (
                       <option key={unit.id} value={unit.id}>
                         {unit.name} - {unit.description}
@@ -215,8 +215,9 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   )}
                 </select>
               </div>
+
               <div>
-                <label htmlFor="" className={styles.modalLabel}>
+                <label htmlFor="title" className={styles.modalLabel}>
                   Nombre del producto
                 </label>
                 <input
@@ -230,7 +231,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
               </div>
 
               <div>
-                <label htmlFor="" className={styles.modalLabel}>
+                <label htmlFor="price" className={styles.modalLabel}>
                   Precio de venta
                 </label>
                 <input
@@ -246,7 +247,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
               </div>
 
               <div>
-                <label htmlFor="" className={styles.modalLabel}>
+                <label htmlFor="reposition_point" className={styles.modalLabel}>
                   Punto de reposición
                 </label>
                 <input
@@ -263,7 +264,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
               </div>
 
               <div>
-                <label htmlFor="" className={styles.modalLabel}>
+                <label htmlFor="stock" className={styles.modalLabel}>
                   Stock actual
                 </label>
                 <input
