@@ -15,12 +15,8 @@ export const Filter: React.FC<FiltersProps> = ({
     isOpen,
     setIsOpen,
     children,
-    onApplyFilters = () => {
-
-    },
-    onDeleteFilters = () => {
-
-    },
+    onApplyFilters,
+    onDeleteFilters,
 }) => {
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
@@ -66,7 +62,7 @@ export const Filter: React.FC<FiltersProps> = ({
                             {children}
                         </div>
                         <footer className={styles.footer}>
-                            <button onClick={onApplyFilters} className={`${styles.btn} ${styles.btnRegister}`}>
+                            <button onClick={onApplyFilters} className={`${styles.btn} ${styles.btnRegister}`} >
                                 Aplicar filtros
                             </button>
                             <button onClick={onDeleteFilters} className={`${styles.btn} ${styles.btnCancel}`}>

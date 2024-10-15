@@ -5,6 +5,9 @@ import styles from '../styles/products.module.scss';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { NewProduct } from '../components';
 import { Filter } from '../../../shared/filter';
+import { ProductsContext } from '../../../contexts/Products/ProductsContext';
+import { getCategories, getUnits } from '../../../services/products';
+import { INITIAL_FILTERS } from '../../../contexts/Products/ProductsContext';
 
 import {
   TableContainer,
@@ -16,7 +19,7 @@ import {
   TableSortLabel,
   CircularProgress,
 } from '@mui/material';
-import { ProductsContext } from '../../../contexts/Products/ProductsContext';
+
 
 const PRODUCTS_AMOUNT = 145;
 
@@ -30,9 +33,10 @@ export const ProductsPage = () => {
     mappedProducts,
     isLoading,
     setFilters,
+    getProducts,
     deleteProductFromTable,
     setMappedProducts,
-    filters
+    filters,
   } = useContext(ProductsContext);
   const [search, setSearch] = useState('');
 
@@ -48,8 +52,34 @@ export const ProductsPage = () => {
 
   const [valueToOrderBy, setValueToOrderBy] = useState();
   const [orderDirection, setOrderDirection] = useState<Order>();
+  const [categories, setCategories] = useState([]);
+  const [units, setUnits] = useState([]);
 
   useEffect(() => {
+    const getCategoriesOptions = async () => {
+      try {
+        const { categorias } = await getCategories();
+        if (categorias) {
+          setCategories(categorias);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const getUnitsOptions = async () => {
+      try {
+        const { unidades } = await getUnits();
+        if (unidades) {
+          setUnits(unidades);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getCategoriesOptions();
+    getUnitsOptions();
     const timeoutId = setTimeout(() => {
       setFilters((prevFilters) => ({ ...prevFilters, title: search }));
     }, 500);
@@ -310,7 +340,7 @@ export const ProductsPage = () => {
                       marginTop: '10rem',
                     }}
                   >
-                    No se encontraron productos con ese nombre
+                    No se encontraron productos
                   </p>
                 </TableCell>
               </TableRow>
@@ -330,28 +360,54 @@ export const ProductsPage = () => {
         <Filter
           isOpen={isOpenFilter}
           setIsOpen={setIsOpenFilter}
-          onApplyFilters={() => { }}
-          onDeleteFilters={() => { }}
+          onApplyFilters={getProducts}
+          onDeleteFilters={() => setFilters(INITIAL_FILTERS)}
         >
           <form className={styles.formFilter}>
             <div className={styles.formGroup}>
-              <label htmlFor="category_id" className={styles.modalLabel}>Categoria</label>
-              <select name="" id="" className={styles.selectFilter}>
-                <option value="">1</option>
+              <label htmlFor="category_id" className={styles.modalLabel}>Categoría</label>
+              <select name="" id="" className={styles.selectFilter} value={filters.category_id || ''} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, category_id: e.target.value })))} >
+                <option value="" disabled>Seleccione una categoría</option>
+                {
+                  categories.length > 0 ? (
+                    categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} - {c.description}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      No hay categorías disponibles
+                    </option>
+                  )
+                }
               </select>
             </div>
 
             <div className={styles.formGroup}>
               <label htmlFor="unit_id" className={styles.modalLabel}>Unidad</label>
-              <select name="" id="" className={styles.selectFilter}>
-                <option value="">1</option>
+              <select name="" id="" className={styles.selectFilter} value={filters.unit_id || ''} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, unit_id: e.target.value })))} >
+                <option value="" disabled>Seleccione una unidad</option>
+                {
+                  units.length > 0 ? (
+                    units.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} - {c.description}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      No hay unidades disponibles
+                    </option>
+                  )
+                }
               </select>
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="below_reposition" className={styles.modalLabel}>Stock por debajo del punto de reposición</label>
-              <select id="below_reposition" name="below_reposition" className={styles.selectFilter}>
-                <option value="">--</option>
+              <label htmlFor="below_reposition" className={styles.modalLabel}>Punto de reposición</label>
+              <select id="below_reposition" name="below_reposition" className={styles.selectFilter} value={filters.below_reposition || ''} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, below_reposition: e.target.value })))} >
+                <option value="">Seleccione un opción</option>
                 <option value="true">Sí</option>
                 <option value="false">No</option>
               </select>
@@ -360,15 +416,15 @@ export const ProductsPage = () => {
             <div className={styles.formGroup}>
               <label htmlFor="price_min" className={styles.modalLabel}>Rango de precio</label>
               <div className={styles.priceContainer}>
-                <input type="number" id="price_min" name="price_min" placeholder="price_min" min={0} className={styles.inputPrice} value={filters.price_min} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, price_min: e.target.value })))} />
+                <input type="number" id="price_min" name="price_min" placeholder="Mínimo" min={0} className={styles.inputPrice} value={filters.price_min || ''} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, price_min: e.target.value })))} />
                 <Icon icon={mopsusIcons.guion} fontSize={35} />
-                <input type="number" id="price_max" name="price_max" placeholder="price_max" min={0} className={styles.inputPrice} value={filters.price_max} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, price_max: e.target.value })))} />
+                <input type="number" id="price_max" name="price_max" placeholder="Máximo" min={0} className={styles.inputPrice} value={filters.price_max || ''} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, price_max: e.target.value })))} />
               </div>
             </div>
 
             <div className={styles.formGroup}>
               <label htmlFor="is_active" className={styles.modalLabel}>Estado</label>
-              <select id="is_active" name="is_active" className={styles.selectFilter}>
+              <select id="is_active" name="is_active" className={styles.selectFilter} value={filters.is_active || ''} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, is_active: e.target.value })))} >
                 <option value="">--</option>
                 <option value="true">Activo</option>
                 <option value="false">Inactivo</option>
@@ -376,7 +432,8 @@ export const ProductsPage = () => {
             </div>
           </form>
         </Filter>
-      )}
-    </Box>
+      )
+      }
+    </Box >
   );
 };

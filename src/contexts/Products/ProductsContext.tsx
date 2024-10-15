@@ -5,7 +5,7 @@ import { mopsusIcons } from '../../icons';
 
 export const ProductsContext = createContext(null);
 
-const INITIAL_FILTERS = {
+export const INITIAL_FILTERS = {
   title: '',
   category_id: null,
   unit_id: null,
