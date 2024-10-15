@@ -55,6 +55,7 @@ h4 {
 
 form {
   display: flex;
+  padding: 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -63,9 +64,9 @@ form {
 .inputGroup {
   width: 95%;
   position: relative;
-  margin: 20px;
+  margin: 20px 0px;
   display: flex;
-  flex-direction: column; /* Cambiado para alinear mejor el input y el label */
+  flex-direction: column;
 }
 
 input {
