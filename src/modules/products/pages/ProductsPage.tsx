@@ -25,8 +25,14 @@ type Order = 'asc' | 'desc';
 export const ProductsPage = () => {
   const [isOpenNewProduct, setIsOpenNewProduct] = useState(false);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
-  const { getProducts, mappedProducts, isLoading } =
-    useContext(ProductsContext);
+  const {
+    mappedProducts,
+    isLoading,
+    setFilters,
+    deleteProductFromTable,
+    setMappedProducts,
+  } = useContext(ProductsContext);
+  const [search, setSearch] = useState('');
 
   const handleOpenNewProduct = (e) => {
     e.preventDefault();
@@ -38,12 +44,18 @@ export const ProductsPage = () => {
     setIsOpenFilter(true);
   };
 
-  const [valueToOrderBy, setValueToOrderBy] = useState('productName');
-  const [orderDirection, setOrderDirection] = useState<Order>('asc');
+  const [valueToOrderBy, setValueToOrderBy] = useState();
+  const [orderDirection, setOrderDirection] = useState<Order>();
 
   useEffect(() => {
-    getProducts();
-  }, []);
+    const timeoutId = setTimeout(() => {
+      setFilters((prevFilters) => ({ ...prevFilters, title: search }));
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [search]);
 
   const productsTableColumns = [
     {
@@ -67,11 +79,6 @@ export const ProductsPage = () => {
       orderBy: true,
     },
     {
-      text: 'Stock',
-      value: 'stock',
-      orderBy: true,
-    },
-    {
       text: 'Categoria',
       value: 'category',
       orderBy: true,
@@ -80,6 +87,11 @@ export const ProductsPage = () => {
       text: 'Estado',
       value: 'state',
       orderBy: true,
+    },
+    {
+      text: 'Opciones',
+      value: 'options',
+      orderBy: false,
     },
   ];
 
@@ -119,8 +131,20 @@ export const ProductsPage = () => {
 
   const createSortHandler = (property: string) => {
     const isAsc = valueToOrderBy === property && orderDirection === 'asc';
-    setOrderDirection(isAsc ? 'desc' : 'asc');
+    const newOrderDirection = isAsc ? 'desc' : 'asc';
+
+    setOrderDirection(newOrderDirection);
     setValueToOrderBy(property);
+
+    const sortedProducts = [...mappedProducts].sort((a, b) => {
+      if (newOrderDirection === 'asc') {
+        return a[property] > b[property] ? 1 : -1;
+      } else {
+        return a[property] < b[property] ? 1 : -1;
+      }
+    });
+
+    setMappedProducts(sortedProducts);
   };
 
   return (
@@ -138,6 +162,8 @@ export const ProductsPage = () => {
       <section className={styles.tableActionsContainer}>
         <div className={styles.tableSearchComponent}>
           <input
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
             className={styles.tableSearchInput}
             placeholder="Buscar por nombre"
             type="text"
@@ -234,29 +260,57 @@ export const ProductsPage = () => {
                   <p>Cargando datos...</p>
                 </TableCell>
               </TableRow>
-            ) : (
+            ) : mappedProducts && mappedProducts.length > 0 ? (
               stableSort(
                 mappedProducts,
                 getComparator(orderDirection, valueToOrderBy)
               ).map((row, index) => (
-                <TableRow key={index} sx={{}}>
+                <TableRow key={index}>
                   {productsTableColumns.map((column) => (
                     <TableCell
+                      sx={{
+                        border: 'none',
+                        color: '#ffff',
+                        fontFamily: 'Montserrat',
+                      }}
                       align="center"
                       key={column.value}
-                      sx={{
-                        backgroundColor: 'transparent',
-                        border: 'none',
-                        fontFamily: 'Montserrat',
-                        textAlign: 'center',
-                        color: '#FFF',
-                      }}
                     >
-                      {row[column.value]}
+                      {column.value === 'options' ? (
+                        <Icon
+                          style={{ color: '#ffff', fontSize: '1.2rem' }}
+                          icon={mopsusIcons.trash}
+                          onClick={() => deleteProductFromTable(index)}
+                        />
+                      ) : (
+                        row[column.value]
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={productsTableColumns.length}
+                  sx={{
+                    border: 'none',
+                    color: '#fff',
+                    fontFamily: 'Montserrat',
+                  }}
+                  align="center"
+                >
+                  <p
+                    style={{
+                      color: '#ffff',
+                      textAlign: 'center',
+                      marginTop: '10rem',
+                    }}
+                  >
+                    No se encontraron productos con ese nombre
+                  </p>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
