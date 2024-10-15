@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { mopsusIcons } from '../../../icons';
 import Box from '../../../shared/box';
 import styles from '../styles/products.module.scss';
@@ -14,8 +14,9 @@ import {
   TableRow,
   TableCell,
   TableSortLabel,
+  CircularProgress,
 } from '@mui/material';
-
+import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 
 const PRODUCTS_AMOUNT = 145;
 
@@ -24,6 +25,8 @@ type Order = 'asc' | 'desc';
 export const ProductsPage = () => {
   const [isOpenNewProduct, setIsOpenNewProduct] = useState(false);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const { getProducts, mappedProducts, isLoading } =
+    useContext(ProductsContext);
 
   const handleOpenNewProduct = (e) => {
     e.preventDefault();
@@ -37,6 +40,10 @@ export const ProductsPage = () => {
 
   const [valueToOrderBy, setValueToOrderBy] = useState('productName');
   const [orderDirection, setOrderDirection] = useState<Order>('asc');
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   const productsTableColumns = [
     {
@@ -59,64 +66,23 @@ export const ProductsPage = () => {
       value: 'repositionPoint',
       orderBy: true,
     },
+    {
+      text: 'Stock',
+      value: 'stock',
+      orderBy: true,
+    },
+    {
+      text: 'Categoria',
+      value: 'category',
+      orderBy: true,
+    },
+    {
+      text: 'Estado',
+      value: 'state',
+      orderBy: true,
+    },
   ];
 
-  const mockedProducts = [
-    {
-      productName: 'Super8',
-      price: '$300.00',
-      stock: 120,
-      repositionPoint: 20,
-    },
-    {
-      productName: 'Chocman',
-      price: '$350.00',
-      stock: 150,
-      repositionPoint: 10,
-    },
-    {
-      productName: 'Jorgito',
-      price: '$500.00',
-      stock: 90,
-      repositionPoint: 35,
-    },
-    {
-      productName: 'Facturas',
-      price: '$600.00',
-      stock: 200,
-      repositionPoint: 18,
-    },
-    {
-      productName: 'Completos',
-      price: '$2,000.00',
-      stock: 100,
-      repositionPoint: 7,
-    },
-    {
-      productName: 'Chubi',
-      price: '$400.00',
-      stock: 50,
-      repositionPoint: 10,
-    },
-    {
-      productName: 'Milanesas',
-      price: '$10,000.00',
-      stock: 79,
-      repositionPoint: 55,
-    },
-    {
-      productName: 'Chocolate Milka',
-      price: '$1,000.00',
-      stock: 55,
-      repositionPoint: 40,
-    },
-    {
-      productName: 'Eso que te gusta',
-      price: '$20,000.00',
-      stock: 35,
-      repositionPoint: 38,
-    },
-  ];
   function stableSort<T>(
     array: readonly T[],
     comparator: (a: T, b: T) => number
@@ -150,11 +116,13 @@ export const ProductsPage = () => {
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
+
   const createSortHandler = (property: string) => {
     const isAsc = valueToOrderBy === property && orderDirection === 'asc';
     setOrderDirection(isAsc ? 'desc' : 'asc');
     setValueToOrderBy(property);
   };
+
   return (
     <Box>
       <header className={`${styles.header}`}>
@@ -184,7 +152,9 @@ export const ProductsPage = () => {
         </button>
       </section>
 
-      <TableContainer sx={{ width: '95%', margin: '2.5% auto' }}>
+      <TableContainer
+        sx={{ width: '95%', margin: '2.5% auto', height: '40vh' }}
+      >
         <Table>
           <TableHead>
             <TableRow>
@@ -205,7 +175,6 @@ export const ProductsPage = () => {
                     active={valueToOrderBy === value}
                     sx={{
                       opacity: 100,
-
                       textAlign: 'center',
                       '&.Mui-active': {
                         color: '#979797',
@@ -242,29 +211,53 @@ export const ProductsPage = () => {
               ))}
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {stableSort(
-              mockedProducts,
-              getComparator(orderDirection, valueToOrderBy)
-            ).map((row, index) => (
-              <TableRow key={index} sx={{}}>
-                {productsTableColumns.map((column) => (
-                  <TableCell
-                    align="center"
-                    key={column.value}
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={productsTableColumns.length}
+                  sx={{
+                    border: 'none',
+                    color: '#fff',
+                    fontFamily: 'Montserrat',
+                  }}
+                  align="center"
+                >
+                  <CircularProgress
                     sx={{
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      fontFamily: 'Montserrat',
-                      textAlign: 'center',
-                      color: '#FFF',
+                      margin: '7.5% auto 1rem auto',
+                      color: '#4a7370',
+                      opacity: 100,
                     }}
-                  >
-                    {row[column.value]}
-                  </TableCell>
-                ))}
+                  />
+                  <p>Cargando datos...</p>
+                </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              stableSort(
+                mappedProducts,
+                getComparator(orderDirection, valueToOrderBy)
+              ).map((row, index) => (
+                <TableRow key={index} sx={{}}>
+                  {productsTableColumns.map((column) => (
+                    <TableCell
+                      align="center"
+                      key={column.value}
+                      sx={{
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        fontFamily: 'Montserrat',
+                        textAlign: 'center',
+                        color: '#FFF',
+                      }}
+                    >
+                      {row[column.value]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -280,11 +273,9 @@ export const ProductsPage = () => {
         <Filter
           isOpen={isOpenFilter}
           setIsOpen={setIsOpenFilter}
-          onApplyFilters={() => { }}
-          onDeleteFilters={() => { }}
-        >
-          <h1>hoañ</h1>
-        </Filter>
+          onApplyFilters={() => {}}
+          onDeleteFilters={() => {}}
+        />
       )}
     </Box>
   );

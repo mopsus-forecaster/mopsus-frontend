@@ -47,3 +47,12 @@ export const getUnits = async () => {
   });
   return response.data;
 };
+
+export const getAllProducts = async (page) => {
+  const response = await apiClient({
+    api: 'products',
+    service: `/?page=${page}`,
+    verb: 'get',
+  });
+  return response.data;
+};

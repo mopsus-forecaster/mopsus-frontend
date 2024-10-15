@@ -1,12 +1,15 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import styles from '../styles/products.module.scss';
 import { mopsusIcons } from '../../../icons';
-import { useForm } from '../../../Hooks/useForm';
+import { useForm } from '../../../hooks/useForm';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
-import routes from '../../../router/routes';
-import { addProduct, getCategories, getUnits } from '../../../services/products';
+import {
+  addProduct,
+  getCategories,
+  getUnits,
+} from '../../../services/products';
+import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 
 interface FormData {
   title: string;
@@ -14,7 +17,7 @@ interface FormData {
   reposition_point: number | string;
   stock: number | string;
   category: string;
-  unit: string,
+  unit: string;
 }
 
 const validateForm = (form: FormData) => {
@@ -39,10 +42,9 @@ const validateForm = (form: FormData) => {
   return errors;
 };
 
-
-
 export const NewProduct = ({ isOpenNewProduct, onClose }) => {
-  const { handleOpen, handleModalChange } = useContext(ModalContext)
+  const { getProducts } = useContext(ProductsContext);
+  const { handleOpen, handleModalChange } = useContext(ModalContext);
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
     {
       title: '',
@@ -55,21 +57,29 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
     validateForm
   );
 
-  const [categories, setCategories] = useState([])
-  const [units, setUnits] = useState([])
-
-  const navigate = useNavigate()
+  const [categories, setCategories] = useState([]);
+  const [units, setUnits] = useState([]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await addProduct(form.title, form.price, form.reposition_point, form.stock, form.unit, form.category)
+      const res = await addProduct(
+        form.title,
+        form.price,
+        form.reposition_point,
+        form.stock,
+        form.unit,
+        form.category
+      );
 
       if (res) {
         handleModalChange({
           accept: {
             title: 'Aceptar',
-            action: () => { navigate(`/${routes.products}`) },
+            action: () => {
+              onClose();
+              getProducts();
+            },
           },
           title: 'Producto registrado con éxito',
           message: 'Prodra ver el producto registrado en la tabla',
@@ -77,13 +87,12 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
         handleOpen();
       }
     } catch ({ errors }) {
-
       switch (errors[0].status) {
         case 400:
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => {},
             },
             title: 'Error en los campos',
             message: 'Usuario y/o contraseña incorrectos.',
@@ -95,7 +104,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => {},
             },
             title: 'Error técnico',
             message:
@@ -106,7 +115,6 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
 
           break;
       }
-
     }
     console.log('Producto registrado', JSON.stringify(form));
   };
@@ -114,76 +122,103 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
   useEffect(() => {
     const getCategoriesOptions = async () => {
       try {
-        const { categorias } = await getCategories()
+        const { categorias } = await getCategories();
         if (categorias) {
-          console.log(categorias)
-          setCategories(categorias)
+          console.log(categorias);
+          setCategories(categorias);
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
 
     const getUnitsOptions = async () => {
       try {
-        const { unidades } = await getUnits()
+        const { unidades } = await getUnits();
         if (unidades) {
-          console.log(unidades)
-          setUnits(unidades)
+          console.log(unidades);
+          setUnits(unidades);
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
 
-    getCategoriesOptions()
-    getUnitsOptions()
-
-  }, [])
-
+    getCategoriesOptions();
+    getUnitsOptions();
+  }, []);
 
   return (
     <div className={styles.modal}>
       <div className={styles.registerContainer}>
         <div className={styles.modalContents}>
-          <Icon fontSize={25} icon={mopsusIcons.closeModal} className={styles.iconClose} onClick={onClose} />
+          <Icon
+            fontSize={25}
+            icon={mopsusIcons.closeModal}
+            className={styles.iconClose}
+            onClick={onClose}
+          />
           <div></div>
           <h2 className={styles.titleRegister}>Registrar Producto</h2>
           <hr className={styles.line} />
           <form onSubmit={onSubmit}>
             <div>
               <div>
-                <label htmlFor="" className={styles.modalLabel}>Categorias</label>
-                <select onChange={handleChange} value={form.category} name="category" id="category">
-                  <option value="" disabled selected>Selecciona una categoría</option>
-                  {categories && categories.length > 0
-                    ? categories.map(c => (
+                <label htmlFor="" className={styles.modalLabel}>
+                  Categorias
+                </label>
+                <select
+                  onChange={handleChange}
+                  value={form.category}
+                  name="category"
+                  id="category"
+                >
+                  <option value="" disabled selected>
+                    Selecciona una categoría
+                  </option>
+                  {categories && categories.length > 0 ? (
+                    categories.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.name} - {c.description}
                       </option>
                     ))
-                    : <option value="" disabled>No hay categorías disponibles</option>
-                  }
+                  ) : (
+                    <option value="" disabled>
+                      No hay categorías disponibles
+                    </option>
+                  )}
                 </select>
-
-
               </div>
               <div>
-                <label htmlFor="" className={styles.modalLabel}>Unidades</label>
-                <select name="unit" id="unit" value={form.unit} onChange={handleChange}>
-                  <option value="" disabled>Selecciona una unidad</option>
-                  {units && units.length > 0
-                    ? units.map(unit => (
+                <label htmlFor="" className={styles.modalLabel}>
+                  Unidades
+                </label>
+                <select
+                  name="unit"
+                  id="unit"
+                  value={form.unit}
+                  onChange={handleChange}
+                >
+                  <option value="" disabled>
+                    Selecciona una unidad
+                  </option>
+                  {units && units.length > 0 ? (
+                    units.map((unit) => (
                       <option key={unit.id} value={unit.id}>
                         {unit.name} - {unit.description}
                       </option>
                     ))
-                    : <option value="" disabled>No hay unidades disponibles</option>
-                  }
+                  ) : (
+                    <option value="" disabled>
+                      No hay unidades disponibles
+                    </option>
+                  )}
                 </select>
               </div>
               <div>
-                <label htmlFor="" className={styles.modalLabel}>Nombre del producto</label>
+                <label htmlFor="" className={styles.modalLabel}>
+                  Nombre del producto
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -195,7 +230,9 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
               </div>
 
               <div>
-                <label htmlFor="" className={styles.modalLabel}>Precio de venta</label>
+                <label htmlFor="" className={styles.modalLabel}>
+                  Precio de venta
+                </label>
                 <input
                   type="number"
                   name="price"
@@ -209,7 +246,9 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
               </div>
 
               <div>
-                <label htmlFor="" className={styles.modalLabel}>Punto de reposición</label>
+                <label htmlFor="" className={styles.modalLabel}>
+                  Punto de reposición
+                </label>
                 <input
                   type="number"
                   name="reposition_point"
@@ -218,11 +257,15 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   value={form.reposition_point}
                   onChange={handleChange}
                 />
-                {errors.reposition_point && <p className={styles.error}>{errors.reposition_point}</p>}
+                {errors.reposition_point && (
+                  <p className={styles.error}>{errors.reposition_point}</p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="" className={styles.modalLabel}>Stock actual</label>
+                <label htmlFor="" className={styles.modalLabel}>
+                  Stock actual
+                </label>
                 <input
                   type="number"
                   name="stock"
@@ -235,14 +278,24 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
               </div>
 
               <div className={styles.btnBox}>
-                <button type='submit' className={`${styles.btn} ${styles.btnRegister}`}>Registrar Producto</button>
-                <button type='button' className={`${styles.btn} ${styles.btnCancel}`} onClick={onClose}>Cancelar</button>
+                <button
+                  type="submit"
+                  className={`${styles.btn} ${styles.btnRegister}`}
+                >
+                  Registrar Producto
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.btn} ${styles.btnCancel}`}
+                  onClick={onClose}
+                >
+                  Cancelar
+                </button>
               </div>
             </div>
           </form>
         </div>
       </div>
     </div>
-
   );
 };
