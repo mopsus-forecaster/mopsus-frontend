@@ -25,12 +25,14 @@ type Order = 'asc' | 'desc';
 export const ProductsPage = () => {
   const [isOpenNewProduct, setIsOpenNewProduct] = useState(false);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
+
   const {
     mappedProducts,
     isLoading,
     setFilters,
     deleteProductFromTable,
     setMappedProducts,
+    filters
   } = useContext(ProductsContext);
   const [search, setSearch] = useState('');
 
@@ -51,6 +53,7 @@ export const ProductsPage = () => {
     const timeoutId = setTimeout(() => {
       setFilters((prevFilters) => ({ ...prevFilters, title: search }));
     }, 500);
+
 
     return () => {
       clearTimeout(timeoutId);
@@ -327,9 +330,52 @@ export const ProductsPage = () => {
         <Filter
           isOpen={isOpenFilter}
           setIsOpen={setIsOpenFilter}
-          onApplyFilters={() => {}}
-          onDeleteFilters={() => {}}
-        />
+          onApplyFilters={() => { }}
+          onDeleteFilters={() => { }}
+        >
+          <form className={styles.formFilter}>
+            <div className={styles.formGroup}>
+              <label htmlFor="category_id" className={styles.modalLabel}>Categoria</label>
+              <select name="" id="" className={styles.selectFilter}>
+                <option value="">1</option>
+              </select>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="unit_id" className={styles.modalLabel}>Unidad</label>
+              <select name="" id="" className={styles.selectFilter}>
+                <option value="">1</option>
+              </select>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="below_reposition" className={styles.modalLabel}>Stock por debajo del punto de reposición</label>
+              <select id="below_reposition" name="below_reposition" className={styles.selectFilter}>
+                <option value="">--</option>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="price_min" className={styles.modalLabel}>Rango de precio</label>
+              <div className={styles.priceContainer}>
+                <input type="number" id="price_min" name="price_min" placeholder="price_min" min={0} className={styles.inputPrice} value={filters.price_min} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, price_min: e.target.value })))} />
+                <Icon icon={mopsusIcons.guion} fontSize={35} />
+                <input type="number" id="price_max" name="price_max" placeholder="price_max" min={0} className={styles.inputPrice} value={filters.price_max} onChange={(e) => (setFilters((prevFilters) => ({ ...prevFilters, price_max: e.target.value })))} />
+              </div>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="is_active" className={styles.modalLabel}>Estado</label>
+              <select id="is_active" name="is_active" className={styles.selectFilter}>
+                <option value="">--</option>
+                <option value="true">Activo</option>
+                <option value="false">Inactivo</option>
+              </select>
+            </div>
+          </form>
+        </Filter>
       )}
     </Box>
   );

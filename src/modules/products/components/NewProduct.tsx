@@ -23,6 +23,14 @@ interface FormData {
 const validateForm = (form: FormData) => {
   const errors: Partial<FormData> = {};
 
+  if (!form.category) {
+    errors.category = 'El stock actual es requerido';
+  }
+
+  if (!form.unit) {
+    errors.unit = 'El stock actual es requerido';
+  }
+
   if (!form.title) {
     errors.title = 'El nombre del producto es requerido';
   }
@@ -92,7 +100,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => { },
             },
             title: 'Error en los campos',
             message: 'Usuario y/o contraseña incorrectos.',
@@ -104,7 +112,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => { },
             },
             title: 'Error técnico',
             message:
@@ -116,7 +124,6 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
           break;
       }
     }
-    console.log('Producto registrado', JSON.stringify(form));
   };
 
   useEffect(() => {
@@ -170,6 +177,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   name="category"
                   id="category"
                   className={styles.select}
+                  required
                 >
                   <option value="" disabled>
                     Selecciona una categoría
@@ -198,7 +206,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   value={form.unit}
                   onChange={handleChange}
                   className={styles.select}
-                >
+                  required>
                   <option value="" disabled>
                     Selecciona una unidad
                   </option>
@@ -226,6 +234,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   className={styles.modalInput}
                   value={form.title}
                   onChange={handleChange}
+                  required
                 />
                 {errors.title && <p className={styles.error}>{errors.title}</p>}
               </div>
@@ -242,6 +251,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   step="0.01"
                   value={form.price}
                   onChange={handleChange}
+                  required
                 />
                 {errors.price && <p className={styles.error}>{errors.price}</p>}
               </div>
@@ -257,6 +267,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   min="0"
                   value={form.reposition_point}
                   onChange={handleChange}
+                  required
                 />
                 {errors.reposition_point && (
                   <p className={styles.error}>{errors.reposition_point}</p>
@@ -274,6 +285,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   min="0"
                   value={form.stock}
                   onChange={handleChange}
+                  required
                 />
                 {errors.stock && <p className={styles.error}>{errors.stock}</p>}
               </div>

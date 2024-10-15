@@ -12,7 +12,7 @@ const INITIAL_FILTERS = {
   below_reposition: null,
   price_min: null,
   price_max: null,
-  is_active: null,
+  is_active: true,
   page: 1,
 };
 export const ProductsProvider = ({ children }) => {
@@ -73,7 +73,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => {},
+                action: () => { },
               },
               title: `"${productToDelete.productName}" no pudo darse de baja`,
               message:

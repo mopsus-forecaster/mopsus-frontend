@@ -6,6 +6,7 @@ import { mopsusIcons } from "../../icons";
 type FiltersProps = {
     isOpen: boolean;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    children,
     onApplyFilters: () => void;
     onDeleteFilters: () => void;
 };
