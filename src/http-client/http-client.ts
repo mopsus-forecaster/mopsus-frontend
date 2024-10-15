@@ -117,7 +117,6 @@ export const fetch = async (
     'Content-Type': 'application/json',
     ...headers,
   };
-
   try {
     const response = (await instance.request({
       url,
