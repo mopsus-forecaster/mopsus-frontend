@@ -158,7 +158,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   <option value="" disabled selected>Selecciona una categoría</option>
                   {categories && categories.length > 0
                     ? categories.map(c => (
-                      <option key={c.id} value={c.id} className={styles.options}>
+                      <option key={c.id} value={c.id}>
                         {c.name} - {c.description}
                       </option>
                     ))
@@ -171,7 +171,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
               <div>
                 <label htmlFor="" className={styles.modalLabel}>Unidades</label>
                 <select name="unit" id="unit" value={form.unit} onChange={handleChange} className={styles.select}>
-                  <option value="" disabled className={styles.options}>Selecciona una unidad</option>
+                  <option value="" disabled >Selecciona una unidad</option>
                   {units && units.length > 0
                     ? units.map(unit => (
                       <option key={unit.id} value={unit.id}>
