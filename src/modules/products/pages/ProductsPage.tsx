@@ -3,7 +3,8 @@ import { mopsusIcons } from '../../../icons';
 import Box from '../../../shared/box';
 import styles from '../styles/products.module.scss';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { NewProduct, ProductFilters } from '../components';
+import { NewProduct } from '../components';
+import { Filter } from '../../../shared/filter';
 
 import {
   TableContainer,
@@ -14,6 +15,7 @@ import {
   TableCell,
   TableSortLabel,
 } from '@mui/material';
+
 
 const PRODUCTS_AMOUNT = 145;
 
@@ -275,14 +277,14 @@ export const ProductsPage = () => {
       )}
 
       {isOpenFilter && (
-        <ProductFilters
+        <Filter
           isOpen={isOpenFilter}
           setIsOpen={setIsOpenFilter}
-          onApplyFilters={() => {}}
-          onDeleteFilters={() => {}}
+          onApplyFilters={() => { }}
+          onDeleteFilters={() => { }}
         >
           <h1>hoañ</h1>
-        </ProductFilters>
+        </Filter>
       )}
     </Box>
   );

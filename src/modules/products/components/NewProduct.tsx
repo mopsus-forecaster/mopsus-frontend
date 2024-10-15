@@ -3,49 +3,48 @@ import styles from '../styles/products.module.scss';
 import { mopsusIcons } from '../../../icons';
 import { useForm } from '../../../Hooks/useForm';
 import { useContext, useState } from 'react';
-import Modal from '../../../shared/modal';
 import { useNavigate } from 'react-router-dom';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import routes from '../../../router/routes';
+import { addProduct } from '../../../services/products';
 
 interface FormData {
-  nombreProducto: string;
-  precioVenta: string;
-  puntoReposicion: string;
-  stockActual: string;
+  title: string;
+  price: number | string;
+  reposition_point: number | string;
+  stock: number | string;
 }
 
 const validateForm = (form: FormData) => {
   const errors: Partial<FormData> = {};
 
-  if (!form.nombreProducto) {
-    errors.nombreProducto = 'El nombre del producto es requerido';
+  if (!form.title) {
+    errors.title = 'El nombre del producto es requerido';
   }
 
-  if (!form.precioVenta) {
-    errors.precioVenta = 'El precio de venta es requerido';
+  if (!form.price) {
+    errors.price = 'El precio de venta es requerido';
   }
 
-  if (!form.puntoReposicion) {
-    errors.puntoReposicion = 'El punto de reposición es requerido';
+  if (!form.reposition_point) {
+    errors.reposition_point = 'El punto de reposición es requerido';
   }
 
-  if (!form.stockActual) {
-    errors.stockActual = 'El stock actual es requerido';
+  if (!form.stock) {
+    errors.stock = 'El stock actual es requerido';
   }
 
   return errors;
 };
 
 export const NewProduct = ({ isOpenNewProduct, onClose }) => {
-  const [registrado, setRegistrado] = useState(false);
-  //const { handleOpen, handleModalChange } = useContext(ModalContext)
+  const { handleOpen, handleModalChange } = useContext(ModalContext)
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
     {
-      nombreProducto: '',
-      precioVenta: '',
-      puntoReposicion: '',
-      stockActual: '',
+      title: '',
+      price: '',
+      reposition_point: '',
+      stock: ''
     },
     validateForm
   );
@@ -54,55 +53,52 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    handleSubmit(() => {
-      /* try {
-        const res = await addProduct()
-        if (res) {
+    try {
+      const res = await addProduct(form.title, form.price, form.reposition_point, form.stock)
+      if (res) {
+        handleModalChange({
+          accept: {
+            title: 'Aceptar',
+            action: () => { navigate(`/${routes.products}`) },
+          },
+          title: 'Producto registrado con éxito',
+          message: 'Prodra ver el producto registrado en la tabla',
+          icon: mopsusIcons.error,
+        });
+        handleOpen();
+      }
+    } catch (error) {
+      switch (errors[0].status) {
+        case 400:
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { navigate(`/${routes.products}`) },
+              action: () => { },
             },
-            title: 'Producto registrado con éxito',
-            message: 'Prodra ver el producto registrado en la tabla',
+            title: 'Error en los campos',
+            message: 'Usuario y/o contraseña incorrectos.',
             icon: mopsusIcons.error,
           });
           handleOpen();
-        }
-      } catch (error) {
-        switch (errors[0].status) {
-          case 400:
-            handleModalChange({
-              accept: {
-                title: 'Aceptar',
-                action: () => { },
-              },
-              title: 'Error en los campos',
-              message: 'Usuario y/o contraseña incorrectos.',
-              icon: mopsusIcons.error,
-            });
-            handleOpen();
-            break;
-          default:
-            handleModalChange({
-              accept: {
-                title: 'Aceptar',
-                action: () => { },
-              },
-              title: 'Error técnico',
-              message:
-                'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
-              icon: mopsusIcons.error,
-            });
-            handleOpen();
+          break;
+        default:
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => { },
+            },
+            title: 'Error técnico',
+            message:
+              'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+            icon: mopsusIcons.error,
+          });
+          handleOpen();
 
-            break;
-        }
+          break;
+      }
 
-      } */
-      console.log('Producto registrado', JSON.stringify(form));
-      setRegistrado(true);
-    });
+    }
+    console.log('Producto registrado', JSON.stringify(form));
   };
 
   return (
@@ -119,52 +115,52 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   <label htmlFor="" className={styles.modalLabel}>Nombre del producto</label>
                   <input
                     type="text"
-                    name="nombreProducto"
+                    name="title"
                     className={styles.modalInput}
-                    value={form.nombreProducto}
+                    value={form.title}
                     onChange={handleChange}
                   />
-                  {errors.nombreProducto && <p className={styles.error}>{errors.nombreProducto}</p>}
+                  {errors.title && <p className={styles.error}>{errors.title}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="" className={styles.modalLabel}>Precio de venta</label>
                   <input
                     type="number"
-                    name="precioVenta"
+                    name="price"
                     className={styles.modalInput}
                     min="0"
                     step="0.01"
-                    value={form.precioVenta}
+                    value={form.price}
                     onChange={handleChange}
                   />
-                  {errors.precioVenta && <p className={styles.error}>{errors.precioVenta}</p>}
+                  {errors.price && <p className={styles.error}>{errors.price}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="" className={styles.modalLabel}>Punto de reposición</label>
                   <input
                     type="number"
-                    name="puntoReposicion"
+                    name="reposition_point"
                     className={styles.modalInput}
                     min="0"
-                    value={form.puntoReposicion}
+                    value={form.reposition_point}
                     onChange={handleChange}
                   />
-                  {errors.puntoReposicion && <p className={styles.error}>{errors.puntoReposicion}</p>}
+                  {errors.reposition_point && <p className={styles.error}>{errors.reposition_point}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="" className={styles.modalLabel}>Stock actual</label>
                   <input
                     type="number"
-                    name="stockActual"
+                    name="stock"
                     className={styles.modalInput}
                     min="0"
-                    value={form.stockActual}
+                    value={form.stock}
                     onChange={handleChange}
                   />
-                  {errors.stockActual && <p className={styles.error}>{errors.stockActual}</p>}
+                  {errors.stock && <p className={styles.error}>{errors.stock}</p>}
                 </div>
 
                 <div className={styles.btnBox}>
@@ -173,23 +169,6 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                 </div>
               </div>
             </form>
-            {
-              registrado && (
-                <Modal
-                  show={true}
-                  title="Éxito"
-                  accept={{
-                    title: 'Aceptar',
-                    action: () => { },
-                  }}
-                  message="Producto registrado con éxito"
-                  handleClose={() => {
-                    setRegistrado(false);
-                  }}
-                  icon={mopsusIcons.circleCheck}
-                />
-              )
-            }
           </div>
         </div>
       </div>

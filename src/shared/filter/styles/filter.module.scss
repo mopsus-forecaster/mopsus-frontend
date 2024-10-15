@@ -1,0 +1,87 @@
+.filtersModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background-color: #282828;
+  margin-left: auto;
+}
+
+.modalFilter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(32, 32, 32, 0.7);
+  display: flex;
+  justify-content: right;
+  z-index: 1000;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+.headerContainer {
+  margin: 10px;
+}
+
+.tableContainer {
+  width: 90%;
+}
+
+.btn {
+  position: relative;
+  height: 5vh;
+  color: $color-white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition:
+    background-color 0.3s,
+    border 0.3s;
+}
+
+.btnRegister {
+  background-color: $color-primary;
+  border: $color-primary;
+  margin-right: 2vw;
+}
+
+.btnRegister:hover {
+  background-color: transparent;
+  border: 1px solid $color-primary;
+}
+
+.btnCancel {
+  background-color: transparent;
+  border: 1px solid $color-primary;
+}
+
+.btnCancel:hover {
+  background-color: $color-primary;
+  border: none;
+}
+
+.line {
+  position: relative;
+  margin: 0;
+  width: 25vw;
+  height: 0.5px;
+}
+
+.titleRegister {
+  font-size: 2rem;
+  color: white;
+  margin-top: 2vb;
+}
+
+.iconCloseFilter {
+  position: relative;
+  margin-top: 2vh;
+  margin-left: 23vw;
+  cursor: pointer;
+}

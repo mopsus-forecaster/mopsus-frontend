@@ -25,7 +25,7 @@ const localConfig: LocalConfig = {
           basepath: `${BASE_URL}/auth`,
         },
         products: {
-          basepath: `${BASE_URL}/products/`,
+          basepath: `${BASE_URL}/products`,
         },
       },
     },
