@@ -221,3 +221,14 @@ form {
   background-color: #f0f0f0;
   color: #999;
 }
+
+.option {
+  padding: 8px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-primary; // Cambia el fondo al color primario
+    color: $color-white; // Asegúrate de que el texto siga siendo visible
+  }
+}
