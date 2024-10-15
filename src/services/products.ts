@@ -47,3 +47,47 @@ export const getUnits = async () => {
   });
   return response.data;
 };
+
+export const deleteProduct = async (id) => {
+  const response = await apiClient({
+    api: 'products',
+    service: '/delete_product',
+    verb: 'put',
+    dataSend: {
+      id,
+    },
+  });
+  return response.data;
+};
+
+export const getAllProducts = async ({
+  page,
+  title = '',
+  category_id = null,
+  unit_id = null,
+  below_reposition = null,
+  price_min = null,
+  price_max = null,
+  is_active = null,
+}) => {
+  const queryParams = new URLSearchParams();
+
+  queryParams.append('page', page);
+
+  if (title) queryParams.append('title', title);
+  if (category_id !== null) queryParams.append('category_id', category_id);
+  if (unit_id !== null) queryParams.append('unit_id', unit_id);
+  if (below_reposition !== null)
+    queryParams.append('below_reposition', below_reposition);
+  if (price_min !== null) queryParams.append('price_min', price_min);
+  if (price_max !== null) queryParams.append('price_max', price_max);
+  if (is_active !== null) queryParams.append('is_active', is_active);
+
+  const response = await apiClient({
+    api: 'products',
+    service: `/?${queryParams.toString()}`,
+    verb: 'get',
+  });
+
+  return response.data;
+};

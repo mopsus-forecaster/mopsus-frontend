@@ -10,6 +10,7 @@ import { useForm } from '../../hooks';
 import { ModalContext } from '../../contexts/modal/ModalContext';
 import { resendCode, userLogin } from '../../services';
 import { MfaFlow } from '../../types';
+import { CircularProgress } from '@mui/material';
 
 interface FormData {
   email: string;
@@ -44,7 +45,7 @@ export const Login = () => {
     handlesetPrevRoute,
     setCurrentMfaFlow,
   } = useContext(AuthContext);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
   const from = comesFrom || routes.home;
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
@@ -94,6 +95,7 @@ export const Login = () => {
   const { handleModalChange, handleOpen } = useContext(ModalContext);
   const onLogin = async () => {
     try {
+      setIsLoading(true);
       const {
         access_token: accessToken,
         name,
@@ -192,6 +194,8 @@ export const Login = () => {
       }
 
       return;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -234,28 +238,34 @@ export const Login = () => {
           </div>
         </div>
         {errors.password && <p className={styles.errors}>{errors.password} </p>}
-        <div className={styles.inputGroup}>
-          <button type="submit" className={styles.btn}>
-            Iniciar Sesión
-          </button>
-        </div>
+        {isLoading ? (
+          <CircularProgress sx={{ opacity: 100, color: '#4a7370' }} />
+        ) : (
+          <div className={styles.inputGroup}>
+            <button type="submit" className={styles.btn}>
+              Iniciar Sesión
+            </button>
+          </div>
+        )}
       </form>
-      <div className={styles.aBlock}>
-        <p
-          onClick={() => {
-            setCurrentMfaFlow(MfaFlow.AccountRecovery);
-            navigate(`/${routes.accountRecovery}`);
-          }}
-        >
-          ¿Olvidaste tu contraseña?
-        </p>
-        <p
-          className={styles.blond}
-          onClick={() => navigate(`/${routes.registerNameEmail}`)}
-        >
-          Crear una cuenta
-        </p>
-      </div>
+      {!isLoading && (
+        <div className={styles.aBlock}>
+          <p
+            onClick={() => {
+              setCurrentMfaFlow(MfaFlow.AccountRecovery);
+              navigate(`/${routes.accountRecovery}`);
+            }}
+          >
+            ¿Olvidaste tu contraseña?
+          </p>
+          <p
+            className={styles.blond}
+            onClick={() => navigate(`/${routes.registerNameEmail}`)}
+          >
+            Crear una cuenta
+          </p>
+        </div>
+      )}
     </article>
   );
 };
