@@ -36,6 +36,8 @@ export const ProductsPage = () => {
     deleteProductFromTable,
     setMappedProducts,
     filters,
+    handleSetProductToEdit,
+    editProduct,
   } = useContext(ProductsContext);
   const [search, setSearch] = useState('');
 
@@ -331,7 +333,9 @@ export const ProductsPage = () => {
                           <Icon
                             style={{ color: '#ffff', fontSize: '1.2rem' }}
                             icon={mopsusIcons.edit}
-                            onClick={() => {}}
+                            onClick={() => {
+                              handleSetProductToEdit(index);
+                            }}
                           />
                         </div>
                       ) : (
@@ -542,6 +546,11 @@ export const ProductsPage = () => {
           </form>
         </Filter>
       )}
+
+      {/* 
+      
+      Lo que deberias hacer es  productToEdit && <ComponenteEdicion/> y cuando termines de editar deberias llamar a la funcion pero sin mandarle ningun argumento 
+      */}
     </Box>
   );
 };

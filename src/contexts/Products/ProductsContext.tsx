@@ -20,7 +20,7 @@ export const ProductsProvider = ({ children }) => {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [isLoading, setIsLoading] = useState(false);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
-
+  const [editProduct, setEditProduct] = useState(null);
   const getProducts = async (customFilters?) => {
     try {
       setIsLoading(true);
@@ -45,6 +45,14 @@ export const ProductsProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSetProductToEdit = (index = null) => {
+    if (!index) {
+      setEditProduct(null);
+      return;
+    }
+    setEditProduct(mappedProducts[index]);
   };
 
   const deleteProductFromTable = (index) => {
@@ -100,6 +108,8 @@ export const ProductsProvider = ({ children }) => {
         setFilters,
         deleteProductFromTable,
         setMappedProducts,
+        handleSetProductToEdit,
+        editProduct,
       }}
     >
       {children}
