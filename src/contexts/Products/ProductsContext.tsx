@@ -21,10 +21,12 @@ export const ProductsProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
 
-  const getProducts = async () => {
+  const getProducts = async (customFilters?) => {
     try {
       setIsLoading(true);
-      const { productos } = await getAllProducts(filters);
+      const { productos } = await getAllProducts(
+        customFilters ? customFilters : filters
+      );
       if (productos) {
         const mapped = productos.map((product) => ({
           id: product.id,
@@ -46,8 +48,6 @@ export const ProductsProvider = ({ children }) => {
   };
 
   const deleteProductFromTable = (index) => {
-    console.log(index);
-    console.log(mappedProducts);
     const productToDelete = mappedProducts[index];
     handleModalChange({
       accept: {
@@ -73,7 +73,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${productToDelete.productName}" no pudo darse de baja`,
               message:
@@ -89,10 +89,6 @@ export const ProductsProvider = ({ children }) => {
     });
     handleOpen();
   };
-
-  useEffect(() => {
-    getProducts();
-  }, [filters]);
 
   return (
     <ProductsContext.Provider
