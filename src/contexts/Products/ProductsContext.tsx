@@ -30,6 +30,7 @@ export const ProductsProvider = ({ children }) => {
       if (productos) {
         const mapped = productos.map((product) => ({
           id: product.id,
+          measureUnit: product.unit_id,
           productName: product.title,
           price: product.price,
           stock: product.stock,
