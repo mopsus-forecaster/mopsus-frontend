@@ -508,17 +508,18 @@ export const ProductsPage = () => {
                 id="is_active"
                 name="is_active"
                 className={styles.selectFilter}
-                value={filters.is_active || ''}
+                value={filters.is_active || 'all'}
                 onChange={(e) =>
                   setFilters((prevFilters) => ({
                     ...prevFilters,
-                    is_active: e.target.value,
+                    is_active: e.target.value === 'all' ? null : e.target.value,
                   }))
                 }
               >
                 <option value="">--</option>
                 <option value="true">Activo</option>
                 <option value="false">Inactivo</option>
+                <option value="all">Todos</option>
               </select>
             </div>
           </form>
