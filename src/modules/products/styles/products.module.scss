@@ -73,6 +73,12 @@
   border-radius: 20px;
   padding: 0.5% 1.5%;
   font-weight: 600;
+  transition: all 0.4s;
+}
+
+.buttonAdd:hover {
+  background-color: transparent;
+  border: 1px solid $color-primary;
 }
 
 .modal {

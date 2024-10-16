@@ -81,6 +81,7 @@ export const ProductsPage = () => {
     getUnitsOptions();
     const timeoutId = setTimeout(() => {
       setFilters((prevFilters) => ({ ...prevFilters, title: search }));
+      getProducts();
     }, 500);
 
     return () => {
@@ -180,6 +181,9 @@ export const ProductsPage = () => {
 
   useEffect(() => {
     getProducts();
+    return () => {
+      setFilters(INITIAL_FILTERS);
+    };
   }, []);
 
   return (
@@ -312,11 +316,24 @@ export const ProductsPage = () => {
                       key={column.value}
                     >
                       {column.value === 'options' ? (
-                        <Icon
-                          style={{ color: '#ffff', fontSize: '1.2rem' }}
-                          icon={mopsusIcons.trash}
-                          onClick={() => deleteProductFromTable(index)}
-                        />
+                        <div
+                          style={{
+                            display: 'flex',
+                            gap: '1rem',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <Icon
+                            style={{ color: '#ffff', fontSize: '1.2rem' }}
+                            icon={mopsusIcons.trash}
+                            onClick={() => deleteProductFromTable(index)}
+                          />
+                          <Icon
+                            style={{ color: '#ffff', fontSize: '1.2rem' }}
+                            icon={mopsusIcons.edit}
+                            onClick={() => {}}
+                          />
+                        </div>
                       ) : (
                         row[column.value]
                       )}
