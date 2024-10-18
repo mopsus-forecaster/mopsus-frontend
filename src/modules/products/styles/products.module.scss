@@ -307,3 +307,16 @@ form {
     border-color: #888;
   }
 }
+
+.modalInputDesabled {
+  margin: 2vh 0;
+  padding: 2vb;
+  width: 25vw;
+  height: 4vh;
+  background-color: #5f5f5f;
+  border: none;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+}

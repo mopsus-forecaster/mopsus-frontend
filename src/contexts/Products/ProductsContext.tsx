@@ -30,7 +30,8 @@ export const ProductsProvider = ({ children }) => {
       if (productos) {
         const mapped = productos.map((product) => ({
           id: product.id,
-          measureUnit: product.unit_id,
+          measureUnitId: product.id_units,
+          measureUnitDescription: product.unidad,
           productName: product.title,
           price: product.price,
           stock: product.stock,
@@ -49,7 +50,7 @@ export const ProductsProvider = ({ children }) => {
   };
 
   const handleSetProductToEdit = (index = null) => {
-    if (!index) {
+    if (!index && index != 0) {
       setEditProduct(null);
       return;
     }
@@ -82,7 +83,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => {},
+                action: () => { },
               },
               title: `"${productToDelete.productName}" no pudo darse de baja`,
               message:
