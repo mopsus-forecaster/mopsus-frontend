@@ -87,7 +87,6 @@ export const ProductsPage = () => {
       setFilters((prevFilters) => ({ ...prevFilters, title: search }));
       getProducts();
     }, 500);
-
     return () => {
       clearTimeout(timeoutId);
     };
