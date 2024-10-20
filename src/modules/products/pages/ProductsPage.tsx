@@ -8,6 +8,7 @@ import { Filter } from '../../../shared/filter';
 import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 import { getCategories, getUnits } from '../../../services/products';
 import { INITIAL_FILTERS } from '../../../contexts/Products/ProductsContext';
+import { ModifyProduct } from '../components/ModifyProduct';
 
 import {
   TableContainer,
@@ -19,6 +20,7 @@ import {
   TableSortLabel,
   CircularProgress,
 } from '@mui/material';
+
 
 const PRODUCTS_AMOUNT = 145;
 
@@ -95,37 +97,37 @@ export const ProductsPage = () => {
     {
       text: 'Nombre',
       value: 'productName',
-      orderBy: true,
+      sort: true,
     },
     {
-      text: 'Precio',
+      text: 'Precio (ARS)',
       value: 'price',
-      orderBy: true,
+      sort: true,
     },
     {
       text: 'Stock',
       value: 'stock',
-      orderBy: true,
+      sort: true,
     },
     {
-      text: 'Punto de reposicion',
+      text: 'Punto de reposición',
       value: 'repositionPoint',
-      orderBy: true,
+      sort: true,
     },
     {
-      text: 'Categoria',
+      text: 'Categoría',
       value: 'category',
-      orderBy: true,
+      sort: true,
     },
     {
-      text: 'Estado',
-      value: 'state',
-      orderBy: true,
+      text: 'Unidad de medida',
+      value: 'measureUnitDescription',
+      sort: true,
     },
     {
       text: 'Opciones',
       value: 'options',
-      orderBy: false,
+      sort: false,
     },
   ];
 
@@ -225,7 +227,7 @@ export const ProductsPage = () => {
         <Table>
           <TableHead>
             <TableRow>
-              {productsTableColumns.map(({ value, text }) => (
+              {productsTableColumns.map(({ value, text, sort }) => (
                 <TableCell
                   key={value}
                   sx={{
@@ -237,7 +239,7 @@ export const ProductsPage = () => {
                   }}
                   align="center"
                 >
-                  <TableSortLabel
+                  {sort ? <TableSortLabel
                     onClick={() => createSortHandler(value)}
                     active={valueToOrderBy === value}
                     sx={{
@@ -273,7 +275,17 @@ export const ProductsPage = () => {
                     }
                   >
                     {text}
-                  </TableSortLabel>
+                  </TableSortLabel> : <span
+                    style={{
+                      textAlign: "center",
+                      fontFamily: "Montserrat",
+                      color: '#979797',
+                      opacity: 100
+                    }}
+                  >
+                    {`${text}`}
+                  </span>}
+
                 </TableCell>
               ))}
             </TableRow>
@@ -547,10 +559,9 @@ export const ProductsPage = () => {
         </Filter>
       )}
 
-      {/* 
-      
-      Lo que deberias hacer es  productToEdit && <ComponenteEdicion/> y cuando termines de editar deberias llamar a la funcion pero sin mandarle ningun argumento 
-      */}
+      {
+        editProduct && <ModifyProduct editProduct={editProduct} setEditProduct={handleSetProductToEdit} />
+      }
     </Box>
   );
 };

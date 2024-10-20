@@ -91,3 +91,32 @@ export const getAllProducts = async ({
 
   return response.data;
 };
+
+export const onEditProduct = async (
+  id,
+  title,
+  id_categoria,
+  id_units,
+  reposition_point,
+  price
+) => {
+  const priceCasted = Number(price);
+  const product = {
+    id,
+    title,
+    id_categoria,
+    id_units,
+    reposition_point,
+    price: priceCasted,
+  };
+  const response = await apiClient({
+    api: 'products',
+    service: `/modify_product`,
+    verb: 'post',
+    dataSend: {
+      product,
+    },
+  });
+
+  return response.data;
+};
