@@ -9900,4 +9900,9 @@ export const mopsusIcons = {
     height: 24,
     body: '<path fill="currentColor" d="m10.828 12l4.95 4.95l-1.414 1.415L8 12l6.364-6.364l1.414 1.414z" />',
   },
+  plus: {
+    width: 24,
+    height: 24,
+    body: '<g class="plus-outline"><g fill="white" fill-rule="evenodd" class="Vector" clip-rule="evenodd"><path d="M12 3a1 1 0 0 1 1 1v16a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1" /><path d="M21 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h16a1 1 0 0 1 1 1" /></g></g>',
+  },
 };
