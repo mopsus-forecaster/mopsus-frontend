@@ -9,27 +9,13 @@ import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 import { getCategories, getUnits } from '../../../services/products';
 import { INITIAL_FILTERS } from '../../../contexts/Products/ProductsContext';
 import { ModifyProduct } from '../components/ModifyProduct';
-
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableSortLabel,
-  CircularProgress,
-} from '@mui/material';
-
+import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
+import { productsTableColumns } from '../data/productsColumns';
+import { ProductFilters } from '../components/ProductFilters';
 
 const PRODUCTS_AMOUNT = 145;
 
-type Order = 'asc' | 'desc';
-
 export const ProductsPage = () => {
-  const [isOpenNewProduct, setIsOpenNewProduct] = useState(false);
-  const [isOpenFilter, setIsOpenFilter] = useState(false);
-
   const {
     mappedProducts,
     isLoading,
@@ -40,8 +26,31 @@ export const ProductsPage = () => {
     filters,
     handleSetProductToEdit,
     editProduct,
+    totalPages,
+    goToLastPage,
+    goToFirstPage,
+    goToPreviousPage,
+    goToNextPage,
   } = useContext(ProductsContext);
+
+  const [isOpenNewProduct, setIsOpenNewProduct] = useState(false);
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [search, setSearch] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [units, setUnits] = useState([]);
+
+  const options = [
+    {
+      icon: mopsusIcons.edit,
+
+      onClick: handleSetProductToEdit,
+    },
+    {
+      icon: mopsusIcons.trash,
+
+      onClick: deleteProductFromTable,
+    },
+  ];
 
   const handleOpenNewProduct = (e) => {
     e.preventDefault();
@@ -53,10 +62,24 @@ export const ProductsPage = () => {
     setIsOpenFilter(true);
   };
 
-  const [valueToOrderBy, setValueToOrderBy] = useState();
-  const [orderDirection, setOrderDirection] = useState<Order>();
-  const [categories, setCategories] = useState([]);
-  const [units, setUnits] = useState([]);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setFilters((prevFilters) => {
+        const newFilters = {
+          ...prevFilters,
+          title: search ? search : null,
+        };
+
+        getProducts(newFilters);
+
+        return newFilters;
+      });
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [search]);
 
   useEffect(() => {
     const getCategoriesOptions = async () => {
@@ -83,106 +106,6 @@ export const ProductsPage = () => {
 
     getCategoriesOptions();
     getUnitsOptions();
-    const timeoutId = setTimeout(() => {
-      setFilters((prevFilters) => ({ ...prevFilters, title: search }));
-      getProducts();
-    }, 500);
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [search]);
-
-  const productsTableColumns = [
-    {
-      text: 'Nombre',
-      value: 'productName',
-      sort: true,
-    },
-    {
-      text: 'Precio (ARS)',
-      value: 'price',
-      sort: true,
-    },
-    {
-      text: 'Stock',
-      value: 'stock',
-      sort: true,
-    },
-    {
-      text: 'Punto de reposición',
-      value: 'repositionPoint',
-      sort: true,
-    },
-    {
-      text: 'Categoría',
-      value: 'category',
-      sort: true,
-    },
-    {
-      text: 'Unidad de medida',
-      value: 'measureUnitDescription',
-      sort: true,
-    },
-    {
-      text: 'Opciones',
-      value: 'options',
-      sort: false,
-    },
-  ];
-
-  function stableSort<T>(
-    array: readonly T[],
-    comparator: (a: T, b: T) => number
-  ) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) {
-        return order;
-      }
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-  }
-
-  function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  }
-
-  function getComparator<
-    T extends Record<Key, number | string>,
-    Key extends keyof T,
-  >(order: Order, orderBy: Key): (a: T, b: T) => number {
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-
-  const createSortHandler = (property: string) => {
-    const isAsc = valueToOrderBy === property && orderDirection === 'asc';
-    const newOrderDirection = isAsc ? 'desc' : 'asc';
-
-    setOrderDirection(newOrderDirection);
-    setValueToOrderBy(property);
-
-    const sortedProducts = [...mappedProducts].sort((a, b) => {
-      if (newOrderDirection === 'asc') {
-        return a[property] > b[property] ? 1 : -1;
-      } else {
-        return a[property] < b[property] ? 1 : -1;
-      }
-    });
-
-    setMappedProducts(sortedProducts);
-  };
-
-  useEffect(() => {
     getProducts();
     return () => {
       setFilters(INITIAL_FILTERS);
@@ -220,168 +143,21 @@ export const ProductsPage = () => {
         </button>
       </section>
 
-      <TableContainer
-        sx={{ width: '95%', margin: '2.5% auto', height: '40vh' }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              {productsTableColumns.map(({ value, text, sort }) => (
-                <TableCell
-                  key={value}
-                  sx={{
-                    backgroundColor: 'transparent',
-                    borderBottom: '1px solid #979797',
-                    color: '#979797',
-                    fontFamily: 'Montserrat',
-                    fontWeight: 600,
-                  }}
-                  align="center"
-                >
-                  {sort ? <TableSortLabel
-                    onClick={() => createSortHandler(value)}
-                    active={valueToOrderBy === value}
-                    sx={{
-                      opacity: 100,
-                      textAlign: 'center',
-                      '&.Mui-active': {
-                        color: '#979797',
-                        fontWeight: 600,
-                      },
-                      '& .MuiTableSortLabel-icon': {
-                        color: '#FFF',
-                        fontWeight: 600,
-                      },
-                      '&.Mui-active .MuiTableSortLabel-icon': {
-                        color: '#979797',
-                        fontWeight: 600,
-                      },
-                      '&:hover': {
-                        color: '#979797',
-                        fontWeight: 600,
-                        '& .MuiTableSortLabel-icon': {
-                          color: '#979797',
-                          fontWeight: 600,
-                        },
-                      },
-                    }}
-                    direction={
-                      valueToOrderBy === value
-                        ? orderDirection === 'asc'
-                          ? 'asc'
-                          : 'desc'
-                        : 'asc'
-                    }
-                  >
-                    {text}
-                  </TableSortLabel> : <span
-                    style={{
-                      textAlign: "center",
-                      fontFamily: "Montserrat",
-                      color: '#979797',
-                      opacity: 100
-                    }}
-                  >
-                    {`${text}`}
-                  </span>}
-
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={productsTableColumns.length}
-                  sx={{
-                    border: 'none',
-                    color: '#fff',
-                    fontFamily: 'Montserrat',
-                  }}
-                  align="center"
-                >
-                  <CircularProgress
-                    sx={{
-                      margin: '7.5% auto 1rem auto',
-                      color: '#4a7370',
-                      opacity: 100,
-                    }}
-                  />
-                  <p>Cargando datos...</p>
-                </TableCell>
-              </TableRow>
-            ) : mappedProducts && mappedProducts.length > 0 ? (
-              stableSort(
-                mappedProducts,
-                getComparator(orderDirection, valueToOrderBy)
-              ).map((row, index) => (
-                <TableRow key={index}>
-                  {productsTableColumns.map((column) => (
-                    <TableCell
-                      sx={{
-                        border: 'none',
-                        color: '#ffff',
-                        fontFamily: 'Montserrat',
-                      }}
-                      align="center"
-                      key={column.value}
-                    >
-                      {column.value === 'options' ? (
-                        <div
-                          style={{
-                            display: 'flex',
-                            gap: '1rem',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <Icon
-                            style={{ color: '#ffff', fontSize: '1.2rem' }}
-                            icon={mopsusIcons.trash}
-                            onClick={() => deleteProductFromTable(index)}
-                          />
-                          <Icon
-                            style={{ color: '#ffff', fontSize: '1.2rem' }}
-                            icon={mopsusIcons.edit}
-                            onClick={() => {
-                              handleSetProductToEdit(index);
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        row[column.value]
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={productsTableColumns.length}
-                  sx={{
-                    border: 'none',
-                    color: '#fff',
-                    fontFamily: 'Montserrat',
-                  }}
-                  align="center"
-                >
-                  <p
-                    style={{
-                      color: '#ffff',
-                      textAlign: 'center',
-                      marginTop: '10rem',
-                    }}
-                  >
-                    No se encontraron productos
-                  </p>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <MopsusTable
+        columns={productsTableColumns}
+        rows={mappedProducts}
+        goToFirstPage={goToFirstPage}
+        goToLastPage={goToLastPage}
+        goToNextPage={goToNextPage}
+        goToPreviousPage={goToPreviousPage}
+        includeOptions={true}
+        includePagination={true}
+        isLoading={isLoading}
+        options={options}
+        page={filters.page}
+        setRows={setMappedProducts}
+        totalPages={totalPages.current}
+      />
 
       {isOpenNewProduct && (
         <NewProduct
@@ -404,163 +180,21 @@ export const ProductsPage = () => {
             setIsOpenFilter(false);
           }}
         >
-          <form className={styles.formFilter}>
-            <div className={styles.formGroup}>
-              <label htmlFor="category_id" className={styles.modalLabel}>
-                Categoría
-              </label>
-              <select
-                name=""
-                id=""
-                className={styles.selectFilter}
-                value={filters.category_id || ''}
-                onChange={(e) =>
-                  setFilters((prevFilters) => ({
-                    ...prevFilters,
-                    category_id: e.target.value,
-                  }))
-                }
-              >
-                <option value="" disabled>
-                  Seleccione una categoría
-                </option>
-                {categories.length > 0 ? (
-                  categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} - {c.description}
-                    </option>
-                  ))
-                ) : (
-                  <option value="" disabled>
-                    No hay categorías disponibles
-                  </option>
-                )}
-              </select>
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="unit_id" className={styles.modalLabel}>
-                Unidad
-              </label>
-              <select
-                name=""
-                id=""
-                className={styles.selectFilter}
-                value={filters.unit_id || ''}
-                onChange={(e) =>
-                  setFilters((prevFilters) => ({
-                    ...prevFilters,
-                    unit_id: e.target.value,
-                  }))
-                }
-              >
-                <option value="" disabled>
-                  Seleccione una unidad
-                </option>
-                {units.length > 0 ? (
-                  units.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} - {c.description}
-                    </option>
-                  ))
-                ) : (
-                  <option value="" disabled>
-                    No hay unidades disponibles
-                  </option>
-                )}
-              </select>
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="below_reposition" className={styles.modalLabel}>
-                Punto de reposición
-              </label>
-              <select
-                id="below_reposition"
-                name="below_reposition"
-                className={styles.selectFilter}
-                value={filters.below_reposition || ''}
-                onChange={(e) =>
-                  setFilters((prevFilters) => ({
-                    ...prevFilters,
-                    below_reposition: e.target.value,
-                  }))
-                }
-              >
-                <option value="">Seleccione un opción</option>
-                <option value="true">Por debajo</option>
-                <option value="false">Por encima</option>
-              </select>
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="price_min" className={styles.modalLabel}>
-                Rango de precio
-              </label>
-              <div className={styles.priceContainer}>
-                <input
-                  type="number"
-                  id="price_min"
-                  name="price_min"
-                  placeholder="Mínimo"
-                  min={0}
-                  className={styles.inputPrice}
-                  value={filters.price_min || ''}
-                  onChange={(e) =>
-                    setFilters((prevFilters) => ({
-                      ...prevFilters,
-                      price_min: e.target.value,
-                    }))
-                  }
-                />
-                <Icon icon={mopsusIcons.guion} fontSize={35} />
-                <input
-                  type="number"
-                  id="price_max"
-                  name="price_max"
-                  placeholder="Máximo"
-                  min={0}
-                  className={styles.inputPrice}
-                  value={filters.price_max || ''}
-                  onChange={(e) =>
-                    setFilters((prevFilters) => ({
-                      ...prevFilters,
-                      price_max: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="is_active" className={styles.modalLabel}>
-                Estado
-              </label>
-              <select
-                id="is_active"
-                name="is_active"
-                className={styles.selectFilter}
-                value={filters.is_active || 'all'}
-                onChange={(e) =>
-                  setFilters((prevFilters) => ({
-                    ...prevFilters,
-                    is_active: e.target.value === 'all' ? null : e.target.value,
-                  }))
-                }
-              >
-                <option value="">--</option>
-                <option value="true">Activo</option>
-                <option value="false">Inactivo</option>
-                <option value="all">Todos</option>
-              </select>
-            </div>
-          </form>
+          <ProductFilters
+            categories={categories}
+            filters={filters}
+            setFilters={setFilters}
+            units={units}
+          />
         </Filter>
       )}
 
-      {
-        editProduct && <ModifyProduct editProduct={editProduct} setEditProduct={handleSetProductToEdit} />
-      }
+      {editProduct && (
+        <ModifyProduct
+          editProduct={editProduct}
+          setEditProduct={handleSetProductToEdit}
+        />
+      )}
     </Box>
   );
 };
