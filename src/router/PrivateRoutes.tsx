@@ -4,6 +4,7 @@ import { Home, Inventory, ProductsPage, Sales } from '../modules';
 
 import RequireAuth from './components/RequireAuth';
 import styles from './styles/layout.module.scss';
+import { NewSale } from '../modules/sales/components/NewSale';
 export const PrivateRoutes = () => {
   return (
     <section className={styles.layout}>
@@ -14,6 +15,7 @@ export const PrivateRoutes = () => {
         </Route>
         <Route element={<RequireAuth />}>
           <Route path="ventas" element={<Sales />} />
+          <Route path='nueva-venta' element={<NewSale />} />
         </Route>
         <Route element={<RequireAuth />}>
           <Route path="productos" element={<ProductsPage />} />

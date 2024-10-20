@@ -9880,4 +9880,9 @@ export const mopsusIcons = {
     height: 72,
     body: '<path d="M59 41H13V31h46" /><path fill="white" d="M59 41H13V31h46" /><path fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M13 31h46v10H13z" />',
   },
+  plus: {
+    width: 24,
+    height: 24,
+    body: '<g class="plus-outline"><g fill="white" fill-rule="evenodd" class="Vector" clip-rule="evenodd"><path d="M12 3a1 1 0 0 1 1 1v16a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1" /><path d="M21 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h16a1 1 0 0 1 1 1" /></g></g>',
+  },
 };

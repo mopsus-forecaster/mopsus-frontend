@@ -1,0 +1,200 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.header {
+  width: 100%;
+  padding-left: 3%;
+  margin-top: 3%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  color: $color-white;
+  font-weight: bold;
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  background-color: $color-primary;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-bottom: 15px;
+}
+
+.saleInformationContainer {
+  display: flex;
+  margin-left: 0.5%;
+  align-items: center;
+}
+
+.saleInfoTitle {
+  color: $color-white;
+}
+
+.tableActionsContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  align-items: right;
+  margin-top: 1%;
+}
+
+.filterButton {
+  position: relative;
+  padding: 5px 10px;
+  background-color: $color-gray-dark;
+  gap: 10%;
+  color: $color-white;
+  border: none;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.buttonAdd {
+  color: $color-white;
+  background-color: $color-primary;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5% 1.5%;
+  font-weight: 600;
+  transition: all 0.4s;
+}
+
+.buttonAdd:hover {
+  background-color: transparent;
+  border: 1px solid $color-primary;
+}
+
+.boxContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 10px 40px;
+}
+
+.box {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  background-color: $box-background-color;
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  margin: 10px;
+}
+
+.contentBox {
+  margin: 10px;
+}
+
+.tableSearchInput {
+  width: 140%;
+  background-color: $color-gray-dark;
+  border: none;
+  height: 2.5rem;
+  border-radius: 20px;
+}
+
+.titleBox {
+  color: white;
+  margin: 0;
+}
+
+.line {
+  width: 100%;
+  margin: 0;
+}
+
+.productInfoContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  width: 31%;
+  height: auto;
+  border-radius: 10px;
+  background-color: #282828;
+  padding: 10px;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  width: 60%;
+}
+
+.priceButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.priceInfo {
+  color: white;
+  margin-right: 10px;
+}
+
+p {
+  margin: 0;
+}
+
+.btn {
+  background-color: $color-primary;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 5px;
+}
+
+.productListContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-height: 23vh;
+  overflow-y: auto;
+  /* Estilos para WebKit (Chrome, Edge, Safari) */
+  &::-webkit-scrollbar {
+    width: 10px; /* Ancho de la barra de desplazamiento */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #1a1a1a; /* Color de fondo del track */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #3a3a3a; /* Color de la barra del scroll */
+    border-radius: 10px;
+    border: 2px solid #1a1a1a; /* Bordes que le dan el efecto más delgado */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Color de la barra al hacer hover */
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: #777; /* Color de la barra al hacer clic */
+  }
+}
+
+.table,
+.line2 {
+  width: 70%;
+  color: white;
+  margin: 0;
+}
+
+th:first-child,
+th:nth-child(2),
+th:nth-child(3),
+th:last-child {
+  text-align: center;
+}
