@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useRef, useState } from 'react';
 import { deleteProduct, getAllProducts } from '../../services/products';
 import { ModalContext } from '../modal/ModalContext';
 import { mopsusIcons } from '../../icons';
@@ -19,12 +19,13 @@ export const ProductsProvider = ({ children }) => {
   const [mappedProducts, setMappedProducts] = useState([]);
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [isLoading, setIsLoading] = useState(false);
+  const totalPages = useRef(null);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const [editProduct, setEditProduct] = useState(null);
   const getProducts = async (customFilters?) => {
     try {
       setIsLoading(true);
-      const { productos } = await getAllProducts(
+      const { productos, total_pages } = await getAllProducts(
         customFilters ? customFilters : filters
       );
       if (productos) {
@@ -39,13 +40,55 @@ export const ProductsProvider = ({ children }) => {
           category: product.categoria,
           state: product.is_active ? 'Activo' : 'Inactivo',
         }));
-
+        if (totalPages.current === null || totalPages.current !== total_pages) {
+          totalPages.current = total_pages;
+        }
         setMappedProducts(mapped);
       }
     } catch ({ errors }) {
       console.error(errors);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const goToNextPage = () => {
+    const nextPage =
+      filters.page + 1 !== totalPages.current + 1
+        ? filters.page + 1
+        : totalPages.current;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page: nextPage,
+    }));
+    getProducts({ ...filters, page: nextPage });
+  };
+
+  const goToPreviousPage = () => {
+    const nextPage = filters.page - 1 !== 0 ? filters.page - 1 : 1;
+
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page: nextPage,
+    }));
+    getProducts({ ...filters, page: nextPage });
+  };
+
+  const goToFirstPage = () => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page: 1,
+    }));
+    getProducts({ ...filters, page: 1 });
+  };
+
+  const goToLastPage = () => {
+    if (totalPages.current !== null) {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        page: totalPages.current,
+      }));
+      getProducts({ ...filters, page: totalPages.current });
     }
   };
 
@@ -83,7 +126,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${productToDelete.productName}" no pudo darse de baja`,
               message:
@@ -105,8 +148,13 @@ export const ProductsProvider = ({ children }) => {
       value={{
         mappedProducts,
         getProducts,
+        totalPages,
         isLoading,
         filters,
+        goToFirstPage,
+        goToNextPage,
+        goToPreviousPage,
+        goToLastPage,
         setFilters,
         deleteProductFromTable,
         setMappedProducts,

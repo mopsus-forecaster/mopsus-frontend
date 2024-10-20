@@ -9880,4 +9880,24 @@ export const mopsusIcons = {
     height: 72,
     body: '<path d="M59 41H13V31h46" /><path fill="white" d="M59 41H13V31h46" /><path fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M13 31h46v10H13z" />',
   },
+  firstPage: {
+    width: 24,
+    height: 24,
+    body: '<path fill="currentColor" d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6l6 6zM6 6h2v12H6z" />',
+  },
+  lastPage: {
+    width: 24,
+    height: 24,
+    body: '<path fill="currentColor" d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6l-6-6zM16 6h2v12h-2z" />',
+  },
+  nextPage: {
+    width: 12,
+    height: 24,
+    body: '<path fill="currentColor" fill-rule="evenodd" d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />',
+  },
+  previousPage: {
+    width: 24,
+    height: 24,
+    body: '<path fill="currentColor" d="m10.828 12l4.95 4.95l-1.414 1.415L8 12l6.364-6.364l1.414 1.414z" />',
+  },
 };
