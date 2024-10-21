@@ -27,6 +27,9 @@ const localConfig: LocalConfig = {
         products: {
           basepath: `${BASE_URL}/products`,
         },
+        sales: {
+          basepath: `${BASE_URL}/sales`,
+        },
       },
     },
   },

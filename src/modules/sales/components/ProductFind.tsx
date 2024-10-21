@@ -28,7 +28,10 @@ export const ProductFind = () => {
                         ))}
                     </div>
                 ) : (
-                    <p>No se encontraron productos</p>
+                    <tr>
+                        <td style={{ textAlign: 'center' }}>No hay productos en el carrito.</td>
+                    </tr>
+
                 )}
             </div>
         </div>

@@ -126,7 +126,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => {},
+                action: () => { },
               },
               title: `"${productToDelete.productName}" no pudo darse de baja`,
               message:
