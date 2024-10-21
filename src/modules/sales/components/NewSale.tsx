@@ -26,6 +26,7 @@ export const NewSale = () => {
     useEffect(() => {
         getProducts();
     }, [filters]);
+
     return (
         <Box>
             <header className={styles.header}>
