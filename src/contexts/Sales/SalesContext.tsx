@@ -75,6 +75,46 @@ export const SalesProvider = ({ children }) => {
     return `${(discount * 100).toFixed(0)}%`; // Multiplica por 100 y elimina decimales con toFixed(0)
   };
 
+  const goToNextPage = () => {
+    const nextPage =
+      filters.page + 1 !== totalPages.current + 1
+        ? filters.page + 1
+        : totalPages.current;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page: nextPage,
+    }));
+    getSale({ ...filters, page: nextPage });
+  };
+
+  const goToPreviousPage = () => {
+    const nextPage = filters.page - 1 !== 0 ? filters.page - 1 : 1;
+
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page: nextPage,
+    }));
+    getSale({ ...filters, page: nextPage });
+  };
+
+  const goToFirstPage = () => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page: 1,
+    }));
+    getSale({ ...filters, page: 1 });
+  };
+
+  const goToLastPage = () => {
+    if (totalPages.current !== null) {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        page: totalPages.current,
+      }));
+      getSale({ ...filters, page: totalPages.current });
+    }
+  };
+
   const getPaginatedSales = async (customFilters) => {
     if (!customFilters) {
       try {
@@ -114,6 +154,10 @@ export const SalesProvider = ({ children }) => {
         filters,
         setSales,
         totalPages,
+        goToFirstPage,
+        goToNextPage,
+        goToPreviousPage,
+        goToLastPage,
       }}
     >
       {children}

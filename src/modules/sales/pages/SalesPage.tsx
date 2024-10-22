@@ -11,8 +11,18 @@ import { SaleContext } from '../../../contexts/Sales/SalesContext';
 const SALE_AMOUNT = 100;
 
 export const Sales = () => {
-  const { sales, isLoading, filters, setSales, totalPages, getPaginatedSales } =
-    useContext(SaleContext);
+  const {
+    sales,
+    isLoading,
+    filters,
+    setSales,
+    totalPages,
+    getPaginatedSales,
+    goToFirstPage,
+    goToNextPage,
+    goToPreviousPage,
+    goToLastPage,
+  } = useContext(SaleContext);
   const salesTableColumns = [
     {
       text: 'Fecha de venta',
@@ -43,7 +53,7 @@ export const Sales = () => {
 
   const options = [
     {
-      icon: mopsusIcons.edit,
+      icon: mopsusIcons.trash,
 
       onClick: () => {},
     },
@@ -73,10 +83,10 @@ export const Sales = () => {
       </section>
       <MopsusTable
         columns={salesTableColumns}
-        goToFirstPage={() => {}}
-        goToLastPage={() => {}}
-        goToNextPage={() => {}}
-        goToPreviousPage={() => {}}
+        goToFirstPage={goToFirstPage}
+        goToLastPage={goToLastPage}
+        goToNextPage={goToNextPage}
+        goToPreviousPage={goToPreviousPage}
         includeOptions={true}
         includePagination={true}
         isLoading={isLoading}
