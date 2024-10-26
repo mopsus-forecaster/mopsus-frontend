@@ -3,7 +3,6 @@ import styles from '../styles/sales.module.scss'
 import { mopsusIcons } from '../../../icons';
 import { useContext } from 'react';
 import { SaleContext } from '../../../contexts/Sales/SalesContext';
-import { createSale } from '../../../services/sales';
 
 export const RowSummarySales = ({ product }) => {
     const { productName, price, category, quantity } = product;

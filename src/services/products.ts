@@ -72,7 +72,7 @@ export const getAllProducts = async ({
 }) => {
   const queryParams = new URLSearchParams();
 
-  queryParams.append('page', page);
+  if (page) queryParams.append('page', page);
 
   if (title) queryParams.append('title', title);
   if (category_id !== null) queryParams.append('category_id', category_id);
@@ -82,7 +82,6 @@ export const getAllProducts = async ({
   if (price_min !== null) queryParams.append('price_min', price_min);
   if (price_max !== null) queryParams.append('price_max', price_max);
   if (is_active !== null) queryParams.append('is_active', is_active);
-
   const response = await apiClient({
     api: 'products',
     service: `/?${queryParams.toString()}`,
@@ -116,6 +115,16 @@ export const onEditProduct = async (
     dataSend: {
       product,
     },
+  });
+
+  return response.data;
+};
+
+export const getProductsAllAll = async () => {
+  const response = await apiClient({
+    api: 'products',
+    service: '/get-all/',
+    verb: 'get',
   });
 
   return response.data;

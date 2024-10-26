@@ -1,9 +1,11 @@
-import { createContext, useState } from 'react';
-import { getSale } from '../../services/sales';
+import { createContext, useContext, useState } from 'react';
+import { deleteSale, getSale, getSaleById } from '../../services/sales';
+import { ModalContext } from '../modal/ModalContext';
+import { mopsusIcons } from '../../icons';
 
 export const SaleContext = createContext(null);
 
-const INITIAL_FILTERS = {
+export const INITIAL_FILTERS = {
   saleDateStart: null,
   saleDateEnd: null,
   isActive: null,
@@ -14,11 +16,14 @@ const INITIAL_FILTERS = {
 
 export const SalesProvider = ({ children }) => {
   const [addProduct, setAddProduct] = useState([]);
-  const [subTotal, setSubTotal] = useState(0);
   const [sales, setSales] = useState([]);
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [totalPages, setTotalPages] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { handleOpen, handleModalChange } = useContext(ModalContext);
+  const [saleDetails, setSaleDetails] = useState(null)
+  const [subTotal, setSubTotal] = useState(null)
+
   const addProductToSale = (product) => {
     const productInSale = addProduct.findIndex(
       (item) => item.id === product.id
@@ -65,14 +70,14 @@ export const SalesProvider = ({ children }) => {
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses empiezan en 0
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
 
     return `${day}/${month}/${year}`;
   };
 
   const formatDiscount = (discount) => {
-    return `${(discount * 100).toFixed(0)}%`; // Multiplica por 100 y elimina decimales con toFixed(0)
+    return `${(discount * 100).toFixed(0)}%`;
   };
 
   const goToNextPage = () => {
@@ -115,11 +120,11 @@ export const SalesProvider = ({ children }) => {
     }
   };
 
-  const getPaginatedSales = async (customFilters) => {
+  const getPaginatedSales = async (customFilters?) => {
     if (!customFilters) {
       try {
         setIsLoading(true);
-        const { sales, total_pages } = await getSale(INITIAL_FILTERS);
+        const { sales, total_pages } = await getSale(customFilters ? customFilters : filters);
         if (sales) {
           const mappedSales = sales.map((sale) => ({
             saleId: sale.sale_id,
@@ -136,6 +141,77 @@ export const SalesProvider = ({ children }) => {
       } finally {
         setIsLoading(false);
       }
+    }
+  };
+
+  const deleteSaleFromTable = (index) => {
+    const saleToDelete = sales[index];
+    handleModalChange({
+      accept: {
+        title: 'Aceptar',
+        action: async () => {
+          try {
+            const response = await deleteSale(saleToDelete.saleId);
+            if (response) {
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    getPaginatedSales()
+                  },
+                },
+                title: `Venta n° "${saleToDelete.saleId}" anulada exitosamente`,
+                message:
+                  '',
+              });
+              handleOpen();
+            }
+          } catch (error) {
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: () => { },
+              },
+              title: `La venta n°"${saleToDelete.saleId}" no pudo ser anulada`,
+              message:
+                'Lo sentimos, no pudimos concretar la operción. Intente más tarde',
+            });
+            handleOpen();
+          }
+        },
+      },
+      title: `Anular venta n° "${saleToDelete.saleId}"`,
+      message: '¿Está seguro que desea dar de baja la venta?',
+      icon: mopsusIcons.warning,
+    });
+    handleOpen();
+  };
+
+  const handleSetSaleToDetails = async (index = null) => {
+    if (!index && index !== 0) {
+      setSaleDetails(null);
+      return;
+    }
+
+    const saleDetails = sales[index];
+
+    try {
+      const saleSelect = await getSaleById(saleDetails.saleId);
+
+      if (saleSelect) {
+        const mappedSale = {
+          saleId: saleSelect.sale_id,
+          saleDate: formatDate(saleSelect.sale_date),
+          isActive: saleSelect.is_active ? 'Activo' : 'Inactivo',
+          total: saleSelect.total,
+          discount: formatDiscount(saleSelect.discount),
+          products: saleSelect.products,
+        };
+        setSaleDetails(mappedSale);
+        console.log(mappedSale)
+      }
+    } catch (error) {
+      console.error('Error al obtener los detalles de la venta:', error);
     }
   };
 
@@ -158,6 +234,11 @@ export const SalesProvider = ({ children }) => {
         goToNextPage,
         goToPreviousPage,
         goToLastPage,
+        deleteSaleFromTable,
+        handleSetSaleToDetails,
+        saleDetails,
+        setSubTotal,
+        subTotal
       }}
     >
       {children}

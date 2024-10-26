@@ -7,10 +7,11 @@ import { SummarySales } from './SummarySales';
 
 export const NewSale = () => {
   const [search, setSearch] = useState('');
-  const { setFilters, getProducts, filters } = useContext(ProductsContext);
+  const { setFilters, getProductsAll, filters } = useContext(ProductsContext);
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setFilters((prevFilters) => ({ ...prevFilters, title: search }));
+      setFilters((prevFilters) => ({ ...prevFilters, title: search, page: null }));
     }, 500);
 
     return () => {
@@ -19,14 +20,14 @@ export const NewSale = () => {
   }, [search]);
 
   useEffect(() => {
-    getProducts();
+    getProductsAll();
   }, [filters]);
 
   return (
     <Box>
       <header className={styles.header}>
         <h1 className={styles.title}>Registrar ventas</h1>
-        <section className={styles.tableActionsContainer}>
+        <section className={styles.tableActionsContainerBuscar}>
           <div className={styles.tableSearchComponent}>
             <input
               onChange={(e) => setSearch(e.target.value)}

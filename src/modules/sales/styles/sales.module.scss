@@ -44,6 +44,14 @@
 
   margin: 0 auto;
 }
+.tableActionsContainerBuscar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 95%;
+  margin: 0 5px;
+}
 
 .filterButton {
   display: flex;
@@ -130,13 +138,21 @@
 
 .productInfo {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: left;
   color: white;
   width: 60%;
 }
 
+.infoName {
+  margin: 0;
+  font-weight: 800;
+}
+
+.infoUnit {
+  margin: 0;
+  font-size: 0.7rem;
+}
 .priceButtonContainer {
   display: flex;
   align-items: center;
@@ -145,7 +161,7 @@
 
 .priceInfo {
   color: white;
-  margin-right: 10px;
+  margin: 0 10px 0 0;
 }
 
 .btn {
@@ -280,10 +296,11 @@ td:nth-child(5) {
     background-color: transparent;
   }
 }
-s th:nth-child(1),
-th:nth-child(2),
-th:nth-child(3),
-th:nth-child(4) {
+
+.thSales:nth-child(1),
+.thSale:nth-child(2),
+.thSale:nth-child(3),
+.thSale:nth-child(4) {
   width: 20%;
 }
 
@@ -380,4 +397,213 @@ input:not(:placeholder-shown) + .placeholder {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.selectFilter {
+  width: 22vw;
+  margin: 17px 0px;
+  padding: 7px 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 32.5px;
+  background-color: #363636;
+  color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+
+  &:hover {
+    border-color: #888;
+  }
+}
+
+.select:disabled {
+  background-color: #f0f0f0;
+  color: #999;
+}
+
+.formGroup {
+  margin: 15px auto 15px -10px;
+  flex-basis: 48%;
+  display: flex;
+  flex-direction: column;
+}
+
+.formFilter {
+  display: flex;
+  padding-left: 1.5vw;
+}
+
+.priceContainer {
+  margin: 17px 0px;
+  width: 22vw;
+  display: flex;
+  gap: 1vw;
+}
+
+.inputPrice {
+  width: 100%;
+  padding: 7px 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 32.5px;
+  background-color: #363636;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+
+  &:hover {
+    border-color: #888;
+  }
+}
+
+.modalLabel {
+  color: white;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(32, 32, 32, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  color: white;
+}
+
+.detailsContainer {
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 40vw;
+  height: fit-content;
+  border-radius: 30px;
+  background-color: #282828;
+}
+
+.modalContents {
+  margin: 3vb;
+}
+
+.headerDetails {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.iconClose {
+  position: relative;
+  cursor: pointer;
+}
+
+.theadSaleDetails {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+.tableSaleDetails {
+  width: 100%;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.thSaleDetails {
+  padding: 10px 0;
+}
+
+.thSaleDetails:nth-child(2),
+.thSaleDetails:nth-child(3),
+.thSaleDetails:nth-child(4),
+.thSaleDetails:nth-child(5) {
+  text-align: center;
+}
+
+.thSaleDetails:nth-child(1) {
+  text-align: left;
+}
+
+.tdSaleDetails:nth-child(2),
+.tdSaleDetails:nth-child(3),
+.tdSaleDetails:nth-child(4),
+.tdSaleDetails:nth-child(5) {
+  width: 10%;
+  padding: 20px 0;
+  align-items: center;
+}
+
+.trSaleDetails:last-child {
+  border-bottom: 1px solid white;
+}
+
+.listSales {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-height: 50vh;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #3a3a3a;
+    border-radius: 10px;
+    border: 2px solid #1a1a1a;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: #777;
+  }
+}
+
+.boxResults {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.results {
+  display: flex;
+  height: fit-content;
+  justify-content: space-between;
+  width: 30%;
+  margin: 5px 0;
+  padding: 0 7px;
+}
+
+.resultsGris {
+  background-color: #979797;
+  border-radius: 10px;
+}
+
+.infoResults {
+  margin: 10px 0;
 }

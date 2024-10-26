@@ -30,7 +30,7 @@ export const MopsusTable = ({
         sx={{
           width: '95%',
           margin: '2.5% auto',
-          height: '40vh',
+          height: '50vh',
           overflowX: 'auto',
           '&::-webkit-scrollbar': {
             width: '12.5px',
