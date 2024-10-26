@@ -1,5 +1,5 @@
 import { createContext, useContext, useRef, useState } from 'react';
-import { deleteProduct, getAllProducts } from '../../services/products';
+import { deleteProduct, getAllProducts, getProductsAllAll } from '../../services/products';
 import { ModalContext } from '../modal/ModalContext';
 import { mopsusIcons } from '../../icons';
 
@@ -47,6 +47,37 @@ export const ProductsProvider = ({ children }) => {
       }
     } catch ({ errors }) {
       console.error(errors);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getProductsAll = async (customFilters?) => {
+    try {
+      setIsLoading(true);
+      let productos
+      if (filters.page !== null || filters.title !== '') {
+        productos = await getProducts(customFilters);
+      } else {
+        productos = await getProductsAllAll();
+      }
+
+      if (productos) {
+        const mapped = productos.map((product) => ({
+          id: product.id,
+          measureUnitId: product.id_units,
+          measureUnitDescription: product.unidad,
+          productName: product.title,
+          price: product.price,
+          stock: product.stock,
+          repositionPoint: product.reposition_point,
+          category: product.categoria,
+          state: product.is_active ? 'Activo' : 'Inactivo',
+        }));
+        setMappedProducts(mapped);
+      }
+    } catch (error) {
+      console.error(error?.errors || error);
     } finally {
       setIsLoading(false);
     }
@@ -143,6 +174,8 @@ export const ProductsProvider = ({ children }) => {
     handleOpen();
   };
 
+
+
   return (
     <ProductsContext.Provider
       value={{
@@ -160,6 +193,7 @@ export const ProductsProvider = ({ children }) => {
         setMappedProducts,
         handleSetProductToEdit,
         editProduct,
+        getProductsAll
       }}
     >
       {children}

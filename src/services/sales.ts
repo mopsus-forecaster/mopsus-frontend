@@ -40,3 +40,28 @@ export const getSale = async (filters) => {
 
   return response.data;
 };
+
+export const deleteSale = async (id) => {
+  const respones = await apiClient({
+    api: 'sales',
+    service: `/${id}/delete`,
+    verb: 'put',
+    dataSend: {
+      id,
+    },
+  });
+
+  return respones.data;
+};
+
+export const getSaleById = async (id) => {
+  const respones = await apiClient({
+    api: 'sales',
+    service: `/${id}`,
+    verb: 'get',
+    dataSend: {
+      id,
+    },
+  });
+  return respones.data;
+};

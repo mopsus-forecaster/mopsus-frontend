@@ -2,11 +2,13 @@ import Box from '../../../shared/box';
 import styles from '../styles/sales.module.scss';
 import { mopsusIcons } from '../../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
-
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 import { SaleContext } from '../../../contexts/Sales/SalesContext';
+import { Filter } from '../../../shared/filter';
+import { SalesFilter } from '../components/SalesFilter'
+import { SaleDetails } from '../components/SaleDateils';
 
 const SALE_AMOUNT = 100;
 
@@ -15,6 +17,7 @@ export const Sales = () => {
     sales,
     isLoading,
     filters,
+    setFilters,
     setSales,
     totalPages,
     getPaginatedSales,
@@ -22,7 +25,13 @@ export const Sales = () => {
     goToNextPage,
     goToPreviousPage,
     goToLastPage,
+    deleteSaleFromTable,
+    handleSetSaleToDetails,
+    saleDetails,
+    formatDate,
   } = useContext(SaleContext);
+
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
   const salesTableColumns = [
     {
       text: 'Fecha de venta',
@@ -51,17 +60,26 @@ export const Sales = () => {
     },
   ];
 
+
   const options = [
     {
-      icon: mopsusIcons.trash,
-
-      onClick: () => {},
+      icon: mopsusIcons.details,
+      onClick: handleSetSaleToDetails,
     },
+    {
+      icon: mopsusIcons.trash,
+      onClick: deleteSaleFromTable,
+    }
   ];
+
+
+
+
 
   useEffect(() => {
     getPaginatedSales();
-  }, []);
+
+  }, [filters]);
 
   return (
     <Box>
@@ -73,7 +91,7 @@ export const Sales = () => {
         </div>
       </header>
       <section className={styles.tableActionsContainer}>
-        <button className={styles.filterButton}>
+        <button className={styles.filterButton} onClick={() => setIsOpenFilter(true)}>
           <Icon fontSize={24} icon={mopsusIcons.filters}></Icon>
           Filtros
         </button>
@@ -96,6 +114,36 @@ export const Sales = () => {
         setRows={setSales}
         totalPages={totalPages}
       />
+      {
+        isOpenFilter && (
+          <Filter
+            isOpen={isOpenFilter}
+            setIsOpen={setIsOpenFilter}
+            onApplyFilters={() => {
+              getPaginatedSales();
+              setIsOpenFilter(false);
+            }}
+            onDeleteFilters={() => {
+              setIsOpenFilter(false);
+            }}
+          >
+            <SalesFilter
+              filters={filters}
+              setFilters={setFilters}
+            />
+          </Filter>
+        )
+      }
+
+      {
+        saleDetails && (
+          <SaleDetails
+            handleSetSaleToDetails={handleSetSaleToDetails}
+            saleDetails={saleDetails}
+          />
+        )
+
+      }
     </Box>
   );
 };

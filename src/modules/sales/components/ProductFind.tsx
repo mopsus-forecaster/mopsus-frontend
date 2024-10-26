@@ -27,14 +27,14 @@ export const ProductFind = () => {
           />
         ) : mappedProducts && mappedProducts.length > 0 ? (
           <div className={styles.productListContainer}>
-            {mappedProducts.map((product, index) => (
-              <ProductInfo key={index} product={product} />
+            {mappedProducts.map((producto, index) => (
+              <ProductInfo key={index} producto={producto} />
             ))}
           </div>
         ) : (
           <tr>
             <td className={styles.productListEmptyContainer}>
-              No hay productos en el carrito.
+              No se encontraron productos.
             </td>
           </tr>
         )}
