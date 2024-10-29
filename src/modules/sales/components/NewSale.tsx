@@ -11,7 +11,7 @@ export const NewSale = () => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setFilters((prevFilters) => ({ ...prevFilters, title: search, page: null }));
+      setFilters((prevFilters) => ({ ...prevFilters, title: search, page: null, is_active: null }));
     }, 500);
 
     return () => {

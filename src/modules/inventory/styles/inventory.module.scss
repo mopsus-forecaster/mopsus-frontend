@@ -25,31 +25,14 @@
   margin-bottom: 15px;
 }
 
-.saleInformationContainer {
-  display: flex;
-  margin-left: 0.5%;
-  align-items: center;
-}
-
-.saleInfoTitle {
-  color: $color-white;
-}
-
 .tableActionsContainer {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 95%;
-  margin: 10px 34px;
-}
-.tableActionsContainerBuscar {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 95%;
-  margin: 0 5px;
+
+  margin: 0 auto;
 }
 
 .filterButton {
@@ -80,11 +63,28 @@
   border: 1px solid $color-primary;
 }
 
+.tableActionsContainerBuscar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 95%;
+  margin: 0 5px;
+}
+
+.tableSearchInput {
+  width: 140%;
+  background-color: $color-gray-dark;
+  border: none;
+  height: 2.5rem;
+  border-radius: 20px;
+}
+
 .boxContainer {
   position: relative;
   display: flex;
   flex-direction: column;
-  margin: 10px 40px;
+  margin: 5px 40px;
 }
 
 .box {
@@ -100,16 +100,12 @@
 
 .contentBox {
   position: relative;
-
-  margin: 10px;
+  margin: 20px 10px 10px 10px;
 }
 
-.tableSearchInput {
-  width: 140%;
-  background-color: $color-gray-dark;
-  border: none;
-  height: 2.5rem;
-  border-radius: 20px;
+.titleBoxDate {
+  color: white;
+  margin: 20px 0 0 0;
 }
 
 .titleBox {
@@ -120,55 +116,6 @@
 .line {
   width: 100%;
   margin: 0;
-}
-
-.productInfoContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px;
-  width: 31%;
-  height: auto;
-  border-radius: 10px;
-  background-color: #282828;
-  padding: 10px;
-}
-
-.productInfo {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  color: white;
-  width: 60%;
-}
-
-.infoName {
-  margin: 0;
-  font-weight: 800;
-}
-
-.infoUnit {
-  margin: 0;
-  font-size: 0.7rem;
-}
-.priceButtonContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.priceInfo {
-  color: white;
-  margin: 0 10px 0 0;
-}
-
-.btn {
-  background-color: $color-primary;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  padding: 5px 5px;
 }
 
 .productListContainer {
@@ -201,12 +148,73 @@
   }
 }
 
-//----------------------------------------------------------------------------------------------------------------------------------
+.productListEmptyContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingSpinner {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  color: white;
+  width: 60%;
+}
+
+.infoName {
+  margin: 0;
+  font-weight: 800;
+}
+
+.priceButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn {
+  background-color: $color-primary;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 5px;
+}
+
+.productInfoContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  width: 31%;
+  height: auto;
+  border-radius: 10px;
+  background-color: #282828;
+  padding: 10px;
+}
+
+.infoUnit {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
 .boxTableResumen {
   position: relative;
   display: flex;
   width: 100%;
-  height: 30vh;
+  height: 34vh;
   padding: 10px;
   background-color: $box-background-color;
   border-radius: 20px;
@@ -218,14 +226,12 @@
   position: relative;
   width: 70%;
   height: 100%;
-  padding: 10px;
 }
 
 .resumenContainer {
   position: relative;
   width: 30%;
   height: 100%;
-  padding: 10px;
 }
 
 .verticalLine {
@@ -236,12 +242,14 @@
 
 .table {
   width: 99%;
+  margin: 10px 0;
   color: white;
   border-collapse: collapse;
 }
 .table th {
   border-bottom: 2px solid $color-gray-dark;
   text-align: center;
+  padding-bottom: 4px;
 }
 .table td {
   border-bottom: 2px solid $color-gray-dark;
@@ -257,7 +265,7 @@ td:nth-child(5) {
 }
 
 .scrollContainer {
-  max-height: 28vh;
+  max-height: 25vh;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 10px;
@@ -304,7 +312,7 @@ td:nth-child(5) {
 }
 
 .productCategory {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   margin: 0;
 }
 
@@ -335,19 +343,18 @@ td:nth-child(5) {
   align-items: center;
 }
 
-.inputDesc {
-  width: 25%;
-  height: 3vh;
-  padding: 10px;
-  background-color: $color-dark-primary;
-  border: none;
+.btnContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .buttonRegsiter {
+  position: absolute;
   color: $color-white;
   background-color: $color-primary;
   border: 1px solid $color-primary;
-  margin-right: 20px;
+  margin-right: 10px;
   border-radius: 15px;
   padding: 1vb;
   font-weight: 600;
@@ -444,13 +451,15 @@ input:not(:placeholder-shown) + .placeholder {
   gap: 1vw;
 }
 
-.inputPrice {
-  width: 100%;
+.inputQuantity {
+  width: 30%;
+  height: 3.5vh;
   padding: 7px 12px;
   font-size: 1rem;
   border: none;
-  border-radius: 32.5px;
-  background-color: #363636;
+  text-align: center;
+  border-radius: 15px;
+  background-color: $color-dark-primary;
   transition: border-color 0.3s ease;
 
   &:focus {
@@ -531,12 +540,10 @@ input:not(:placeholder-shown) + .placeholder {
 .thSaleDetails:nth-child(4),
 .thSaleDetails:nth-child(5) {
   text-align: center;
-  width: 20%;
 }
 
 .thSaleDetails:nth-child(1) {
   text-align: left;
-  width: 30%;
 }
 
 .tdSaleDetails:nth-child(2),
@@ -598,11 +605,57 @@ input:not(:placeholder-shown) + .placeholder {
   padding: 0 7px;
 }
 
-.resultsGris {
-  background-color: #979797;
-  border-radius: 10px;
-}
-
 .infoResults {
   margin: 10px 0;
+}
+
+.margin {
+  margin: 0 10px;
+}
+
+.inputDate {
+  width: 40%;
+  height: 3.5vh;
+  margin: 10px 0;
+  padding: 7px 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 32.5px;
+  background-color: $color-dark-primary;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+
+  &:hover {
+    border-color: #888;
+  }
+}
+.commentBox {
+  width: 100%;
+  resize: none;
+  border: none;
+  margin-top: 10px;
+  background-color: $color-dark-primary;
+  color: white;
+  border-radius: 10px;
+  padding: 8px;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+
+  &:hover {
+    border-color: #888;
+  }
+}
+
+.marginHeader {
+  margin-bottom: 15px;
+}
+
+.productName {
+  font-weight: 800;
 }

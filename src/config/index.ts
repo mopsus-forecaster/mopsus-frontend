@@ -30,6 +30,9 @@ const localConfig: LocalConfig = {
         sales: {
           basepath: `${BASE_URL}/sales`,
         },
+        incomes: {
+          basepath: `${BASE_URL}/incomes`,
+        },
       },
     },
   },

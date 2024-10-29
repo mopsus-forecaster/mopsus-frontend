@@ -1,31 +1,8 @@
 import styles from '../styles/sales.module.scss'
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { mopsusIcons } from '../../../icons';
-import { useState } from 'react';
 
 export const SalesFilter = ({ filters, setFilters }) => {
-    const [error, setError] = useState('');
-    const handleDateChange = (e) => {
-        const { name, value } = e.target;
-
-
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [name]: value,
-        }));
-
-
-        if (name === 'initial_date' || name === 'end_date') {
-            const initialDate = new Date(filters.initial_date);
-            const endDate = new Date(filters.end_date);
-            if (initialDate && endDate && initialDate >= endDate) {
-                setError('La fecha inicial debe ser anterior a la fecha final.');
-            } else {
-                setError('');
-            }
-        }
-    };
-
     return (
         <form className={styles.formFilter}>
             <div className={styles.formGroup}>
@@ -38,7 +15,11 @@ export const SalesFilter = ({ filters, setFilters }) => {
                         name="initial_date"
                         className={styles.inputPrice}
                         value={filters.initial_date}
-                        onChange={handleDateChange}
+                        onChange={(e) => setFilters((prevFilters) => ({
+                            ...prevFilters,
+                            saleDateStart: e.target.value,
+                        }))
+                        }
                     />
                     <Icon icon={mopsusIcons.guion} fontSize={35} />
                     <input
@@ -47,12 +28,13 @@ export const SalesFilter = ({ filters, setFilters }) => {
                         name="end_date"
                         className={styles.inputPrice}
                         value={filters.end_date}
-                        onChange={handleDateChange}
+                        onChange={(e) => setFilters((prevFilters) => ({
+                            ...prevFilters,
+                            saleDateEnd: e.target.value,
+                        }))}
                     />
                 </div>
             </div>
-
-            {error && <div className={styles.error}>{error}</div>}
 
             <div className={styles.formGroup}>
                 <label htmlFor="is_active" className={styles.modalLabel}>
@@ -66,7 +48,7 @@ export const SalesFilter = ({ filters, setFilters }) => {
                     onChange={(e) =>
                         setFilters((prevFilters) => ({
                             ...prevFilters,
-                            is_active: e.target.value === 'all' ? null : e.target.value,
+                            isActive: e.target.value === 'all' ? null : e.target.value,
                         }))
                     }
                 >
