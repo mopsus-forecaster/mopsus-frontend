@@ -34,10 +34,11 @@ export const SummarySales = () => {
         handleOpen();
       }
     } catch (error) {
+      console.log(error)
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => {},
+          action: () => { },
         },
         title: 'Error tecnico',
         message: 'No pudimos concretar su solicitud. Intente mas tarde',

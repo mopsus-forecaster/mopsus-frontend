@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Navbar } from '../shared';
 import { Home, Inventory, ProductsPage, Sales } from '../modules';
-
+import { NewInventorty } from '../modules/inventory/components/NewInventory'
 import RequireAuth from './components/RequireAuth';
 import styles from './styles/layout.module.scss';
 import { NewSale } from '../modules/sales/components/NewSale';
@@ -22,6 +22,7 @@ export const PrivateRoutes = () => {
         </Route>
         <Route element={<RequireAuth />}>
           <Route path="inventario" element={<Inventory />} />
+          <Route path='nuevo-ingreso' element={<NewInventorty />} />
         </Route>
         <Route element={<RequireAuth />}>
           <Route path="/*" element={<Navigate to={'/inicio'} />} />

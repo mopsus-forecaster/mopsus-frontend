@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
-import { SaleContext } from '../../../contexts/Sales/SalesContext';
+import { INITIAL_FILTERS, SaleContext } from '../../../contexts/Sales/SalesContext';
 import { Filter } from '../../../shared/filter';
 import { SalesFilter } from '../components/SalesFilter'
 import { SaleDetails } from '../components/SaleDateils';
@@ -28,7 +28,6 @@ export const Sales = () => {
     deleteSaleFromTable,
     handleSetSaleToDetails,
     saleDetails,
-    formatDate,
   } = useContext(SaleContext);
 
   const [isOpenFilter, setIsOpenFilter] = useState(false);
@@ -72,13 +71,8 @@ export const Sales = () => {
     }
   ];
 
-
-
-
-
   useEffect(() => {
     getPaginatedSales();
-
   }, [filters]);
 
   return (
@@ -124,6 +118,8 @@ export const Sales = () => {
               setIsOpenFilter(false);
             }}
             onDeleteFilters={() => {
+              setFilters(INITIAL_FILTERS)
+              getPaginatedSales(INITIAL_FILTERS)
               setIsOpenFilter(false);
             }}
           >

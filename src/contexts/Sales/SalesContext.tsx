@@ -45,6 +45,16 @@ export const SalesProvider = ({ children }) => {
     }
   };
 
+
+  const productQuantity = (id, quantity) => {
+    setAddProduct((prevState) =>
+      prevState.map((item) =>
+        item.id === id ? { ...item, quantity: quantity } : item
+      )
+    );
+  };
+
+
   const increaseProductQuantity = (id) => {
     setAddProduct((prevState) =>
       prevState.map((item) =>
@@ -135,6 +145,7 @@ export const SalesProvider = ({ children }) => {
           }));
           setSales([...mappedSales]);
           setTotalPages(total_pages);
+
         }
       } catch (error) {
         console.log(error);
@@ -228,6 +239,7 @@ export const SalesProvider = ({ children }) => {
         isLoading,
         sales,
         filters,
+        setFilters,
         setSales,
         totalPages,
         goToFirstPage,
@@ -238,7 +250,8 @@ export const SalesProvider = ({ children }) => {
         handleSetSaleToDetails,
         saleDetails,
         setSubTotal,
-        subTotal
+        subTotal,
+        productQuantity
       }}
     >
       {children}

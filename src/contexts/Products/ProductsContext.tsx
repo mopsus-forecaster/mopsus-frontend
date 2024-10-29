@@ -56,9 +56,13 @@ export const ProductsProvider = ({ children }) => {
     try {
       setIsLoading(true);
       let productos
-      if (filters.page !== null || filters.title !== '') {
+      if (filters.page !== null && filters.title === '') {
+        productos = await getProductsAllAll();
+      }
+      else if (filters.title !== '') {
         productos = await getProducts(customFilters);
-      } else {
+      }
+      else {
         productos = await getProductsAllAll();
       }
 
