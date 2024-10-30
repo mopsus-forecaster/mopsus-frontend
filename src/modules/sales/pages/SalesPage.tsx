@@ -3,7 +3,7 @@ import styles from '../styles/sales.module.scss';
 import { mopsusIcons } from '../../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useContext, useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 import { INITIAL_FILTERS, SaleContext } from '../../../contexts/Sales/SalesContext';
 import { Filter } from '../../../shared/filter';
@@ -70,7 +70,7 @@ export const Sales = () => {
       onClick: deleteSaleFromTable,
     }
   ];
-
+  const navigate = useNavigate()
   useEffect(() => {
     getPaginatedSales();
   }, [filters]);
@@ -85,13 +85,18 @@ export const Sales = () => {
         </div>
       </header>
       <section className={styles.tableActionsContainer}>
-        <button className={styles.filterButton} onClick={() => setIsOpenFilter(true)}>
-          <Icon fontSize={24} icon={mopsusIcons.filters}></Icon>
-          Filtros
-        </button>
-        <NavLink to={`/nueva-venta`}>
-          <button className={styles.buttonAdd}>Agregar Venta</button>
-        </NavLink>
+        <div className={styles.tableSearchComponent}>
+          <input
+            className={styles.tableSearchInput}
+            placeholder="Buscar por id..."
+            type="text"
+          />
+          <button className={styles.filterButton} onClick={() => setIsOpenFilter(true)}>
+            <Icon fontSize={24} icon={mopsusIcons.filters} />
+            Filtros
+          </button>
+        </div>
+        <button className={styles.buttonAdd} onClick={() => navigate('/nueva-venta')}>Agregar Venta</button>
       </section>
       <MopsusTable
         columns={salesTableColumns}

@@ -44,7 +44,7 @@ export const NewInventorty = () => {
                 <ProductFind />
             </div>
             <div className={styles.boxContainer}>
-                <InventortSummary></InventortSummary>
+                <InventortSummary />
             </div>
         </Box>
     );
