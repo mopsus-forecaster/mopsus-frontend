@@ -6,7 +6,7 @@ import { useContext, useState } from 'react';
 import { RowInventorySummary } from './RowInventorySummary'
 import { createInventory } from '../../../services/inventory'
 import { mopsusIcons } from '../../../icons';
-import { Icon } from '@iconify/react/dist/iconify.js';
+
 
 
 export const InventortSummary = () => {

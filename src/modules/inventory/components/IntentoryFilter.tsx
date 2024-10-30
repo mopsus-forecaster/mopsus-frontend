@@ -1,3 +1,3 @@
 export const InventoryFilter = ({ filters }) => {
-    return
+    return console.log(filters)
 }

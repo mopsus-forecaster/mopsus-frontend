@@ -606,3 +606,9 @@ input:not(:placeholder-shown) + .placeholder {
 .infoResults {
   margin: 10px 0;
 }
+
+.tableSearchComponent {
+  width: 40%;
+  display: flex;
+  gap: 5%;
+}

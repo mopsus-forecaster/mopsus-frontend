@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { ModalContext } from "../modal/ModalContext";
-import { getInventory, getInventoryById } from "../../services/inventory";
+import { deleteIncome, getInventory, getInventoryById } from "../../services/inventory";
+import { mopsusIcons } from "../../icons";
 
 export const InventoryContext = createContext(null);
 
@@ -16,63 +17,32 @@ export const InventoryProvider = ({ children }) => {
     const [totalPages, setTotalPages] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const { handleOpen, handleModalChange } = useContext(ModalContext);
-    const [inventory, setInventory] = useState([])
-    const { inventoryDetails, setInventoryDetails } = useState([])
+    const [incomes, setIncomes] = useState([])
+    const [editIncome, setEditIncome] = useState(null)
 
     const getPaginatedInventory = async (customFilters?) => {
-        if (!customFilters) {
-            try {
-                setIsLoading(true);
-                const inventory = await getInventory(customFilters ? customFilters : filters);
-
-                if (inventory) {
-                    const mappedInventory = inventory.map((inventory) => ({
-                        date: formatDate(inventory.date),
-                        description: inventory.description,
-                        isActive: inventory.is_active ? 'Activo' : 'Inactivo',
-                        isAdjustment: inventory.is_adjustment ? 'Egreso' : 'Ingreso',
-                        id: inventory.id,
-                    }));
-                    setInventory([...mappedInventory]);
-
-                }
-            } catch (error) {
-                console.log(error);
-                console.log('este es el error' + error);
-            } finally {
-                setIsLoading(false);
-            }
-        }
-    };
-
-    const handleSetInventoryToDetails = async (index = null) => {
-        if (!index && index !== 0) {
-            setInventoryDetails(null);
-            return;
-        }
-
-        const inventoryDetails = inventory[index];
-
         try {
-            const inventorySelect = await getInventoryById(inventoryDetails.id);
+            setIsLoading(true);
+            const response = await getInventory(customFilters ? customFilters : filters);
+            const { incomes, total_pages } = response;
+            if (incomes) {
+                const mappedInventorys = incomes.map((income) => ({
+                    id: income.id,
+                    date: formatDate(income.date),
+                    description: income.description || 'Sin descripción',
+                    isActive: income.is_active ? 'Activo' : 'Inactivo',
+                    isAdjustment: income.is_adjustment ? 'Egreso' : 'Ingreso',
+                }));
 
-            if (inventorySelect) {
-                const mappedInventory = {
-                    date: formatDate(inventorySelect.date),
-                    description: inventorySelect.description,
-                    isActive: inventorySelect.is_active ? 'Activo' : 'Inactivo',
-                    isAdjustment: inventorySelect.is_adjustment ? 'Egreso' : 'Ingreso',
-                    id: inventorySelect.id,
-                };
-                setInventoryDetails(mappedInventory);
-                console.log(mappedInventory)
+                setIncomes(mappedInventorys);
+                setTotalPages(total_pages);
             }
         } catch (error) {
-            console.error('Error al obtener los detalles de la venta:', error);
+            console.log(error);
+        } finally {
+            setIsLoading(false);
         }
     };
-
-
 
     const formatDate = (isoDate) => {
         const date = new Date(isoDate);
@@ -81,6 +51,10 @@ export const InventoryProvider = ({ children }) => {
         const year = date.getFullYear();
 
         return `${day}/${month}/${year}`;
+    };
+
+    const formatId = (id) => {
+        return id.length > 5 ? id.slice(0, 5) : id;
     };
 
     const goToNextPage = () => {
@@ -123,7 +97,56 @@ export const InventoryProvider = ({ children }) => {
         }
     };
 
+    const deleteIncomeFromTable = (id) => {
+        handleModalChange({
+            accept: {
+                title: 'Aceptar',
+                action: async () => {
+                    try {
+                        const response = await deleteIncome(id);
+                        if (response) {
+                            handleModalChange({
+                                accept: {
+                                    title: 'Aceptar',
+                                    action: () => {
+                                        getPaginatedInventory();
+                                    },
+                                },
+                                title: `Ingreso/Egreso N° "${formatId(id)}" dado de baja exitosamente`,
+                                message:
+                                    'Puede restaurar los ingresos/egresos desde la tabla de inventario.',
+                            });
+                            handleOpen();
+                        }
+                    } catch (error) {
+                        handleModalChange({
+                            accept: {
+                                title: 'Aceptar',
+                                action: () => { },
+                            },
+                            title: `Ingreso/Egreso N° "${formatId(id)}" no pudo darse de baja`,
+                            message:
+                                'Lo sentimos, no pudimos concretar la opercion. Intente mas tarde',
+                        });
+                        handleOpen();
+                    }
+                },
+            },
+            title: `Dar de baja Ingreso/Egreso N° "${formatId(id)}" `,
+            message: '¿Está seguro que desea dar de baja el Ingreso/Egreso?',
+            icon: mopsusIcons.warning,
+        });
+        handleOpen();
+    };
 
+    const handleSetIncomeToEdit = async (id) => {
+        if (!id) {
+            setEditIncome(null);
+            return;
+        }
+        const editIncome = await getInventoryById(id)
+        setEditIncome(editIncome);
+    };
 
     return (
         <InventoryContext.Provider value={{
@@ -140,9 +163,13 @@ export const InventoryProvider = ({ children }) => {
             goToPreviousPage,
             goToNextPage,
             getPaginatedInventory,
-            inventory,
-            setInventory,
-            handleSetInventoryToDetails
+            incomes,
+            setIncomes,
+            deleteIncomeFromTable,
+            formatId,
+            handleSetIncomeToEdit,
+            editIncome,
+            formatDate
         }}>
             {children}
         </InventoryContext.Provider>
