@@ -5,9 +5,12 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { useContext, useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
-import { INITIAL_FILTERS, SaleContext } from '../../../contexts/Sales/SalesContext';
+import {
+  INITIAL_FILTERS,
+  SaleContext,
+} from '../../../contexts/Sales/SalesContext';
 import { Filter } from '../../../shared/filter';
-import { SalesFilter } from '../components/SalesFilter'
+import { SalesFilter } from '../components/SalesFilter';
 import { SaleDetails } from '../components/SaleDateils';
 
 const SALE_AMOUNT = 100;
@@ -32,6 +35,11 @@ export const Sales = () => {
 
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const salesTableColumns = [
+    {
+      text: 'Identificador',
+      value: 'saleId',
+      sort: true,
+    },
     {
       text: 'Fecha de venta',
       value: 'saleDate',
@@ -59,7 +67,6 @@ export const Sales = () => {
     },
   ];
 
-
   const options = [
     {
       icon: mopsusIcons.details,
@@ -68,12 +75,12 @@ export const Sales = () => {
     {
       icon: mopsusIcons.trash,
       onClick: deleteSaleFromTable,
-    }
+    },
   ];
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     getPaginatedSales();
-  }, [filters]);
+  }, []);
 
   return (
     <Box>
@@ -91,12 +98,20 @@ export const Sales = () => {
             placeholder="Buscar por id..."
             type="text"
           />
-          <button className={styles.filterButton} onClick={() => setIsOpenFilter(true)}>
+          <button
+            className={styles.filterButton}
+            onClick={() => setIsOpenFilter(true)}
+          >
             <Icon fontSize={24} icon={mopsusIcons.filters} />
             Filtros
           </button>
         </div>
-        <button className={styles.buttonAdd} onClick={() => navigate('/nueva-venta')}>Agregar Venta</button>
+        <button
+          className={styles.buttonAdd}
+          onClick={() => navigate('/nueva-venta')}
+        >
+          Agregar Venta
+        </button>
       </section>
       <MopsusTable
         columns={salesTableColumns}
@@ -113,38 +128,30 @@ export const Sales = () => {
         setRows={setSales}
         totalPages={totalPages}
       />
-      {
-        isOpenFilter && (
-          <Filter
-            isOpen={isOpenFilter}
-            setIsOpen={setIsOpenFilter}
-            onApplyFilters={() => {
-              getPaginatedSales();
-              setIsOpenFilter(false);
-            }}
-            onDeleteFilters={() => {
-              setFilters(INITIAL_FILTERS)
-              getPaginatedSales(INITIAL_FILTERS)
-              setIsOpenFilter(false);
-            }}
-          >
-            <SalesFilter
-              filters={filters}
-              setFilters={setFilters}
-            />
-          </Filter>
-        )
-      }
+      {isOpenFilter && (
+        <Filter
+          isOpen={isOpenFilter}
+          setIsOpen={setIsOpenFilter}
+          onApplyFilters={() => {
+            getPaginatedSales();
+            setIsOpenFilter(false);
+          }}
+          onDeleteFilters={() => {
+            setFilters(INITIAL_FILTERS);
+            getPaginatedSales(INITIAL_FILTERS);
+            setIsOpenFilter(false);
+          }}
+        >
+          <SalesFilter filters={filters} setFilters={setFilters} />
+        </Filter>
+      )}
 
-      {
-        saleDetails && (
-          <SaleDetails
-            handleSetSaleToDetails={handleSetSaleToDetails}
-            saleDetails={saleDetails}
-          />
-        )
-
-      }
+      {saleDetails && (
+        <SaleDetails
+          handleSetSaleToDetails={handleSetSaleToDetails}
+          saleDetails={saleDetails}
+        />
+      )}
     </Box>
   );
 };

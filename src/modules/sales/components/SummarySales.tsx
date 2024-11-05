@@ -34,11 +34,11 @@ export const SummarySales = () => {
         handleOpen();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => { },
+          action: () => {},
         },
         title: 'Error tecnico',
         message: 'No pudimos concretar su solicitud. Intente mas tarde',
@@ -66,9 +66,9 @@ export const SummarySales = () => {
             <thead className={styles.thead}>
               <tr>
                 <th className={styles.category}>Artículo</th>
-                <th className={styles.category}>Precio</th>
+                <th className={styles.category}>Precio (ARS)</th>
                 <th className={styles.category}>Cantidad</th>
-                <th className={styles.category}>Subtotal</th>
+                <th className={styles.category}>Subtotal (ARS)</th>
                 <th className={styles.category}></th>
               </tr>
             </thead>
@@ -94,7 +94,7 @@ export const SummarySales = () => {
         </div>
         <div>
           <div className={styles.resumenContent}>
-            <p className={styles.p}>Subtotal</p>
+            <p className={styles.p}>Subtotal (ARS)</p>
             <p className={styles.p}>{subTotal}</p>
           </div>
 
@@ -103,7 +103,7 @@ export const SummarySales = () => {
 
         <div>
           <div className={styles.resumenContent}>
-            <p className={styles.p}>Descuento</p>
+            <p className={styles.p}>Descuento %</p>
             <input
               type="number"
               onChange={(e) => setDiscount(Number(e.target.value) / 100)}
@@ -114,7 +114,7 @@ export const SummarySales = () => {
         </div>
         <div>
           <div className={styles.resumenContent}>
-            <p className={styles.p}>Total</p>
+            <p className={styles.p}>Total (ARS)</p>
             <p className={styles.p}>{total}</p>
           </div>
         </div>

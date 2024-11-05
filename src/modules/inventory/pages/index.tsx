@@ -12,11 +12,9 @@ import { CircularProgress } from '@mui/material';
 import { RowDetailsIncome } from '../components/RowDetailsIncome';
 import { DetailsIncome } from '../components/DetailsIncome';
 
-
-
 export const Inventory = () => {
-  const [isOpenFilter, setIsOpenFilter] = useState(false)
-  const navigate = useNavigate()
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const navigate = useNavigate();
 
   const {
     filters,
@@ -30,7 +28,7 @@ export const Inventory = () => {
     setInventory,
     getPaginatedInventory,
     handleSetInventoryToDetails,
-  } = useContext(InventoryContext)
+  } = useContext(InventoryContext);
 
   useEffect(() => {
     getPaginatedInventory();
@@ -39,9 +37,7 @@ export const Inventory = () => {
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Inventario</h1>
-        <div className={`${styles.saleInformationContainer}`}>
-          <div className={`${styles.circle}`}></div>
-        </div>
+        <div className={`${styles.saleInformationContainer}`}></div>
       </header>
 
       <section className={styles.tableActionsContainer}>
@@ -51,13 +47,21 @@ export const Inventory = () => {
             placeholder="Buscar por id..."
             type="text"
           />
-          <button className={styles.filterButton} onClick={() => setIsOpenFilter(true)}>
+          <button
+            className={styles.filterButton}
+            onClick={() => setIsOpenFilter(true)}
+          >
             <Icon fontSize={24} icon={mopsusIcons.filters} />
             Filtros
           </button>
         </div>
 
-        <button className={styles.buttonAdd} onClick={() => navigate('/nuevo-ingreso')}>Agregar inventario</button>
+        <button
+          className={styles.buttonAdd}
+          onClick={() => navigate('/nuevo-ingreso')}
+        >
+          Agregar inventario
+        </button>
       </section>
       <div className={styles.boxContainerInventory}>
         <section className={styles.boxInventory}>
@@ -111,23 +115,20 @@ export const Inventory = () => {
         <DetailsIncome />
       </div>
 
-      {
-        isOpenFilter && (
-          <Filter
-            isOpen={isOpenFilter}
-            setIsOpen={setIsOpenFilter}
-            onApplyFilters={() => {
-              setIsOpenFilter(false);
-            }}
-            onDeleteFilters={() => {
-              setIsOpenFilter(false);
-            }}
-          >
-            <InventoryFilter filters={filters} />
-          </Filter>
-        )
-      }
-
+      {isOpenFilter && (
+        <Filter
+          isOpen={isOpenFilter}
+          setIsOpen={setIsOpenFilter}
+          onApplyFilters={() => {
+            setIsOpenFilter(false);
+          }}
+          onDeleteFilters={() => {
+            setIsOpenFilter(false);
+          }}
+        >
+          <InventoryFilter filters={filters} />
+        </Filter>
+      )}
     </Box>
   );
 };
