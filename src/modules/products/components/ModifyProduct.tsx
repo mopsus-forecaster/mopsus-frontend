@@ -177,7 +177,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
                                     {categories.length > 0 ? (
                                         categories.map((c) => (
                                             <option key={c.id} value={c.id}>
-                                                {c.name} - {c.description}
+                                                {c.name}
                                             </option>
                                         ))
                                     ) : (

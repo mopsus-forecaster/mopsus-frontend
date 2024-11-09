@@ -19,13 +19,14 @@ export const ProductsProvider = ({ children }) => {
   const [mappedProducts, setMappedProducts] = useState([]);
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(null);
   const totalPages = useRef(null);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const [editProduct, setEditProduct] = useState(null);
   const getProducts = async (customFilters?) => {
     try {
       setIsLoading(true);
-      const { productos, total_pages } = await getAllProducts(
+      const { productos, total_pages, total_count } = await getAllProducts(
         customFilters ? customFilters : filters
       );
       if (productos) {
@@ -40,12 +41,18 @@ export const ProductsProvider = ({ children }) => {
           category: product.categoria,
           state: product.is_active ? 'Activo' : 'Inactivo',
         }));
+        console.log(total_count)
+        if( total_count){
+          setTotalCount(total_count)
+        }
+
         if (totalPages.current === null || totalPages.current !== total_pages) {
           totalPages.current = total_pages;
         }
         setMappedProducts(mapped);
       }
     } catch ({ errors }) {
+      setTotalCount(0)
       console.error(errors);
     } finally {
       setIsLoading(false);
@@ -197,7 +204,8 @@ export const ProductsProvider = ({ children }) => {
         setMappedProducts,
         handleSetProductToEdit,
         editProduct,
-        getProductsAll
+        getProductsAll,
+        totalCount
       }}
     >
       {children}

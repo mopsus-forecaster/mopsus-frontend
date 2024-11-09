@@ -20,6 +20,11 @@ export const productsTableColumns = [
     sort: true,
   },
   {
+    text: 'Estado',
+    value: 'state',
+    sort: true,
+  },
+  {
     text: 'Categoría',
     value: 'category',
     sort: true,

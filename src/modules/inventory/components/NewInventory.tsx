@@ -35,7 +35,7 @@ export const NewInventorty = () => {
                             value={search}
                             type="text"
                             className={styles.tableSearchInput}
-                            placeholder="Buscar por nombre de producto"
+                            placeholder="Buscar por nombre..."
                         />
                     </div>
                 </section>

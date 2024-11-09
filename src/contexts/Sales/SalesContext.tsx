@@ -22,8 +22,9 @@ export const SalesProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const [saleDetails, setSaleDetails] = useState(null);
+  
   const [subTotal, setSubTotal] = useState(null);
-
+  const [totalCount, setTotalCount] = useState(null)
   const addProductToSale = (product) => {
     const productInSale = addProduct.findIndex(
       (item) => item.id === product.id
@@ -132,12 +133,12 @@ export const SalesProvider = ({ children }) => {
     try {
       setIsLoading(true);
       console.log(customFilters);
-      const { sales, total_pages } = await getSale(
+      const { sales, total_pages, total_count } = await getSale(
         customFilters ? customFilters : filters
       );
       if (sales) {
         const mappedSales = sales.map((sale) => ({
-          saleId: formatId(sale.sale_id),
+          saleId: sale.sale_id,
           saleDate: formatDate(sale.sale_date),
           isActive: sale.is_active ? 'Activo' : 'Inactivo',
           total: sale.total,
@@ -146,9 +147,13 @@ export const SalesProvider = ({ children }) => {
         setSales([...mappedSales]);
         setTotalPages(total_pages);
       }
+      if(total_count || total_count === 0){
+        setTotalCount(totalCount)
+      }
     } catch (error) {
       console.log(error);
       setSales([]);
+      setTotalCount(0)
     } finally {
       setIsLoading(false);
     }
@@ -254,6 +259,8 @@ export const SalesProvider = ({ children }) => {
         setSubTotal,
         subTotal,
         productQuantity,
+        formatId,
+        totalCount
       }}
     >
       {children}

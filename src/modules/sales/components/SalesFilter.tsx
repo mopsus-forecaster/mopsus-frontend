@@ -3,7 +3,6 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { mopsusIcons } from '../../../icons';
 
 export const SalesFilter = ({ filters, setFilters }) => {
-  console.log(filters);
   return (
     <form className={styles.formFilter}>
       <div className={styles.formGroup}>
