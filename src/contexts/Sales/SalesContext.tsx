@@ -21,9 +21,10 @@ export const SalesProvider = ({ children }) => {
   const [totalPages, setTotalPages] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
-  const [saleDetails, setSaleDetails] = useState(null)
-  const [subTotal, setSubTotal] = useState(null)
+  const [saleDetails, setSaleDetails] = useState(null);
 
+  const [subTotal, setSubTotal] = useState(null);
+  const [totalCount, setTotalCount] = useState(null)
   const addProductToSale = (product) => {
     const productInSale = addProduct.findIndex(
       (item) => item.id === product.id
@@ -45,7 +46,6 @@ export const SalesProvider = ({ children }) => {
     }
   };
 
-
   const productQuantity = (id, quantity) => {
     setAddProduct((prevState) =>
       prevState.map((item) =>
@@ -53,7 +53,6 @@ export const SalesProvider = ({ children }) => {
       )
     );
   };
-
 
   const increaseProductQuantity = (id) => {
     setAddProduct((prevState) =>
@@ -131,27 +130,32 @@ export const SalesProvider = ({ children }) => {
   };
 
   const getPaginatedSales = async (customFilters?) => {
-    if (!customFilters) {
-      try {
-        setIsLoading(true);
-        const { sales, total_pages } = await getSale(customFilters ? customFilters : filters);
-        if (sales) {
-          const mappedSales = sales.map((sale) => ({
-            saleId: sale.sale_id,
-            saleDate: formatDate(sale.sale_date),
-            isActive: sale.is_active ? 'Activo' : 'Inactivo',
-            total: sale.total,
-            discount: formatDiscount(sale.discount),
-          }));
-          setSales([...mappedSales]);
-          setTotalPages(total_pages);
-
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
+    try {
+      setIsLoading(true);
+      console.log(customFilters);
+      const { sales, total_pages, total_count } = await getSale(
+        customFilters ? customFilters : filters
+      );
+      if (sales) {
+        const mappedSales = sales.map((sale) => ({
+          saleId: sale.sale_id,
+          saleDate: formatDate(sale.sale_date),
+          isActive: sale.is_active ? 'Activo' : 'Inactivo',
+          total: sale.total,
+          discount: formatDiscount(sale.discount),
+        }));
+        setSales([...mappedSales]);
+        setTotalPages(total_pages);
       }
+      if (total_count || total_count === 0) {
+        setTotalCount(totalCount)
+      }
+    } catch (error) {
+      console.log(error);
+      setSales([]);
+      setTotalCount(0)
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -168,12 +172,11 @@ export const SalesProvider = ({ children }) => {
                 accept: {
                   title: 'Aceptar',
                   action: () => {
-                    getPaginatedSales()
+                    getPaginatedSales();
                   },
                 },
                 title: `Venta n° "${saleToDelete.saleId}" anulada exitosamente`,
-                message:
-                  '',
+                message: '',
               });
               handleOpen();
             }
@@ -196,6 +199,10 @@ export const SalesProvider = ({ children }) => {
       icon: mopsusIcons.warning,
     });
     handleOpen();
+  };
+
+  const formatId = (id) => {
+    return id.length > 5 ? id.slice(0, 5) : id;
   };
 
   const handleSetSaleToDetails = async (index = null) => {
@@ -250,7 +257,9 @@ export const SalesProvider = ({ children }) => {
         saleDetails,
         setSubTotal,
         subTotal,
-        productQuantity
+        productQuantity,
+        formatId,
+        totalCount
       }}
     >
       {children}

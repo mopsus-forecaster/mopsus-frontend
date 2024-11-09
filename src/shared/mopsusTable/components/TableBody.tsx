@@ -131,7 +131,7 @@ export const Body = ({
                 marginTop: '10rem',
               }}
             >
-              No se encontraron productos
+              No se encontraron datos
             </p>
           </TableCell>
         </TableRow>
