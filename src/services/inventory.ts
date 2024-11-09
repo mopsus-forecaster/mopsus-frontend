@@ -18,10 +18,23 @@ export const createInventory = async (description, products) => {
   return response.data;
 };
 
-export const getInventory = async ({}) => {
+export const getInventory = async ({
+  page,
+  start_date = null,
+  end_date = null,
+  include_adjustments = null,
+  is_active = null,
+}) => {
+  const queryParams = new URLSearchParams();
+  if (page) queryParams.append('page', page);
+  if (start_date !== null) queryParams.append('start_date', start_date);
+  if (end_date !== null) queryParams.append('end_date', end_date);
+  if (include_adjustments !== null)
+    queryParams.append('include_adjustments', include_adjustments);
+  if (is_active !== null) queryParams.append('is_active', is_active);
   const response = await apiClient({
     api: 'incomes',
-    service: '',
+    service: `?${queryParams.toString()}`,
     verb: 'get',
   });
   return response.data;

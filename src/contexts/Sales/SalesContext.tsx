@@ -219,7 +219,6 @@ export const SalesProvider = ({ children }) => {
           products: saleSelect.products,
         };
         setSaleDetails(mappedSale);
-        console.log(mappedSale)
       }
     } catch (error) {
       console.error('Error al obtener los detalles de la venta:', error);

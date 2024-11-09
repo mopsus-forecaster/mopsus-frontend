@@ -7,10 +7,8 @@ import { Filter } from '../../../shared/filter';
 import { useContext, useEffect, useState } from 'react';
 import { InventoryFilter } from '../components/IntentoryFilter';
 import { InventoryContext } from '../../../contexts/Inventory/InventoryContext';
-import { RowIncomes } from '../components/RowIncomes';
-import { CircularProgress } from '@mui/material';
-import { RowDetailsIncome } from '../components/RowDetailsIncome';
 import { DetailsIncome } from '../components/DetailsIncome';
+import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 
 
 
@@ -27,14 +25,55 @@ export const Inventory = () => {
     goToPreviousPage,
     goToNextPage,
     incomes,
-    setInventory,
+    setIncomes,
     getPaginatedInventory,
-    handleSetInventoryToDetails,
+    handleSetIncomeToEdit,
+    deleteIncomeFromTable
   } = useContext(InventoryContext)
+
+
+  const inventoryTableColums = [
+    {
+      text: 'N°',
+      value: 'formatId',
+      sort: true,
+    },
+    {
+      text: 'Fecha',
+      value: 'date',
+      sort: true,
+    },
+    {
+      text: 'Estado',
+      value: 'isActive',
+      sort: true,
+    },
+    {
+      text: 'Ingreso/Egreso',
+      value: 'isAdjustment',
+      sort: true,
+    },
+    {
+      text: 'Opciones',
+      value: 'options',
+      sort: false,
+    }
+  ]
+
+  const options = [
+    {
+      icon: mopsusIcons.details,
+      onClick: handleSetIncomeToEdit,
+    },
+    {
+      icon: mopsusIcons.trash,
+      onClick: deleteIncomeFromTable,
+    }
+  ];
 
   useEffect(() => {
     getPaginatedInventory();
-  }, []);
+  }, [filters]);
   return (
     <Box>
       <header className={`${styles.header}`}>
@@ -56,7 +95,6 @@ export const Inventory = () => {
             Filtros
           </button>
         </div>
-
         <button className={styles.buttonAdd} onClick={() => navigate('/nuevo-ingreso')}>Agregar inventario</button>
       </section>
       <div className={styles.boxContainerInventory}>
@@ -67,46 +105,21 @@ export const Inventory = () => {
               <hr className={styles.line} />
             </div>
           </header>
-          <div className={styles.tableContainerIcomes}>
-            <div className={styles.scrollContainerIncomes}>
-              <table className={styles.tableIcomes}>
-                <thead className={styles.theadIcomes}>
-                  <tr className={styles.trIcomes}>
-                    <th className={styles.thIcomes}>N°</th>
-                    <th className={styles.thIcomes}>Fecha</th>
-                    <th className={styles.thIcomes}>Estado</th>
-                    <th className={styles.thIcomes}>Ingreso/Egreso</th>
-                    <th className={styles.thIcomes}>Opciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {isLoading ? (
-                    <tr>
-                      <td className={styles.loadingSpinner}>
-                        <CircularProgress
-                          sx={{
-                            margin: '7.5% auto 1rem auto',
-                            color: '#4a7370',
-                            opacity: 100,
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  ) : incomes && incomes.length > 0 ? (
-                    incomes.map((inventory, index) => (
-                      <RowIncomes key={index} income={inventory} />
-                    ))
-                  ) : (
-                    <tr>
-                      <td className={styles.productListEmptyContainer}>
-                        No se encontraron Ingresos o Egresos.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <MopsusTable
+            columns={inventoryTableColums}
+            rows={incomes}
+            goToFirstPage={goToFirstPage}
+            goToLastPage={goToLastPage}
+            goToNextPage={goToNextPage}
+            goToPreviousPage={goToPreviousPage}
+            includeOptions={true}
+            includePagination={true}
+            isLoading={isLoading}
+            options={options}
+            page={filters.page}
+            setRows={setIncomes}
+            totalPages={totalPages}
+          />
         </section>
         <DetailsIncome />
       </div>

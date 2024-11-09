@@ -29,7 +29,7 @@ export const MopsusTable = ({
       <TableContainer
         sx={{
           width: '95%',
-          margin: '2.5% auto',
+          margin: '2% auto',
           height: '50vh',
           overflowX: 'auto',
           '&::-webkit-scrollbar': {

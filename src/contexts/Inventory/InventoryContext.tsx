@@ -19,12 +19,13 @@ export const InventoryProvider = ({ children }) => {
     const { handleOpen, handleModalChange } = useContext(ModalContext);
     const [incomes, setIncomes] = useState([])
     const [editIncome, setEditIncome] = useState(null)
+    const [totalIncomes, setTotalIncomes] = useState(null)
 
     const getPaginatedInventory = async (customFilters?) => {
         try {
             setIsLoading(true);
             const response = await getInventory(customFilters ? customFilters : filters);
-            const { incomes, total_pages } = response;
+            const { incomes, total_pages, total_incomes } = response;
             if (incomes) {
                 const mappedInventorys = incomes.map((income) => ({
                     id: income.id,
@@ -32,8 +33,9 @@ export const InventoryProvider = ({ children }) => {
                     description: income.description || 'Sin descripción',
                     isActive: income.is_active ? 'Activo' : 'Inactivo',
                     isAdjustment: income.is_adjustment ? 'Egreso' : 'Ingreso',
+                    formatId: formatId(income.id)
                 }));
-
+                setTotalIncomes(total_incomes)
                 setIncomes(mappedInventorys);
                 setTotalPages(total_pages);
             }
@@ -97,13 +99,14 @@ export const InventoryProvider = ({ children }) => {
         }
     };
 
-    const deleteIncomeFromTable = (id) => {
+    const deleteIncomeFromTable = (index) => {
+        const incomeToDelete = incomes[index];
         handleModalChange({
             accept: {
                 title: 'Aceptar',
                 action: async () => {
                     try {
-                        const response = await deleteIncome(id);
+                        const response = await deleteIncome(incomeToDelete.id);
                         if (response) {
                             handleModalChange({
                                 accept: {
@@ -112,7 +115,7 @@ export const InventoryProvider = ({ children }) => {
                                         getPaginatedInventory();
                                     },
                                 },
-                                title: `Ingreso/Egreso N° "${formatId(id)}" dado de baja exitosamente`,
+                                title: `Ingreso/Egreso N° "${formatId(incomeToDelete.id)}" dado de baja exitosamente`,
                                 message:
                                     'Puede restaurar los ingresos/egresos desde la tabla de inventario.',
                             });
@@ -124,7 +127,7 @@ export const InventoryProvider = ({ children }) => {
                                 title: 'Aceptar',
                                 action: () => { },
                             },
-                            title: `Ingreso/Egreso N° "${formatId(id)}" no pudo darse de baja`,
+                            title: `Ingreso/Egreso N° "${formatId(incomeToDelete.id)}" no pudo darse de baja`,
                             message:
                                 'Lo sentimos, no pudimos concretar la opercion. Intente mas tarde',
                         });
@@ -132,19 +135,20 @@ export const InventoryProvider = ({ children }) => {
                     }
                 },
             },
-            title: `Dar de baja Ingreso/Egreso N° "${formatId(id)}" `,
+            title: `Dar de baja Ingreso/Egreso N° "${formatId(incomeToDelete.id)}" `,
             message: '¿Está seguro que desea dar de baja el Ingreso/Egreso?',
             icon: mopsusIcons.warning,
         });
         handleOpen();
     };
 
-    const handleSetIncomeToEdit = async (id) => {
-        if (!id) {
+    const handleSetIncomeToEdit = async (index) => {
+        const incomeDetails = incomes[index];
+        if (!incomeDetails.id) {
             setEditIncome(null);
             return;
         }
-        const editIncome = await getInventoryById(id)
+        const editIncome = await getInventoryById(incomeDetails.id)
         setEditIncome(editIncome);
     };
 
@@ -169,7 +173,8 @@ export const InventoryProvider = ({ children }) => {
             formatId,
             handleSetIncomeToEdit,
             editIncome,
-            formatDate
+            formatDate,
+            totalIncomes
         }}>
             {children}
         </InventoryContext.Provider>

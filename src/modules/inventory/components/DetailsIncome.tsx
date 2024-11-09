@@ -1,11 +1,13 @@
-import { useContext } from 'react'
-import styles from '../styles/inventory.module.scss'
-import { InventoryContext } from '../../../contexts/Inventory/InventoryContext'
-import { RowDetailsIncome } from './RowDetailsIncome'
+import { useContext, useEffect } from 'react';
+import styles from '../styles/inventory.module.scss';
+import { InventoryContext } from '../../../contexts/Inventory/InventoryContext';
+import { RowDetailsIncome } from './RowDetailsIncome';
 
 export const DetailsIncome = () => {
-    const { editIncome, formatId, formatDate } = useContext(InventoryContext)
-    const { id, date, description } = editIncome || {} // Desestructurando editIncome o dejando vacío
+    const { editIncome, formatDate } = useContext(InventoryContext);
+    const { id, date, description, formatId } = editIncome || {};
+
+    useEffect(() => { }, [editIncome]);
 
     return (
         <section className={styles.boxInventoryProducts}>
@@ -17,11 +19,11 @@ export const DetailsIncome = () => {
             </header>
             <section>
                 <div className={styles.infoIncome}>
-                    <p className={styles.dataIncome}>N° &nbsp;{id ? formatId(id) : ""}</p>
+                    <p className={styles.dataIncome}>N° &nbsp;{id ? formatId : ""}</p>
                     <p className={styles.dataIncome}>Fecha:&nbsp;&nbsp;{date ? formatDate(date) : ""}</p>
-                    {description ? (
+                    {description && (
                         <p className={styles.dataIncome}>Descripción: &nbsp;{description}</p>
-                    ) : null}
+                    )}
                 </div>
             </section>
             <div className={styles.contentBoxInventory}>
@@ -53,5 +55,5 @@ export const DetailsIncome = () => {
                 </div>
             </section>
         </section>
-    )
-}
+    );
+};
