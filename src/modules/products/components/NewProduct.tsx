@@ -185,7 +185,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   {categories.length > 0 ? (
                     categories.map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.name} - {c.description}
+                        {c.name} 
                       </option>
                     ))
                   ) : (

@@ -31,7 +31,9 @@ export const ProductsPage = () => {
     goToFirstPage,
     goToPreviousPage,
     goToNextPage,
+    totalCount
   } = useContext(ProductsContext);
+
 
   const [isOpenNewProduct, setIsOpenNewProduct] = useState(false);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
@@ -116,12 +118,16 @@ export const ProductsPage = () => {
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Productos</h1>
-        <div className={`${styles.productInformationContainer}`}>
+        {
+          (totalCount === 0 || totalCount) && <div className={`${styles.productInformationContainer}`}>
           <div className={`${styles.circle}`}></div>
+         
           <p className={`${styles.productInfoTitle}`}>
-            {PRODUCTS_AMOUNT} productos
+            {totalCount} productos
           </p>
         </div>
+        }
+       
       </header>
 
       <section className={styles.tableActionsContainer}>

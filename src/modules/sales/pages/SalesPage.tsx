@@ -31,15 +31,11 @@ export const Sales = () => {
     deleteSaleFromTable,
     handleSetSaleToDetails,
     saleDetails,
+    totalCount
   } = useContext(SaleContext);
 
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const salesTableColumns = [
-    {
-      text: 'Identificador',
-      value: 'saleId',
-      sort: true,
-    },
     {
       text: 'Fecha de venta',
       value: 'saleDate',
@@ -86,10 +82,13 @@ export const Sales = () => {
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Ventas</h1>
+        {
+         ( totalCount === 0 || totalCount) &&
         <div className={`${styles.saleInformationContainer}`}>
           <div className={`${styles.circle}`}></div>
-          <p className={`${styles.saleInfoTitle}`}>{SALE_AMOUNT} ventas</p>
+          <p className={`${styles.saleInfoTitle}`}>{totalCount} ventas</p>
         </div>
+        }
       </header>
       <section className={styles.tableActionsContainer}>
         <div className={styles.tableSearchComponent}>
