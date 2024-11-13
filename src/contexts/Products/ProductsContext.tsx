@@ -42,7 +42,7 @@ export const ProductsProvider = ({ children }) => {
           state: product.is_active ? 'Activo' : 'Inactivo',
         }));
         console.log(total_count)
-        if( total_count){
+        if (total_count) {
           setTotalCount(total_count)
         }
 

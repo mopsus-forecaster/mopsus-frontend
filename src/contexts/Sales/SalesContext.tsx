@@ -22,7 +22,7 @@ export const SalesProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const [saleDetails, setSaleDetails] = useState(null);
-  
+
   const [subTotal, setSubTotal] = useState(null);
   const [totalCount, setTotalCount] = useState(null)
   const addProductToSale = (product) => {
@@ -53,6 +53,14 @@ export const SalesProvider = ({ children }) => {
       )
     );
   };
+
+  const productAdjustment = (id, adjustment) => {
+    setAddProduct((prevState) =>
+      prevState.map((item) =>
+        item.id === id ? { ...item, is_income: adjustment } : item
+      )
+    )
+  }
 
   const increaseProductQuantity = (id) => {
     setAddProduct((prevState) =>
@@ -143,11 +151,12 @@ export const SalesProvider = ({ children }) => {
           isActive: sale.is_active ? 'Activo' : 'Inactivo',
           total: sale.total,
           discount: formatDiscount(sale.discount),
+          formatId: formatId(sale.sale_id)
         }));
         setSales([...mappedSales]);
         setTotalPages(total_pages);
       }
-      if(total_count || total_count === 0){
+      if (total_count || total_count === 0) {
         setTotalCount(totalCount)
       }
     } catch (error) {
@@ -184,7 +193,7 @@ export const SalesProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => {},
+                action: () => { },
               },
               title: `La venta n°"${saleToDelete.saleId}" no pudo ser anulada`,
               message:
@@ -226,7 +235,6 @@ export const SalesProvider = ({ children }) => {
           products: saleSelect.products,
         };
         setSaleDetails(mappedSale);
-        console.log(mappedSale);
       }
     } catch (error) {
       console.error('Error al obtener los detalles de la venta:', error);
@@ -260,7 +268,8 @@ export const SalesProvider = ({ children }) => {
         subTotal,
         productQuantity,
         formatId,
-        totalCount
+        totalCount,
+        productAdjustment
       }}
     >
       {children}

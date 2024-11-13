@@ -113,9 +113,11 @@
   margin: 0;
 }
 
-.line {
+.line2 {
   width: 100%;
   margin: 0;
+  background-color: #dad9d9;
+  height: 2px;
 }
 
 .productListContainer {
@@ -155,6 +157,7 @@
   transform: translate(-50%, -50%);
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
 
 .loadingSpinner {
@@ -664,14 +667,14 @@ input:not(:placeholder-shown) + .placeholder {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 75%;
-  padding: 3.5vh 1.5vw 1vh 1.5vw;
+  height: 76%;
+  padding: 2.5vh 1.5vw 1vh 1.5vw;
   gap: 2vb;
 }
 
 .boxInventory {
   position: relative;
-  width: 45%;
+  width: 55%;
   height: 100%;
   padding: 10px;
   background-color: rgb(22, 22, 22);
@@ -680,7 +683,7 @@ input:not(:placeholder-shown) + .placeholder {
 
 .boxInventoryProducts {
   position: relative;
-  width: 55%;
+  width: 45%;
   height: 100%;
   padding: 10px;
   background-color: rgb(22, 22, 22);
@@ -851,4 +854,55 @@ input:not(:placeholder-shown) + .placeholder {
 .thIcomesArticulo:nth-child(1) {
   text-align: left;
   width: 60%;
+}
+
+.btnContainer {
+  gap: 1vw;
+}
+
+.saleInformationContainer {
+  display: flex;
+  margin-left: 0.5%;
+  align-items: center;
+}
+
+.saleInfoTitle {
+  color: $color-white;
+}
+
+.thAdjustment:nth-child(1) {
+  width: 30%;
+}
+
+.thAdjustment:nth-child(2),
+.thAdjustment:nth-child(4),
+.thAdjustment:nth-child(5) {
+  width: 15%;
+}
+
+.thAdjustment:nth-child(3) {
+  width: 35%;
+}
+
+.selectFilterAdjustment {
+  width: 100%;
+  padding: 7px 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 32.5px;
+  background-color: #363636;
+  color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+
+  &:hover {
+    border-color: #888;
+  }
 }

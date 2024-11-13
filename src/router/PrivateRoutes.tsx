@@ -5,6 +5,7 @@ import { NewInventorty } from '../modules/inventory/components/NewInventory'
 import RequireAuth from './components/RequireAuth';
 import styles from './styles/layout.module.scss';
 import { NewSale } from '../modules/sales/components/NewSale';
+import { NewAdjustment } from '../modules/inventory/components/NewAdjustment';
 export const PrivateRoutes = () => {
   return (
     <section className={styles.layout}>
@@ -22,7 +23,12 @@ export const PrivateRoutes = () => {
         </Route>
         <Route element={<RequireAuth />}>
           <Route path="inventario" element={<Inventory />} />
-          <Route path='nuevo-ingreso' element={<NewInventorty />} />
+          <Route>
+            <Route path='nuevo-ingreso' element={<NewInventorty />} />
+          </Route>
+          <Route>
+            <Route path='nuevo-ajuste' element={<NewAdjustment />} />
+          </Route>
         </Route>
         <Route element={<RequireAuth />}>
           <Route path="/*" element={<Navigate to={'/inicio'} />} />
