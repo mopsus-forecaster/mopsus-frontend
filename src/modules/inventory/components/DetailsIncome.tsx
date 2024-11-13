@@ -4,8 +4,8 @@ import { InventoryContext } from '../../../contexts/Inventory/InventoryContext';
 import { RowDetailsIncome } from './RowDetailsIncome';
 
 export const DetailsIncome = () => {
-    const { editIncome, formatDate } = useContext(InventoryContext);
-    const { id, date, description, formatId } = editIncome || {};
+    const { editIncome, formatDate, formatId } = useContext(InventoryContext);
+    const { id, date, description, is_adjustment } = editIncome || {};
 
     useEffect(() => { }, [editIncome]);
 
@@ -14,12 +14,12 @@ export const DetailsIncome = () => {
             <header>
                 <div className={styles.contentBoxInventory}>
                     <p className={styles.titleBoxInventory}>Detalle del ingreso o egreso</p>
-                    <hr className={styles.line} />
+                    <hr className={styles.line2} />
                 </div>
             </header>
             <section>
                 <div className={styles.infoIncome}>
-                    <p className={styles.dataIncome}>N° &nbsp;{id ? formatId : ""}</p>
+                    <p className={styles.dataIncome}>N° &nbsp;{id ? formatId(id) : ""}</p>
                     <p className={styles.dataIncome}>Fecha:&nbsp;&nbsp;{date ? formatDate(date) : ""}</p>
                     {description && (
                         <p className={styles.dataIncome}>Descripción: &nbsp;{description}</p>
@@ -27,7 +27,7 @@ export const DetailsIncome = () => {
                 </div>
             </section>
             <div className={styles.contentBoxInventory}>
-                <hr className={styles.line} />
+                <hr className={styles.line2} />
             </div>
             <section>
                 <div className={styles.tableContainerIcomesArticulos}>
@@ -37,6 +37,11 @@ export const DetailsIncome = () => {
                                 <tr className={styles.trIcomes}>
                                     <th className={styles.thIcomesArticulo}>Artículo</th>
                                     <th className={styles.thIcomesArticulo}>Cantidad</th>
+                                    {
+                                        is_adjustment && (
+                                            <th className={styles.thIcomesArticulo}>Ingreso/Egreso</th>
+                                        )
+                                    }
                                 </tr>
                             </thead>
                             <tbody>

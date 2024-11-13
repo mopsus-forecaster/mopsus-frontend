@@ -3,13 +3,13 @@ import { SaleContext } from '../../../contexts/Sales/SalesContext';
 import { useNavigate } from 'react-router-dom';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import { useContext, useState } from 'react';
-import { RowInventorySummary } from './RowInventorySummary'
-import { createInventory } from '../../../services/inventory'
+import { RowAdjustmentSummary } from './RowAdjustmentSummary'
+import { createAdjustment } from '../../../services/inventory'
 import { mopsusIcons } from '../../../icons';
 
 
 
-export const InventortSummary = () => {
+export const AdjustmentSummary = () => {
     const { addProduct, setAddProduct } = useContext(SaleContext);
     const { handleModalChange, handleOpen } = useContext(ModalContext);
     const [description, setDescription] = useState('')
@@ -30,9 +30,9 @@ export const InventortSummary = () => {
             handleOpen();
             return;
         }
-
         try {
-            const res = await createInventory(description, addProduct);
+            const res = await createAdjustment(addProduct, description);
+            console.log('entra al trys')
             if (res) {
                 handleModalChange({
                     accept: {
@@ -42,8 +42,8 @@ export const InventortSummary = () => {
                             navigate(`/inventario`);
                         },
                     },
-                    title: 'Venta registrada con éxito',
-                    message: 'Podrá visualizarla en la tabla de ventas',
+                    title: 'Ajuste registrado con éxito',
+                    message: 'Podrá visualizarlo en la tabla de ingresos',
                 });
                 handleOpen();
             }
@@ -67,7 +67,7 @@ export const InventortSummary = () => {
             <div className={styles.tableContainer}>
                 <header>
                     <div className={styles.contentBox}>
-                        <p className={styles.titleBox}>Productos Agregados</p>
+                        <p className={styles.titleBox}>Productos Agregados al Ajuste</p>
                         <hr className={styles.line2} />
                     </div>
                 </header>
@@ -76,16 +76,17 @@ export const InventortSummary = () => {
                         <table className={styles.table}>
                             <thead className={styles.thead}>
                                 <tr className={styles.trTable}>
-                                    <th className={styles.category}>Artículo</th>
-                                    <th className={styles.category}>Unidad</th>
-                                    <th className={styles.category}>Cantidad</th>
-                                    <th className={styles.category}></th>
+                                    <th className={styles.thAdjustment}>Artículo</th>
+                                    <th className={styles.thAdjustment}>Unidad</th>
+                                    <th className={styles.thAdjustment}>Cantidad</th>
+                                    <th className={styles.thAdjustment}>Ingreso/Egreso</th>
+                                    <th className={styles.thAdjustment}></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {addProduct && addProduct.length > 0 ? (
                                     addProduct.map((product) => (
-                                        <RowInventorySummary key={product.id} product={product} />
+                                        <RowAdjustmentSummary key={product.id} product={product} />
                                     ))
                                 ) : (
                                     <p className={styles.productListEmptyContainer}>
@@ -102,12 +103,12 @@ export const InventortSummary = () => {
             <div className={styles.resumenContainer}>
                 <header className={styles.marginHeader}>
                     <div className={styles.contentBox}>
-                        <p className={styles.titleBox}>Información del ingreso</p>
+                        <p className={styles.titleBox}>Información del ajuste</p>
                         <hr className={styles.line2} />
                     </div>
                 </header>
                 <div className={styles.contentBox}>
-                    <p className={styles.titleBox}>Descripción</p>
+                    <p className={styles.titleBox}>Motivo de ajuste</p>
                     <textarea
                         id="comment"
                         name="description"

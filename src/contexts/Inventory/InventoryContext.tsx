@@ -8,7 +8,7 @@ export const InventoryContext = createContext(null);
 export const INITIAL_FILTERS = {
     date: '',
     isActive: null,
-    isAdjustment: null,
+    include_adjustments: null,
     id: null,
     page: 1
 }
@@ -16,6 +16,7 @@ export const InventoryProvider = ({ children }) => {
     const [filters, setFilters] = useState(INITIAL_FILTERS);
     const [totalPages, setTotalPages] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingDetails, setIsLoadingDetails] = useState(false);
     const { handleOpen, handleModalChange } = useContext(ModalContext);
     const [incomes, setIncomes] = useState([])
     const [editIncome, setEditIncome] = useState(null)
@@ -32,7 +33,7 @@ export const InventoryProvider = ({ children }) => {
                     date: formatDate(income.date),
                     description: income.description || 'Sin descripción',
                     isActive: income.is_active ? 'Activo' : 'Inactivo',
-                    isAdjustment: income.is_adjustment ? 'Egreso' : 'Ingreso',
+                    isAdjustment: income.is_adjustment ? 'Ajuste' : 'Ingreso',
                     formatId: formatId(income.id)
                 }));
                 setTotalIncomes(total_incomes)
@@ -68,7 +69,7 @@ export const InventoryProvider = ({ children }) => {
             ...prevFilters,
             page: nextPage,
         }));
-        getInventory({ ...filters, page: nextPage });
+        getPaginatedInventory({ ...filters, page: nextPage });
     };
 
     const goToPreviousPage = () => {
@@ -78,7 +79,7 @@ export const InventoryProvider = ({ children }) => {
             ...prevFilters,
             page: nextPage,
         }));
-        getInventory({ ...filters, page: nextPage });
+        getPaginatedInventory({ ...filters, page: nextPage });
     };
 
     const goToFirstPage = () => {
@@ -86,7 +87,7 @@ export const InventoryProvider = ({ children }) => {
             ...prevFilters,
             page: 1,
         }));
-        getInventory({ ...filters, page: 1 });
+        getPaginatedInventory({ ...filters, page: 1 });
     };
 
     const goToLastPage = () => {
@@ -95,7 +96,7 @@ export const InventoryProvider = ({ children }) => {
                 ...prevFilters,
                 page: totalPages.current,
             }));
-            getInventory({ ...filters, page: totalPages.current });
+            getPaginatedInventory({ ...filters, page: totalPages.current });
         }
     };
 
@@ -148,9 +149,18 @@ export const InventoryProvider = ({ children }) => {
             setEditIncome(null);
             return;
         }
-        const editIncome = await getInventoryById(incomeDetails.id)
-        setEditIncome(editIncome);
+        try {
+            setIsLoadingDetails(true)
+            const editIncome = await getInventoryById(incomeDetails.id)
+            setEditIncome(editIncome);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setIsLoadingDetails(false)
+        }
+
     };
+
 
     return (
         <InventoryContext.Provider value={{
@@ -174,7 +184,8 @@ export const InventoryProvider = ({ children }) => {
             handleSetIncomeToEdit,
             editIncome,
             formatDate,
-            totalIncomes
+            totalIncomes,
+            isLoadingDetails
         }}>
             {children}
         </InventoryContext.Provider>

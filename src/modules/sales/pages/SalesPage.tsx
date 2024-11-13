@@ -12,6 +12,7 @@ import {
 import { Filter } from '../../../shared/filter';
 import { SalesFilter } from '../components/SalesFilter';
 import { SaleDetails } from '../components/SaleDateils';
+import { Value } from 'sass';
 
 const SALE_AMOUNT = 100;
 
@@ -33,9 +34,14 @@ export const Sales = () => {
     saleDetails,
     totalCount
   } = useContext(SaleContext);
-
+  const [search, setSearch] = useState(null)
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const salesTableColumns = [
+    {
+      text: 'ID',
+      value: 'formatId',
+      sort: true,
+    },
     {
       text: 'Fecha de venta',
       value: 'saleDate',
@@ -78,21 +84,42 @@ export const Sales = () => {
     getPaginatedSales();
   }, []);
 
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setFilters((prevFilters) => {
+        const newFilters = {
+          ...prevFilters,
+          sale_id: search ? search : null,
+        };
+
+        getPaginatedSales(newFilters);
+
+        return newFilters;
+      });
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [search]);
+
   return (
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Ventas</h1>
         {
-         ( totalCount === 0 || totalCount) &&
-        <div className={`${styles.saleInformationContainer}`}>
-          <div className={`${styles.circle}`}></div>
-          <p className={`${styles.saleInfoTitle}`}>{totalCount} ventas</p>
-        </div>
+          (totalCount === 0 || totalCount) &&
+          <div className={`${styles.saleInformationContainer}`}>
+            <div className={`${styles.circle}`}></div>
+            <p className={`${styles.saleInfoTitle}`}>{totalCount} ventas</p>
+          </div>
         }
       </header>
       <section className={styles.tableActionsContainer}>
         <div className={styles.tableSearchComponent}>
           <input
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
             className={styles.tableSearchInput}
             placeholder="Buscar por id..."
             type="text"

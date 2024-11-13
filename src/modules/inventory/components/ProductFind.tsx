@@ -12,7 +12,7 @@ export const ProductFind = () => {
             <header>
                 <div className={styles.contentBox}>
                     <p className={styles.titleBox}>Productos Encontrados</p>
-                    <hr className={styles.line} />
+                    <hr className={styles.line2} />
                 </div>
             </header>
             <div className={styles.contentBox}>

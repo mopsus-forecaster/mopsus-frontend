@@ -54,6 +54,14 @@ export const SalesProvider = ({ children }) => {
     );
   };
 
+  const productAdjustment = (id, adjustment) => {
+    setAddProduct((prevState) =>
+      prevState.map((item) =>
+        item.id === id ? { ...item, is_income: adjustment } : item
+      )
+    )
+  }
+
   const increaseProductQuantity = (id) => {
     setAddProduct((prevState) =>
       prevState.map((item) =>
@@ -143,6 +151,7 @@ export const SalesProvider = ({ children }) => {
           isActive: sale.is_active ? 'Activo' : 'Inactivo',
           total: sale.total,
           discount: formatDiscount(sale.discount),
+          formatId: formatId(sale.sale_id)
         }));
         setSales([...mappedSales]);
         setTotalPages(total_pages);
@@ -259,7 +268,8 @@ export const SalesProvider = ({ children }) => {
         subTotal,
         productQuantity,
         formatId,
-        totalCount
+        totalCount,
+        productAdjustment
       }}
     >
       {children}

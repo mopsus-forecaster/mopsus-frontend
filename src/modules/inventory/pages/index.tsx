@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Filter } from '../../../shared/filter';
 import { useContext, useEffect, useState } from 'react';
 import { InventoryFilter } from '../components/IntentoryFilter';
-import { InventoryContext } from '../../../contexts/Inventory/InventoryContext';
+import { INITIAL_FILTERS, InventoryContext } from '../../../contexts/Inventory/InventoryContext';
 import { DetailsIncome } from '../components/DetailsIncome';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 
@@ -14,6 +14,8 @@ import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 
 export const Inventory = () => {
   const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const [search, setSearch] = useState(null);
+
   const navigate = useNavigate();
 
   const {
@@ -28,7 +30,9 @@ export const Inventory = () => {
     setIncomes,
     getPaginatedInventory,
     handleSetIncomeToEdit,
-    deleteIncomeFromTable
+    deleteIncomeFromTable,
+    setFilters,
+    totalIncomes
   } = useContext(InventoryContext)
 
 
@@ -49,7 +53,7 @@ export const Inventory = () => {
       sort: true,
     },
     {
-      text: 'Ingreso/Egreso',
+      text: 'Ingreso/Ajuste',
       value: 'isAdjustment',
       sort: true,
     },
@@ -72,18 +76,45 @@ export const Inventory = () => {
   ];
 
   useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setFilters((prevFilters) => {
+        const newFilters = {
+          ...prevFilters,
+          id_incomes: search ? search : null,
+        };
+
+        getPaginatedInventory(newFilters);
+        console.log(newFilters)
+        return newFilters;
+      });
+    }, 500);
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [search]);
+
+  useEffect(() => {
     getPaginatedInventory();
-  }, [filters]);
+  }, []);
+
   return (
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Inventario</h1>
-        <div className={`${styles.saleInformationContainer}`}></div>
+        {
+          (totalIncomes === 0 || totalIncomes) &&
+          <div className={`${styles.saleInformationContainer}`}>
+            <div className={`${styles.circle}`}></div>
+            <p className={`${styles.saleInfoTitle}`}>{totalIncomes} ingresos</p>
+          </div>
+        }
       </header>
 
       <section className={styles.tableActionsContainer}>
         <div className={styles.tableSearchComponent}>
           <input
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
             className={styles.tableSearchInput}
             placeholder="Buscar por id..."
             type="text"
@@ -96,14 +127,17 @@ export const Inventory = () => {
             Filtros
           </button>
         </div>
-        <button className={styles.buttonAdd} onClick={() => navigate('/nuevo-ingreso')}>Agregar inventario</button>
+        <div className={styles.btnContainer}>
+          <button className={styles.buttonAdd} onClick={() => navigate('/nuevo-ajuste')}>Agregar Ajuste</button>
+          <button className={styles.buttonAdd} onClick={() => navigate('/nuevo-ingreso')}>Agregar inventario</button>
+        </div>
       </section>
       <div className={styles.boxContainerInventory}>
         <section className={styles.boxInventory}>
           <header>
             <div className={styles.contentBoxInventory}>
               <p className={styles.titleBoxInventory}>Ingresos/Egresos</p>
-              <hr className={styles.line} />
+              <hr className={styles.line2} />
             </div>
           </header>
           <MopsusTable
@@ -131,12 +165,14 @@ export const Inventory = () => {
           setIsOpen={setIsOpenFilter}
           onApplyFilters={() => {
             setIsOpenFilter(false);
+            getPaginatedInventory(filters)
           }}
           onDeleteFilters={() => {
             setIsOpenFilter(false);
+            getPaginatedInventory(INITIAL_FILTERS)
           }}
         >
-          <InventoryFilter filters={filters} />
+          <InventoryFilter filters={filters} setFilters={setFilters} />
         </Filter>
       )}
     </Box>
