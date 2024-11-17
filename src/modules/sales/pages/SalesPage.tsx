@@ -3,7 +3,7 @@ import styles from '../styles/sales.module.scss';
 import { mopsusIcons } from '../../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useContext, useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 import {
   INITIAL_FILTERS,
@@ -12,9 +12,6 @@ import {
 import { Filter } from '../../../shared/filter';
 import { SalesFilter } from '../components/SalesFilter';
 import { SaleDetails } from '../components/SaleDateils';
-import { Value } from 'sass';
-
-const SALE_AMOUNT = 100;
 
 export const Sales = () => {
   const {
@@ -32,10 +29,11 @@ export const Sales = () => {
     deleteSaleFromTable,
     handleSetSaleToDetails,
     saleDetails,
-    totalCount
+    totalCount,
   } = useContext(SaleContext);
-  const [search, setSearch] = useState(null)
+  const [search, setSearch] = useState(null);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
   const salesTableColumns = [
     {
       text: 'ID',
@@ -81,21 +79,26 @@ export const Sales = () => {
   ];
   const navigate = useNavigate();
   useEffect(() => {
-    getPaginatedSales();
+    if (firstLoad) {
+      getPaginatedSales();
+      setFirstLoad(false);
+    }
   }, []);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setFilters((prevFilters) => {
-        const newFilters = {
-          ...prevFilters,
-          sale_id: search ? search : null,
-        };
+      if (!firstLoad) {
+        setFilters((prevFilters) => {
+          const newFilters = {
+            ...prevFilters,
+            sale_id: search ? search : null,
+          };
 
-        getPaginatedSales(newFilters);
+          getPaginatedSales(newFilters);
 
-        return newFilters;
-      });
+          return newFilters;
+        });
+      }
     }, 500);
 
     return () => {
@@ -107,13 +110,12 @@ export const Sales = () => {
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Ventas</h1>
-        {
-          (totalCount === 0 || totalCount) &&
+        {(totalCount === 0 || totalCount) && (
           <div className={`${styles.saleInformationContainer}`}>
             <div className={`${styles.circle}`}></div>
             <p className={`${styles.saleInfoTitle}`}>{totalCount} ventas</p>
           </div>
-        }
+        )}
       </header>
       <section className={styles.tableActionsContainer}>
         <div className={styles.tableSearchComponent}>

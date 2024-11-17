@@ -13,8 +13,6 @@ import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 import { productsTableColumns } from '../data/productsColumns';
 import { ProductFilters } from '../components/ProductFilters';
 
-const PRODUCTS_AMOUNT = 145;
-
 export const ProductsPage = () => {
   const {
     mappedProducts,
@@ -31,15 +29,15 @@ export const ProductsPage = () => {
     goToFirstPage,
     goToPreviousPage,
     goToNextPage,
-    totalCount
+    totalCount,
   } = useContext(ProductsContext);
-
 
   const [isOpenNewProduct, setIsOpenNewProduct] = useState(false);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState([]);
   const [units, setUnits] = useState([]);
+  const [firstLoad, setFirstLoad] = useState(true);
 
   const options = [
     {
@@ -66,16 +64,18 @@ export const ProductsPage = () => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setFilters((prevFilters) => {
-        const newFilters = {
-          ...prevFilters,
-          title: search ? search : null,
-        };
+      if (!firstLoad) {
+        setFilters((prevFilters) => {
+          const newFilters = {
+            ...prevFilters,
+            title: search ? search : null,
+          };
 
-        getProducts(newFilters);
+          getProducts(newFilters);
 
-        return newFilters;
-      });
+          return newFilters;
+        });
+      }
     }, 500);
 
     return () => {
@@ -84,31 +84,35 @@ export const ProductsPage = () => {
   }, [search]);
 
   useEffect(() => {
-    const getCategoriesOptions = async () => {
-      try {
-        const { categorias } = await getCategories();
-        if (categorias) {
-          setCategories(categorias);
+    if (firstLoad) {
+      const getCategoriesOptions = async () => {
+        try {
+          const { categorias } = await getCategories();
+          if (categorias) {
+            setCategories(categorias);
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      };
 
-    const getUnitsOptions = async () => {
-      try {
-        const { unidades } = await getUnits();
-        if (unidades) {
-          setUnits(unidades);
+      const getUnitsOptions = async () => {
+        try {
+          const { unidades } = await getUnits();
+          if (unidades) {
+            setUnits(unidades);
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      };
 
-    getCategoriesOptions();
-    getUnitsOptions();
-    getProducts();
+      getCategoriesOptions();
+      getUnitsOptions();
+      getProducts();
+      setFirstLoad(false);
+    }
+
     return () => {
       setFilters(INITIAL_FILTERS);
     };
@@ -118,16 +122,15 @@ export const ProductsPage = () => {
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Productos</h1>
-        {
-          (totalCount === 0 || totalCount) && <div className={`${styles.productInformationContainer}`}>
-          <div className={`${styles.circle}`}></div>
-         
-          <p className={`${styles.productInfoTitle}`}>
-            {totalCount} productos
-          </p>
-        </div>
-        }
-       
+        {(totalCount === 0 || totalCount) && (
+          <div className={`${styles.productInformationContainer}`}>
+            <div className={`${styles.circle}`}></div>
+
+            <p className={`${styles.productInfoTitle}`}>
+              {totalCount} productos
+            </p>
+          </div>
+        )}
       </header>
 
       <section className={styles.tableActionsContainer}>

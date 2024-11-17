@@ -1,5 +1,9 @@
 import { createContext, useContext, useRef, useState } from 'react';
-import { deleteProduct, getAllProducts, getProductsAllAll } from '../../services/products';
+import {
+  deleteProduct,
+  getAllProducts,
+  getProductsAllAll,
+} from '../../services/products';
 import { ModalContext } from '../modal/ModalContext';
 import { mopsusIcons } from '../../icons';
 
@@ -24,6 +28,7 @@ export const ProductsProvider = ({ children }) => {
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const [editProduct, setEditProduct] = useState(null);
   const getProducts = async (customFilters?) => {
+    console.log('me ejecuto');
     try {
       setIsLoading(true);
       const { productos, total_pages, total_count } = await getAllProducts(
@@ -41,9 +46,8 @@ export const ProductsProvider = ({ children }) => {
           category: product.categoria,
           state: product.is_active ? 'Activo' : 'Inactivo',
         }));
-        console.log(total_count)
         if (total_count) {
-          setTotalCount(total_count)
+          setTotalCount(total_count);
         }
 
         if (totalPages.current === null || totalPages.current !== total_pages) {
@@ -52,8 +56,12 @@ export const ProductsProvider = ({ children }) => {
         setMappedProducts(mapped);
       }
     } catch ({ errors }) {
-      setTotalCount(0)
-      console.error(errors);
+      setTotalCount(null);
+      setMappedProducts([]);
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        page: null,
+      }));
     } finally {
       setIsLoading(false);
     }
@@ -62,14 +70,12 @@ export const ProductsProvider = ({ children }) => {
   const getProductsAll = async (customFilters?) => {
     try {
       setIsLoading(true);
-      let productos
+      let productos;
       if (filters.page !== null && filters.title === '') {
         productos = await getProductsAllAll();
-      }
-      else if (filters.title !== '') {
+      } else if (filters.title !== '') {
         productos = await getProducts(customFilters);
-      }
-      else {
+      } else {
         productos = await getProductsAllAll();
       }
 
@@ -168,7 +174,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${productToDelete.productName}" no pudo darse de baja`,
               message:
@@ -184,8 +190,6 @@ export const ProductsProvider = ({ children }) => {
     });
     handleOpen();
   };
-
-
 
   return (
     <ProductsContext.Provider
@@ -205,7 +209,7 @@ export const ProductsProvider = ({ children }) => {
         handleSetProductToEdit,
         editProduct,
         getProductsAll,
-        totalCount
+        totalCount,
       }}
     >
       {children}

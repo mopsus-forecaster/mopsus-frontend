@@ -24,7 +24,7 @@ export const SalesProvider = ({ children }) => {
   const [saleDetails, setSaleDetails] = useState(null);
 
   const [subTotal, setSubTotal] = useState(null);
-  const [totalCount, setTotalCount] = useState(null)
+  const [totalCount, setTotalCount] = useState(null);
   const addProductToSale = (product) => {
     const productInSale = addProduct.findIndex(
       (item) => item.id === product.id
@@ -59,8 +59,8 @@ export const SalesProvider = ({ children }) => {
       prevState.map((item) =>
         item.id === id ? { ...item, is_income: adjustment } : item
       )
-    )
-  }
+    );
+  };
 
   const increaseProductQuantity = (id) => {
     setAddProduct((prevState) =>
@@ -128,12 +128,12 @@ export const SalesProvider = ({ children }) => {
   };
 
   const goToLastPage = () => {
-    if (totalPages.current !== null) {
+    if (totalPages !== null) {
       setFilters((prevFilters) => ({
         ...prevFilters,
-        page: totalPages.current,
+        page: totalPages,
       }));
-      getSale({ ...filters, page: totalPages.current });
+      getSale({ ...filters, page: totalPages });
     }
   };
 
@@ -151,18 +151,18 @@ export const SalesProvider = ({ children }) => {
           isActive: sale.is_active ? 'Activo' : 'Inactivo',
           total: sale.total,
           discount: formatDiscount(sale.discount),
-          formatId: formatId(sale.sale_id)
+          formatId: formatId(sale.sale_id),
         }));
         setSales([...mappedSales]);
         setTotalPages(total_pages);
       }
       if (total_count || total_count === 0) {
-        setTotalCount(totalCount)
+        setTotalCount(totalCount);
       }
     } catch (error) {
       console.log(error);
       setSales([]);
-      setTotalCount(0)
+      setTotalCount(0);
     } finally {
       setIsLoading(false);
     }
@@ -193,7 +193,7 @@ export const SalesProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `La venta n°"${saleToDelete.saleId}" no pudo ser anulada`,
               message:
@@ -269,7 +269,7 @@ export const SalesProvider = ({ children }) => {
         productQuantity,
         formatId,
         totalCount,
-        productAdjustment
+        productAdjustment,
       }}
     >
       {children}

@@ -10,11 +10,18 @@ export const TableFooter = ({
   goToNextPage,
   goToLastPage,
 }) => {
+  const backButtonDisabled = !(page > 1);
+  const nextButtonDisabled = totalPages === page;
   return (
     <tfoot className={styles.tableFooter}>
       <div className={styles.paginatorContainer}>
         <div className={styles.paginator}>
-          <div>
+          <button
+            className={
+              backButtonDisabled ? styles.buttonDisabled : styles.buttonFooter
+            }
+            disabled={backButtonDisabled}
+          >
             <Icon
               onClick={goToFirstPage}
               fontSize={24}
@@ -25,9 +32,14 @@ export const TableFooter = ({
               fontSize={24}
               icon={mopsusIcons.previousPage}
             />
-          </div>
+          </button>
           Pagina {page} de {totalPages}
-          <div>
+          <button
+            className={
+              nextButtonDisabled ? styles.buttonDisabled : styles.buttonFooter
+            }
+            disabled={nextButtonDisabled}
+          >
             <Icon
               onClick={goToNextPage}
               fontSize={24}
@@ -38,7 +50,7 @@ export const TableFooter = ({
               fontSize={24}
               icon={mopsusIcons.lastPage}
             ></Icon>
-          </div>
+          </button>
         </div>
       </div>
     </tfoot>
