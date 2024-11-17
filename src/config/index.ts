@@ -33,6 +33,9 @@ const localConfig: LocalConfig = {
         incomes: {
           basepath: `${BASE_URL}/incomes`,
         },
+        metrics: {
+          basepath: `${BASE_URL}/metrics/`,
+        },
       },
     },
   },
