@@ -100,10 +100,10 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => {},
             },
-            title: 'Error en los campos',
-            message: 'Usuario y/o contraseña incorrectos.',
+            title: 'Error en el registro',
+            message: 'Ya existe un producto con dicho nombre.',
             icon: mopsusIcons.error,
           });
           handleOpen();
@@ -112,7 +112,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => {},
             },
             title: 'Error técnico',
             message:
@@ -185,7 +185,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   {categories.length > 0 ? (
                     categories.map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.name} 
+                        {c.name}
                       </option>
                     ))
                   ) : (
@@ -206,7 +206,8 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
                   value={form.unit}
                   onChange={handleChange}
                   className={styles.select}
-                  required>
+                  required
+                >
                   <option value="" disabled>
                     Selecciona una unidad
                   </option>
