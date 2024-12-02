@@ -19,6 +19,7 @@ export const MopsusTable = ({
   page,
   totalPages,
   options,
+  totalElements = 0,
 }) => {
   type Order = 'asc' | 'desc';
   const [valueToOrderBy, setValueToOrderBy] = useState();
@@ -84,6 +85,7 @@ export const MopsusTable = ({
           goToPreviousPage={goToPreviousPage}
           page={page}
           totalPages={totalPages}
+          totalElements={totalElements}
         />
       )}
     </>

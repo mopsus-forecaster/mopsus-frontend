@@ -10,6 +10,7 @@ import { AuthContext } from '../../../contexts';
 import { MfaFlow } from '../../../types';
 import { createUser } from '../../../services';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
+import { LoadingContext } from '../../../contexts/loading/LoadingContext';
 
 interface FormData {
   password: string;
@@ -56,9 +57,11 @@ export const RegisterPassword = () => {
   const { name, email } = registerData;
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const navigate = useNavigate();
+  const { setShowLoading } = useContext(LoadingContext);
 
   const handleNavigation = async () => {
     try {
+      setShowLoading(true);
       const response = await createUser(email, form.password, name);
       if (response) {
         handleSetRecoverEmail(email);
@@ -67,6 +70,7 @@ export const RegisterPassword = () => {
         navigate(`/${routes.mfaAContainer}`);
       }
     } catch ({ errors }) {
+      setShowLoading(false);
       switch (errors[0].status) {
         case 400:
           handleModalChange({
@@ -97,6 +101,8 @@ export const RegisterPassword = () => {
           handleOpen();
           break;
       }
+    } finally {
+      setShowLoading(false);
     }
   };
 

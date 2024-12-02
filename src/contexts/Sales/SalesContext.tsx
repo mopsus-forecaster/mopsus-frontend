@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from 'react';
 import { deleteSale, getSale, getSaleById } from '../../services/sales';
 import { ModalContext } from '../modal/ModalContext';
 import { mopsusIcons } from '../../icons';
+import { LoadingContext } from '../loading/LoadingContext';
 
 export const SaleContext = createContext(null);
 
@@ -22,6 +23,7 @@ export const SalesProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const [saleDetails, setSaleDetails] = useState(null);
+  const { setShowLoading } = useContext(LoadingContext);
 
   const [subTotal, setSubTotal] = useState(null);
   const [totalCount, setTotalCount] = useState(null);
@@ -141,7 +143,7 @@ export const SalesProvider = ({ children }) => {
     try {
       setIsLoading(true);
       console.log(customFilters);
-      const { sales, total_pages, total_count } = await getSale(
+      const { sales, total_pages, total_sales } = await getSale(
         customFilters ? customFilters : filters
       );
       if (sales) {
@@ -156,8 +158,8 @@ export const SalesProvider = ({ children }) => {
         setSales([...mappedSales]);
         setTotalPages(total_pages);
       }
-      if (total_count || total_count === 0) {
-        setTotalCount(totalCount);
+      if (total_sales || total_sales === 0) {
+        setTotalCount(total_sales);
       }
     } catch (error) {
       console.log(error);
@@ -223,6 +225,7 @@ export const SalesProvider = ({ children }) => {
     const saleDetails = sales[index];
 
     try {
+      setShowLoading(true);
       const saleSelect = await getSaleById(saleDetails.saleId);
 
       if (saleSelect) {
@@ -238,6 +241,8 @@ export const SalesProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error al obtener los detalles de la venta:', error);
+    } finally {
+      setShowLoading(false);
     }
   };
 

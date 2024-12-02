@@ -12,6 +12,7 @@ import {
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import { mopsusIcons } from '../../../icons';
 import { AuthContext } from '../../../contexts';
+import { LoadingContext } from '../../../contexts/loading/LoadingContext';
 
 export const MFAAuthenticator = () => {
   const {
@@ -30,6 +31,8 @@ export const MFAAuthenticator = () => {
 
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const navigate = useNavigate();
+  const { setShowLoading } = useContext(LoadingContext);
+
   const [errors, setErrors] = useState('');
   const censorEmail = (): string => {
     const [localPart, domain] = email.split('@');
@@ -50,12 +53,14 @@ export const MFAAuthenticator = () => {
 
   const onResendCode = async () => {
     try {
+      setShowLoading(true);
       const response = await resendCode(email);
       if (response) {
+        setShowLoading(false);
         handleModalChange({
           accept: {
             title: 'Aceptar',
-            action: () => { },
+            action: () => {},
           },
           title: 'Código reenviado',
           message: 'Revise su correo electrónico',
@@ -63,10 +68,11 @@ export const MFAAuthenticator = () => {
         handleOpen();
       }
     } catch (error) {
+      setShowLoading(false);
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => { },
+          action: () => {},
         },
         title: 'Error técnico',
         message:
@@ -74,6 +80,8 @@ export const MFAAuthenticator = () => {
         icon: mopsusIcons.error,
       });
       handleOpen();
+    } finally {
+      setShowLoading(false);
     }
   };
 
@@ -129,7 +137,7 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => {},
             },
             title: 'Código Incorrecto',
             message:
@@ -143,7 +151,7 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => {},
             },
             title: 'Error técnico',
             message:
@@ -178,7 +186,7 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => {},
             },
             title: 'Código Incorrecto',
             message:
@@ -192,7 +200,7 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => {},
             },
             title: 'Error técnico',
             message:

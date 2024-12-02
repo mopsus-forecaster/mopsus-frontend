@@ -155,6 +155,7 @@ export const Sales = () => {
         rows={sales}
         setRows={setSales}
         totalPages={totalPages}
+        totalElements={totalCount}
       />
       {isOpenFilter && (
         <Filter

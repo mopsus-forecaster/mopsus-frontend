@@ -58,7 +58,7 @@
   border-top: 1px solid #979797;
   display: flex;
   margin: 0 auto;
-  justify-content: end;
+  justify-content: space-between;
   opacity: 100%;
 }
 
@@ -68,6 +68,17 @@
   width: 15rem;
   margin-top: 10px;
   border-radius: 10px;
+}
+
+.elementsContainer {
+  background-color: #292929;
+  color: #ffff;
+  width: 15rem;
+  margin-top: 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .paginator {
