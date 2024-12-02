@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import { mopsusIcons } from '../../../icons';
 import routes from '../../../router/routes';
+import { LoadingContext } from '../../../contexts/loading/LoadingContext';
 
 export const SummarySales = () => {
   const { addProduct, setAddProduct } = useContext(SaleContext);
@@ -15,11 +16,15 @@ export const SummarySales = () => {
   const [subTotal, setSubTotal] = useState(0);
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
+  const { setShowLoading } = useContext(LoadingContext);
+
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
+      setShowLoading(true);
       const res = await createSale(addProduct, discount);
       if (res) {
+        setShowLoading(false);
         handleModalChange({
           accept: {
             title: 'Aceptar',
@@ -34,6 +39,7 @@ export const SummarySales = () => {
         handleOpen();
       }
     } catch (error) {
+      setShowLoading(false);
       console.log(error);
       handleModalChange({
         accept: {

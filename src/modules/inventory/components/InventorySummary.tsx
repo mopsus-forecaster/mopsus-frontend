@@ -6,12 +6,14 @@ import { useContext, useState } from 'react';
 import { RowInventorySummary } from './RowInventorySummary';
 import { createInventory } from '../../../services/inventory';
 import { mopsusIcons } from '../../../icons';
+import { LoadingContext } from '../../../contexts/loading/LoadingContext';
 
 export const InventortSummary = () => {
   const { addProduct, setAddProduct } = useContext(SaleContext);
   const { handleModalChange, handleOpen } = useContext(ModalContext);
   const [description, setDescription] = useState('');
   const navigate = useNavigate();
+  const { setShowLoading } = useContext(LoadingContext);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -30,8 +32,10 @@ export const InventortSummary = () => {
     }
 
     try {
+      setShowLoading(true);
       const res = await createInventory(description, addProduct);
       if (res) {
+        setShowLoading(false);
         handleModalChange({
           accept: {
             title: 'Aceptar',
@@ -46,6 +50,7 @@ export const InventortSummary = () => {
         handleOpen();
       }
     } catch (error) {
+      setShowLoading(false);
       handleModalChange({
         accept: {
           title: 'Aceptar',

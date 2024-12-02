@@ -166,6 +166,7 @@ export const ProductsPage = () => {
         page={filters.page}
         setRows={setMappedProducts}
         totalPages={totalPages.current}
+        totalElements={totalCount}
       />
 
       {isOpenNewProduct && (

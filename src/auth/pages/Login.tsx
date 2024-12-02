@@ -11,6 +11,7 @@ import { ModalContext } from '../../contexts/modal/ModalContext';
 import { resendCode, userLogin } from '../../services';
 import { MfaFlow } from '../../types';
 import { CircularProgress } from '@mui/material';
+import { LoadingContext } from '../../contexts/loading/LoadingContext';
 
 interface FormData {
   email: string;
@@ -45,6 +46,7 @@ export const Login = () => {
     handlesetPrevRoute,
     setCurrentMfaFlow,
   } = useContext(AuthContext);
+  const { setShowLoading } = useContext(LoadingContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
   const from = comesFrom || routes.home;
@@ -58,8 +60,10 @@ export const Login = () => {
 
   const onResendCode = async () => {
     try {
+      setShowLoading(true);
       const response = await resendCode(form.email);
       if (response) {
+        setShowLoading(false);
         handleModalChange({
           accept: {
             title: 'Aceptar',
@@ -77,6 +81,7 @@ export const Login = () => {
         handleOpen();
       }
     } catch (error) {
+      setShowLoading(false);
       handleModalChange({
         accept: {
           title: 'Aceptar',
@@ -88,6 +93,8 @@ export const Login = () => {
         icon: mopsusIcons.error,
       });
       handleOpen();
+    } finally {
+      setShowLoading(false);
     }
   };
 

@@ -1,14 +1,22 @@
-import { createContext, useReducer, useState, useEffect } from 'react';
+import {
+  createContext,
+  useReducer,
+  useState,
+  useEffect,
+  useContext,
+} from 'react';
 import { authReducer } from './utils/authReducer';
 import { Action, actionTypes } from './types/types';
 import Cookies from 'js-cookie';
 import { refreshUser } from '../../services';
 import { FakeNav } from '../../shared/fakeNav/FakeNav';
+import { LoadingContext } from '../loading/LoadingContext';
 
 export const AuthContext = createContext(null);
 
 const getUser = async (cookieRefreshToken: string) => {
   try {
+    true;
     const {
       access_token: accessToken,
       refresh_token: refreshToken,
@@ -46,6 +54,7 @@ export const AuthProvider = ({ children }) => {
     password: '',
   });
   const [prevRoute, setPrevRoute] = useState('');
+  const { setShowLoading } = useContext(LoadingContext);
 
   const refreshToken = Cookies.get('refreshToken');
 
@@ -54,14 +63,21 @@ export const AuthProvider = ({ children }) => {
     const fetchUser = async () => {
       if (!auth.logged && refreshToken) {
         // Verificar si el usuario ya está autenticado
-        const user = await getUser(refreshToken);
-        if (user) {
-          dispatch({
-            type: actionTypes.login,
-            payload: user,
-          });
-        } else {
+        try {
+          setShowLoading(true);
+          const user = await getUser(refreshToken);
+          if (user) {
+            dispatch({
+              type: actionTypes.login,
+              payload: user,
+            });
+          } else {
+            dispatch({ type: actionTypes.logout });
+          }
+        } catch (error) {
           dispatch({ type: actionTypes.logout });
+        } finally {
+          setShowLoading(false);
         }
       }
       setLoading(false); // Se completa la carga
@@ -79,10 +95,10 @@ export const AuthProvider = ({ children }) => {
       secure: false,
       sameSite: 'Strict',
     });
-    Cookies.set('accessToken', accessToken,{
+    Cookies.set('accessToken', accessToken, {
       secure: false,
       sameSite: 'Strict',
-    })
+    });
     const action: Action = {
       type: actionTypes.login,
       payload: {

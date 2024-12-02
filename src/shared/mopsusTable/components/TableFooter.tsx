@@ -9,11 +9,15 @@ export const TableFooter = ({
   totalPages,
   goToNextPage,
   goToLastPage,
+  totalElements = 0,
 }) => {
   const backButtonDisabled = !(page > 1);
   const nextButtonDisabled = totalPages === page;
   return (
     <tfoot className={styles.tableFooter}>
+      <div className={styles.elementsContainer}>
+        <p style={{ margin: 'auto 0' }}>Total de registros: {totalElements}</p>
+      </div>
       <div className={styles.paginatorContainer}>
         <div className={styles.paginator}>
           <button

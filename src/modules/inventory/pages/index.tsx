@@ -168,6 +168,7 @@ export const Inventory = () => {
             page={filters.page}
             setRows={setIncomes}
             totalPages={totalPages}
+            totalElements={totalIncomes}
           />
         </section>
         <DetailsIncome />

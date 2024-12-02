@@ -10,6 +10,7 @@ import {
   getUnits,
 } from '../../../services/products';
 import { ProductsContext } from '../../../contexts/Products/ProductsContext';
+import { LoadingContext } from '../../../contexts/loading/LoadingContext';
 
 interface FormData {
   title: string;
@@ -53,7 +54,9 @@ const validateForm = (form: FormData) => {
 export const NewProduct = ({ isOpenNewProduct, onClose }) => {
   const { getProducts } = useContext(ProductsContext);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
-  const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
+  const { setShowLoading } = useContext(LoadingContext);
+
+  const { form, errors, handleChange } = useForm<FormData>(
     {
       title: '',
       price: '',
@@ -71,6 +74,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
+      setShowLoading(true);
       const res = await addProduct(
         form.title,
         form.price,
@@ -81,6 +85,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
       );
 
       if (res) {
+        setShowLoading(false);
         handleModalChange({
           accept: {
             title: 'Aceptar',
@@ -95,6 +100,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
         handleOpen();
       }
     } catch ({ errors }) {
+      setShowLoading(false);
       switch (errors[0].status) {
         case 400:
           handleModalChange({
@@ -127,6 +133,18 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      setShowLoading(true);
+
+      try {
+        await Promise.all([getCategoriesOptions(), getUnitsOptions()]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setShowLoading(false);
+      }
+    };
+
     const getCategoriesOptions = async () => {
       try {
         const { categorias } = await getCategories();
@@ -149,8 +167,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
       }
     };
 
-    getCategoriesOptions();
-    getUnitsOptions();
+    fetchData();
   }, []);
 
   return (

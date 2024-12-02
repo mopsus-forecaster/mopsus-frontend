@@ -10,6 +10,7 @@ import { forgottenPassword } from '../../../services';
 import { AuthContext } from '../../../contexts';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import { MfaFlow } from '../../../types';
+import { LoadingContext } from '../../../contexts/loading/LoadingContext';
 
 interface FormData {
   newPassword: string;
@@ -49,6 +50,7 @@ export const NewPassword = () => {
     currentMfaFlow,
   } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { setShowLoading } = useContext(LoadingContext);
 
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
     INITIAL_STATE,
@@ -59,8 +61,10 @@ export const NewPassword = () => {
   const { handleModalChange, handleOpen } = useContext(ModalContext);
   const handleSetNewPassword = async () => {
     try {
+      setShowLoading(true);
       const response = await forgottenPassword(email);
       if (response) {
+        setShowLoading(false);
         handleModalChange({
           accept: {
             title: 'Aceptar',
@@ -81,6 +85,7 @@ export const NewPassword = () => {
         handleOpen();
       }
     } catch (error) {
+      setShowLoading(false);
       handleModalChange({
         accept: {
           title: 'Aceptar',
@@ -92,6 +97,8 @@ export const NewPassword = () => {
         icon: mopsusIcons.error,
       });
       handleOpen();
+    } finally {
+      setShowLoading(false);
     }
   };
 

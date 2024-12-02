@@ -6,6 +6,7 @@ import {
   getInventoryById,
 } from '../../services/inventory';
 import { mopsusIcons } from '../../icons';
+import { LoadingContext } from '../loading/LoadingContext';
 
 export const InventoryContext = createContext(null);
 
@@ -161,8 +162,9 @@ export const InventoryProvider = ({ children }) => {
       setEditIncome(null);
       return;
     }
+    setIsLoadingDetails(true);
     try {
-      setIsLoadingDetails(true);
+      console.log('entro');
       const editIncome = await getInventoryById(incomeDetails.id);
       setEditIncome(editIncome);
     } catch (e) {
