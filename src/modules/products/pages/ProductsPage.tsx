@@ -12,6 +12,7 @@ import { ModifyProduct } from '../components/ModifyProduct';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 import { productsTableColumns } from '../data/productsColumns';
 import { ProductFilters } from '../components/ProductFilters';
+import { MapProductTables } from '../utils/product-table-mapper';
 
 export const ProductsPage = () => {
   const {
@@ -19,7 +20,6 @@ export const ProductsPage = () => {
     isLoading,
     setFilters,
     getProducts,
-    deleteProductFromTable,
     setMappedProducts,
     filters,
     handleSetProductToEdit,
@@ -38,19 +38,6 @@ export const ProductsPage = () => {
   const [categories, setCategories] = useState([]);
   const [units, setUnits] = useState([]);
   const [firstLoad, setFirstLoad] = useState(true);
-
-  const options = [
-    {
-      icon: mopsusIcons.edit,
-
-      onClick: handleSetProductToEdit,
-    },
-    {
-      icon: mopsusIcons.trash,
-
-      onClick: deleteProductFromTable,
-    },
-  ];
 
   const handleOpenNewProduct = (e) => {
     e.preventDefault();
@@ -154,15 +141,14 @@ export const ProductsPage = () => {
 
       <MopsusTable
         columns={productsTableColumns}
-        rows={mappedProducts}
+        rows={mappedProducts.map((product) => MapProductTables(product))}
         goToFirstPage={goToFirstPage}
         goToLastPage={goToLastPage}
         goToNextPage={goToNextPage}
         goToPreviousPage={goToPreviousPage}
-        includeOptions={true}
+        includeOptions={false}
         includePagination={true}
         isLoading={isLoading}
-        options={options}
         page={filters.page}
         setRows={setMappedProducts}
         totalPages={totalPages.current}

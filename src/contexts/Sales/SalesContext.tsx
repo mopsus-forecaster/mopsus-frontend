@@ -36,7 +36,6 @@ export const SalesProvider = ({ children }) => {
       const newCart = structuredClone(addProduct);
       newCart[productInSale].quantity = 1;
       setAddProduct(newCart);
-      console.log(addProduct);
     } else {
       setAddProduct((prevState) => [
         ...prevState,
@@ -142,7 +141,6 @@ export const SalesProvider = ({ children }) => {
   const getPaginatedSales = async (customFilters?) => {
     try {
       setIsLoading(true);
-      console.log(customFilters);
       const { sales, total_pages, total_sales } = await getSale(
         customFilters ? customFilters : filters
       );
@@ -177,8 +175,10 @@ export const SalesProvider = ({ children }) => {
         title: 'Aceptar',
         action: async () => {
           try {
+            setShowLoading(true);
             const response = await deleteSale(saleToDelete.saleId);
             if (response) {
+              setShowLoading(false);
               handleModalChange({
                 accept: {
                   title: 'Aceptar',
@@ -192,6 +192,8 @@ export const SalesProvider = ({ children }) => {
               handleOpen();
             }
           } catch (error) {
+            setShowLoading(false);
+
             handleModalChange({
               accept: {
                 title: 'Aceptar',
