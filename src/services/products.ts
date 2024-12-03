@@ -60,6 +60,18 @@ export const deleteProduct = async (id) => {
   return response.data;
 };
 
+export const reactivateProduct = async (id) => {
+  const response = await apiClient({
+    api: 'products',
+    service: '/revert_product_cancellation',
+    verb: 'put',
+    dataSend: {
+      id,
+    },
+  });
+  return response.data;
+};
+
 export const getAllProducts = async ({
   page,
   title = '',

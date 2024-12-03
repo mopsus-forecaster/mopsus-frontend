@@ -3,9 +3,11 @@ import {
   deleteProduct,
   getAllProducts,
   getProductsAllAll,
+  reactivateProduct,
 } from '../../services/products';
 import { ModalContext } from '../modal/ModalContext';
 import { mopsusIcons } from '../../icons';
+import { LoadingContext } from '../loading/LoadingContext';
 
 export const ProductsContext = createContext(null);
 
@@ -27,8 +29,9 @@ export const ProductsProvider = ({ children }) => {
   const totalPages = useRef(null);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const [editProduct, setEditProduct] = useState(null);
+  const { setShowLoading } = useContext(LoadingContext);
+
   const getProducts = async (customFilters?) => {
-    console.log('me ejecuto');
     try {
       setIsLoading(true);
       const { productos, total_pages, total_count } = await getAllProducts(
@@ -140,23 +143,24 @@ export const ProductsProvider = ({ children }) => {
     }
   };
 
-  const handleSetProductToEdit = (index = null) => {
-    if (!index && index != 0) {
+  const handleSetProductToEdit = (product = null) => {
+    if (!product) {
       setEditProduct(null);
       return;
     }
-    setEditProduct(mappedProducts[index]);
+    setEditProduct(product);
   };
 
-  const deleteProductFromTable = (index) => {
-    const productToDelete = mappedProducts[index];
+  const deleteProductFromTable = (productToDelete) => {
     handleModalChange({
       accept: {
         title: 'Aceptar',
         action: async () => {
           try {
+            setShowLoading(true);
             const response = await deleteProduct(productToDelete.id);
             if (response) {
+              setShowLoading(false);
               handleModalChange({
                 accept: {
                   title: 'Aceptar',
@@ -171,6 +175,7 @@ export const ProductsProvider = ({ children }) => {
               handleOpen();
             }
           } catch (error) {
+            setShowLoading(false);
             handleModalChange({
               accept: {
                 title: 'Aceptar',
@@ -178,7 +183,7 @@ export const ProductsProvider = ({ children }) => {
               },
               title: `"${productToDelete.productName}" no pudo darse de baja`,
               message:
-                'Lo sentimos, no pudimos concretar la opercion. Intente mas tarde',
+                'Lo sentimos, no pudimos concretar la operción. Intente más tarde',
             });
             handleOpen();
           }
@@ -186,6 +191,51 @@ export const ProductsProvider = ({ children }) => {
       },
       title: `Dar de baja "${productToDelete.productName}"`,
       message: '¿Está seguro que desea dar de baja el producto?',
+      icon: mopsusIcons.warning,
+    });
+    handleOpen();
+  };
+
+  const reactivateProductFromTable = (productToReactivate) => {
+    handleModalChange({
+      accept: {
+        title: 'Aceptar',
+        action: async () => {
+          try {
+            setShowLoading(true);
+            const response = await reactivateProduct(productToReactivate.id);
+            if (response) {
+              setShowLoading(false);
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    getProducts();
+                  },
+                },
+                title: `"${productToReactivate.productName}" dado de alta exitosamente`,
+                message:
+                  'Puede consultar el producto desde la tabla de productos.',
+              });
+              handleOpen();
+            }
+          } catch (error) {
+            setShowLoading(false);
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: () => {},
+              },
+              title: `"${productToReactivate.productName}" no pudo darse de alta`,
+              message:
+                'Lo sentimos, no pudimos concretar la operción. Intente más tarde',
+            });
+            handleOpen();
+          }
+        },
+      },
+      title: `Dar de alta "${productToReactivate.productName}"`,
+      message: '¿Está seguro que desea dar de alta el producto?',
       icon: mopsusIcons.warning,
     });
     handleOpen();
@@ -205,6 +255,7 @@ export const ProductsProvider = ({ children }) => {
         goToLastPage,
         setFilters,
         deleteProductFromTable,
+        reactivateProductFromTable,
         setMappedProducts,
         handleSetProductToEdit,
         editProduct,
