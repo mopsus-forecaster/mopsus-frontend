@@ -109,15 +109,6 @@ export const ProductsPage = () => {
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Productos</h1>
-        {(totalCount === 0 || totalCount) && (
-          <div className={`${styles.productInformationContainer}`}>
-            <div className={`${styles.circle}`}></div>
-
-            <p className={`${styles.productInfoTitle}`}>
-              {totalCount} productos
-            </p>
-          </div>
-        )}
       </header>
 
       <section className={styles.tableActionsContainer}>

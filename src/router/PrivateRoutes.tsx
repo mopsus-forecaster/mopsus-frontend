@@ -6,6 +6,7 @@ import RequireAuth from './components/RequireAuth';
 import styles from './styles/layout.module.scss';
 import { NewSale } from '../modules/sales/components/NewSale';
 import { NewAdjustment } from '../modules/inventory/components/NewAdjustment';
+import { SettingsPage } from '../modules/settings/pages/SettingsPage';
 export const PrivateRoutes = () => {
   return (
     <section className={styles.layout}>
@@ -30,9 +31,13 @@ export const PrivateRoutes = () => {
             <Route path='nuevo-ajuste' element={<NewAdjustment />} />
           </Route>
         </Route>
+        <Route>
+          <Route path='opciones' element={<SettingsPage />} />
+        </Route>
         <Route element={<RequireAuth />}>
           <Route path="/*" element={<Navigate to={'/inicio'} />} />
         </Route>
+
       </Routes>
     </section>
   );

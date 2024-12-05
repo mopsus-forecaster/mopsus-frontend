@@ -121,7 +121,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
                 handleModalChange({
                   accept: {
                     title: 'Aceptar',
-                    action: () => {},
+                    action: () => { },
                   },
                   title: 'Producto no encontrado',
                   message:
@@ -135,7 +135,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
                 handleModalChange({
                   accept: {
                     title: 'Aceptar',
-                    action: () => {},
+                    action: () => { },
                   },
                   title: 'Error técnico',
                   message:
@@ -151,7 +151,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
       },
       reject: {
         title: 'Cancelar',
-        action: () => {},
+        action: () => { },
       },
 
       title: `Edición del producto ${form.title}`,
@@ -179,7 +179,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
                 },
                 reject: {
                   title: 'Cancelar',
-                  action: () => {},
+                  action: () => { },
                 },
                 title: `Cancelar la modificación del producto`,
                 message:
@@ -335,7 +335,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
                       },
                       reject: {
                         title: 'Cancelar',
-                        action: () => {},
+                        action: () => { },
                       },
                       title: `Cancelar la modificación del producto`,
                       message:

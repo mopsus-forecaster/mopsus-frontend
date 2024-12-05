@@ -106,7 +106,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => { },
             },
             title: 'Error en el registro',
             message: 'Ya existe un producto con dicho nombre.',
@@ -118,7 +118,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => { },
             },
             title: 'Error técnico',
             message:
@@ -181,7 +181,7 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
             onClick={onClose}
           />
           <h2 className={styles.titleRegister}>Registrar Producto</h2>
-          <hr className={styles.line} />
+          <hr className={styles.lineTable} />
           <form onSubmit={onSubmit}>
             <div>
               <div>

@@ -16,15 +16,6 @@
   font-weight: bold;
 }
 
-.circle {
-  width: 10px;
-  height: 10px;
-  background-color: $color-primary;
-  border-radius: 50%;
-  margin-right: 8px;
-  margin-bottom: 15px;
-}
-
 .saleInformationContainer {
   display: flex;
   margin-left: 0.5%;
@@ -36,32 +27,30 @@
 }
 
 .tableActionsContainer {
-  position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
+  margin-top: 35px;
+  padding: 0 5% 0 3%;
   justify-content: space-between;
-  width: 95%;
-  margin: 10px 34px;
 }
+
 .tableActionsContainerBuscar {
-  position: relative;
+  width: 40%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 95%;
-  margin: 0 5px;
+  gap: 5%;
 }
 
 .filterButton {
-  display: flex;
-  position: relative;
-  padding: 0.5rem 1.5rem;
-  font-size: 1rem;
   background-color: $color-gray-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10%;
   color: $color-white;
   border: none;
   border-radius: 20px;
+  width: 20%;
 }
 
 .buttonAdd {
@@ -105,7 +94,7 @@
 }
 
 .tableSearchInput {
-  width: 140%;
+  width: 60%;
   background-color: $color-gray-dark;
   border: none;
   height: 2.5rem;

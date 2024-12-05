@@ -106,12 +106,6 @@ export const Inventory = () => {
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Inventario</h1>
-        {(totalIncomes === 0 || totalIncomes) && (
-          <div className={`${styles.saleInformationContainer}`}>
-            <div className={`${styles.circle}`}></div>
-            <p className={`${styles.saleInfoTitle}`}>{totalIncomes} ingresos</p>
-          </div>
-        )}
       </header>
 
       <section className={styles.tableActionsContainer}>
@@ -127,7 +121,7 @@ export const Inventory = () => {
             className={styles.filterButton}
             onClick={() => setIsOpenFilter(true)}
           >
-            <Icon fontSize={24} icon={mopsusIcons.filters} />
+            <Icon fontSize={20} icon={mopsusIcons.filters} />
             Filtros
           </button>
         </div>

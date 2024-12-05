@@ -8,7 +8,7 @@ export const Loading = ({ loadingText = "Cargando", show }) => {
           size={80}
           thickness={5}
           sx={{
-            color: "#fff",
+            color: "#4a7370",
             marginBottom: "7.5rem",
             opacity: 100,
           }}
