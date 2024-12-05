@@ -3,7 +3,7 @@ import styles from '../styles/styles.module.scss'
 import { TableSettings } from '../components/TableSettings';
 import { useContext, useEffect } from 'react';
 import { SettingsContext } from '../../../contexts/settings/SettingsContext';
-import { addBrand, addCategory, onEditBrand, onEditCat } from '../../../services/settings';
+import { addBrand, addCategory } from '../../../services/settings';
 import { INITIAL_FILTERS } from '../../../contexts/Inventory/InventoryContext';
 import { MapSettingTablesCat } from '../utils/settingsCat-table-mapper';
 import { MapSettingTablesBrand } from '../utils/settingsBrand-table-mapper';
@@ -75,7 +75,8 @@ export const SettingsPage = () => {
                 <h1 className={`${styles.title}`}>Opciones</h1>
             </header>
             <section className={styles.Container}>
-                <TableSettings title={'Marcas'}
+                <TableSettings
+                    title={'Marcas'}
                     optionsTableColumns={optionsTableColumns}
                     isLoading={isLoadingBrand}
                     set={setMappedBrand}
@@ -86,8 +87,10 @@ export const SettingsPage = () => {
                     get={getBrand}
                     filter={filtersBrand}
                     rows={mappedBrand.map((setting) => MapSettingTablesBrand(setting))}
+                    titleMin={'marca'}
                 />
-                <TableSettings title={'Categorías'}
+                <TableSettings
+                    title={'Categorías'}
                     optionsTableColumns={optionsTableColumns}
                     isLoading={isLoadingCat}
                     set={setMappedCategory}
@@ -98,6 +101,7 @@ export const SettingsPage = () => {
                     get={getCategory}
                     filter={filtersCat}
                     rows={mappedCategory.map((setting) => MapSettingTablesCat(setting))}
+                    titleMin={'categoría'}
                 />
             </section>
         </Box>

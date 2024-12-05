@@ -224,7 +224,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => {},
+                action: () => { },
               },
               title: `"${productToReactivate.productName}" no pudo darse de alta`,
               message:

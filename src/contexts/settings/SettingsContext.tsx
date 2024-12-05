@@ -243,7 +243,7 @@ export const SettingsProvider = ({ children }) => {
                 accept: {
                   title: 'Aceptar',
                   action: () => {
-                    getCategory();
+                    getCategory(INITIAL_FILTERS);
                   },
                 },
                 title: `"${settingToReactivate.name}" dado de alta exitosamente`,
@@ -289,7 +289,7 @@ export const SettingsProvider = ({ children }) => {
                 accept: {
                   title: 'Aceptar',
                   action: () => {
-                    getBrand();
+                    getBrand(INITIAL_FILTERS);
                   },
                 },
                 title: `"${settingToReactivate.name}" dado de alta exitosamente`,
