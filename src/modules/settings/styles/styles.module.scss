@@ -59,13 +59,13 @@
 }
 
 .tableSearchComponent {
-  width: 100%;
-  display: flex;
+  width: 60%;
   gap: 5%;
+  display: flex;
 }
 
 .tableSearchInput {
-  width: 70%;
+  width: 100%;
   background-color: $color-gray-dark;
   border: none;
   height: 2.5rem;
@@ -89,7 +89,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 90%;
   margin: 0 0 20px 20px;
 }
 
@@ -236,4 +236,44 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.formFilter {
+  display: flex;
+  padding-left: 1.5vw;
+}
+
+.formGroup {
+  margin: 15px auto 15px -10px;
+  flex-basis: 48%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalLabel {
+  color: white;
+}
+
+.selectFilter {
+  width: 22vw;
+  margin: 17px 0px;
+  padding: 7px 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 32.5px;
+  background-color: #363636;
+  color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+
+  &:hover {
+    border-color: #888;
+  }
 }

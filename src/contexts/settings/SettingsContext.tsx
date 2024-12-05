@@ -1,6 +1,8 @@
-import { createContext, useRef, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { _descriptors } from 'chart.js/helpers';
-import { getBrands, getCategories } from '../../services/settings';
+import { deleteBrand, deleteCategory, getBrands, getCategories, onEditCat } from '../../services/settings';
+import { mopsusIcons } from '../../icons';
+import { ModalContext } from '../modal/ModalContext';
 export const SettingsContext = createContext(null);
 
 export const INITIAL_FILTERS = {
@@ -13,15 +15,22 @@ export const SettingsProvider = ({ children }) => {
   const [firstLoad, setFirstLoad] = useState(true);
   const [mappedCategory, setMappedCategory] = useState([])
   const [mappedBrand, setMappedBrand] = useState([])
-  const [filters, setFilters] = useState(INITIAL_FILTERS);
-  const [isLoading, setIsLoading] = useState(false);
-  const totalPages = useRef(null);
-  //const { handleOpen, handleModalChange } = useContext(ModalContext);
+  const [filtersCat, setFiltersCat] = useState(INITIAL_FILTERS);
+  const [filtersBrand, setFiltersBrand] = useState(INITIAL_FILTERS);
+  const [isLoadingCat, setIsLoadingCat] = useState(false);
+  const [isLoadingBrand, setIsLoadingBrand] = useState(true);
+  const [totalPagesCategory, setTotalPagesCategory] = useState(null);
+  const [totalPagesBrand, setTotalPagesBrand] = useState(null);
+  const [totalCountCat, setTotalCountCat] = useState(null);
+  const [totalCountBrand, setTotalCountBrand] = useState(null);
+  const { handleOpen, handleModalChange } = useContext(ModalContext);
+  const [editOptionCat, setEditOptionCat] = useState(null)
+  const [editOptionBrand, setEditOptionBrand] = useState(null)
 
 
   const getCategory = async (customFilters?) => {
     try {
-      setIsLoading(true);
+      setIsLoadingCat(true);
       const { categories, total_pages, total_count } = await getCategories(customFilters);
 
 
@@ -32,22 +41,24 @@ export const SettingsProvider = ({ children }) => {
           description: category.description,
           is_active: category.is_active ? 'Activo' : 'Inactivo',
         }));
-        if (totalPages.current === null || totalPages.current !== total_pages) {
-          totalPages.current = total_pages;
+        if (total_count) {
+          setTotalCountCat(total_count);
         }
+        setTotalPagesCategory(total_pages)
+        console.log(total_pages)
         setMappedCategory(mapped);
       }
 
     } catch ({ errors }) {
       console.error('error' + errors)
     } finally {
-      setIsLoading(false);
+      setIsLoadingCat(false);
     }
   };
 
   const getBrand = async (customFilters?) => {
     try {
-      setIsLoading(true);
+      setIsLoadingBrand(true);
       const { marcas, total_pages, total_count } = await getBrands(customFilters);
       console.log(marcas)
 
@@ -58,20 +69,21 @@ export const SettingsProvider = ({ children }) => {
           description: marca.description,
           is_active: marca.is_active ? 'Activo' : 'Inactivo',
         }));
-        if (totalPages.current === null || totalPages.current !== total_pages) {
-          totalPages.current = total_pages;
+        if (total_count) {
+          setTotalCountBrand(total_count);
         }
+        setTotalPagesBrand(total_pages)
         setMappedBrand(mapped);
       }
 
     } catch ({ errors }) {
       console.error('error' + errors)
     } finally {
-      setIsLoading(false);
+      setIsLoadingBrand(false);
     }
   }
 
-  const goToNextPage = () => {
+  const goToNextPage = (totalPages, filters, setFilters, get) => {
     const nextPage =
       filters.page + 1 !== totalPages.current + 1
         ? filters.page + 1
@@ -80,97 +92,143 @@ export const SettingsProvider = ({ children }) => {
       ...prevFilters,
       page: nextPage,
     }));
-    getCategory({ ...filters, page: nextPage });
+    get({ ...filters, page: nextPage });
   };
 
-  const goToPreviousPage = () => {
+  const goToPreviousPage = (filters, setFilters, get) => {
     const nextPage = filters.page - 1 !== 0 ? filters.page - 1 : 1;
 
     setFilters((prevFilters) => ({
       ...prevFilters,
       page: nextPage,
     }));
-    getCategory({ ...filters, page: nextPage });
+    get({ ...filters, page: nextPage });
   };
 
-  const goToFirstPage = () => {
+  const goToFirstPage = (filters, setFilters, get) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       page: 1,
     }));
-    getCategory({ ...filters, page: 1 });
+    get({ ...filters, page: 1 });
   };
 
-  const goToLastPage = () => {
+  const goToLastPage = (totalPages, filters, setFilters, get) => {
     if (totalPages.current !== null) {
       setFilters((prevFilters) => ({
         ...prevFilters,
         page: totalPages.current,
       }));
-      getCategory({ ...filters, page: totalPages.current });
+      get({ ...filters, page: totalPages.current });
     }
   };
 
-  /*   const handleSetProductToEdit = (index = null) => {
-      if (!index && index != 0) {
-        setEditProduct(null);
-        return;
-      }
-      setEditProduct(mappedProducts[index]);
-    }; */
+  const handleSetOptionToEdit = (index = null, mapped, setEdition) => {
+    if (!index && index != 0) {
+      setEditOptionBrand(null);
+      setEditOptionCat(null)
+      return;
+    }
+    setEdition(mapped[index]);
+  };
 
-  /*  const deleteProductFromTable = (index) => {
-     const productToDelete = mappedProducts[index];
-     handleModalChange({
-       accept: {
-         title: 'Aceptar',
-         action: async () => {
-           try {
-             const response = await deleteProduct(productToDelete.id);
-             if (response) {
-               handleModalChange({
-                 accept: {
-                   title: 'Aceptar',
-                   action: () => {
-                     getProducts();
-                   },
-                 },
-                 title: `"${productToDelete.productName}" dado de baja exitosamente`,
-                 message:
-                   'Puede restaurar el producto desde la tabla de productos.',
-               });
-               handleOpen();
-             }
-           } catch (error) {
-             handleModalChange({
-               accept: {
-                 title: 'Aceptar',
-                 action: () => { },
-               },
-               title: `"${productToDelete.productName}" no pudo darse de baja`,
-               message:
-                 'Lo sentimos, no pudimos concretar la opercion. Intente mas tarde',
-             });
-             handleOpen();
-           }
-         },
-       },
-       title: `Dar de baja "${productToDelete.productName}"`,
-       message: '¿Está seguro que desea dar de baja el producto?',
-       icon: mopsusIcons.warning,
-     });
-     handleOpen();
-   }; */
+  const deleteCatFromTable = (index) => {
+    const optionToDelete = mappedCategory[index];
+    handleModalChange({
+      accept: {
+        title: 'Aceptar',
+        action: async () => {
+          try {
+            const response = await deleteCategory(optionToDelete.id);
+            if (response) {
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    getCategory();
+                  },
+                },
+                title: `"${optionToDelete.name}" dado de baja exitosamente`,
+                message:
+                  'Puede restaurar el producto desde la tabla de productos.',
+              });
+              handleOpen();
+            }
+          } catch (error) {
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: () => { },
+              },
+              title: `"${optionToDelete.name}" no pudo darse de baja`,
+              message:
+                'Lo sentimos, no pudimos concretar la opercion. Intente mas tarde',
+            });
+            handleOpen();
+          }
+        },
+      },
+      title: `Dar de baja "${optionToDelete.name}"`,
+      message: '¿Está seguro que desea dar de baja el producto?',
+      icon: mopsusIcons.warning,
+    });
+    handleOpen();
+  };
+
+  const deleteBrandFromTable = (index) => {
+    const optionToDelete = mappedBrand[index];
+    handleModalChange({
+      accept: {
+        title: 'Aceptar',
+        action: async () => {
+          try {
+            const response = await deleteBrand(optionToDelete.id);
+            if (response) {
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    getBrand();
+                  },
+                },
+                title: `"${optionToDelete.name}" dado de baja exitosamente`,
+                message:
+                  'Puede restaurar el producto desde la tabla de productos.',
+              });
+              handleOpen();
+            }
+          } catch (error) {
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: () => { },
+              },
+              title: `"${optionToDelete.name}" no pudo darse de baja`,
+              message:
+                'Lo sentimos, no pudimos concretar la opercion. Intente mas tarde',
+            });
+            handleOpen();
+          }
+        },
+      },
+      title: `Dar de baja "${optionToDelete.name}"`,
+      message: '¿Está seguro que desea dar de baja el producto?',
+      icon: mopsusIcons.warning,
+    });
+    handleOpen();
+  };
 
   return (
     <SettingsContext.Provider
       value={{
         mappedCategory,
         getCategory,
-        totalPages,
-        isLoading,
-        filters,
-        setFilters,
+        isLoadingCat,
+        isLoadingBrand,
+        filtersBrand,
+        setFiltersBrand,
+        filtersCat,
+        setFiltersCat,
         goToNextPage,
         goToFirstPage,
         goToLastPage,
@@ -179,7 +237,18 @@ export const SettingsProvider = ({ children }) => {
         setMappedBrand,
         firstLoad,
         setFirstLoad,
-        getBrand
+        getBrand,
+        totalCountCat,
+        totalCountBrand,
+        totalPagesCategory,
+        totalPagesBrand,
+        deleteCatFromTable,
+        deleteBrandFromTable,
+        handleSetOptionToEdit,
+        editOptionCat,
+        editOptionBrand,
+        setEditOptionCat,
+        setEditOptionBrand
       }}
     >
       {children}

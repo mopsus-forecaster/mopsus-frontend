@@ -1,20 +1,36 @@
 import Box from '../../../shared/box';
 import styles from '../styles/styles.module.scss'
-import { mopsusIcons } from '../../../icons';
 import { TableSettings } from '../components/TableSettings';
-import { useContext, useEffect, useState } from 'react';
-import { FilterSettings } from '../components/FilterSettings';
-import { Filter } from '../../../shared/filter/Filter';
+import { useContext, useEffect } from 'react';
 import { SettingsContext } from '../../../contexts/settings/SettingsContext';
-import { addBrand, addCategory, getBrands, getCategories } from '../../../services/settings';
+import { addBrand, addCategory } from '../../../services/settings';
 import { INITIAL_FILTERS } from '../../../contexts/Inventory/InventoryContext';
 
 export const SettingsPage = () => {
-    const [search, setSearch] = useState(null);
-    const [isOpenFilter, setIsOpenFilter] = useState(false);
-
-
-    const { getCategory, mappedCategory, isLoading, setMappedCategory, mappedBrand, setMappedBrand, firstLoad, setFirstLoad, getBrand, goToNextPage, goToPreviousPage, goToFirstPage, goToLastPage } = useContext(SettingsContext)
+    const {
+        deleteCatFromTable,
+        deleteBrandFromTable,
+        getCategory,
+        mappedCategory,
+        isLoadingCat,
+        isLoadingBrand,
+        setMappedCategory,
+        mappedBrand,
+        setMappedBrand,
+        firstLoad,
+        setFirstLoad,
+        getBrand,
+        totalCountCat,
+        totalCountBrand,
+        totalPagesBrand,
+        totalPagesCategory,
+        setFiltersBrand,
+        setFiltersCat,
+        filtersBrand,
+        filtersCat,
+        setEditOptionBrand,
+        setEditOptionCat
+    } = useContext(SettingsContext)
 
     const optionsTableColumns = [
         {
@@ -34,23 +50,17 @@ export const SettingsPage = () => {
         }
     ];
 
-    const options = [
-        {
-            icon: mopsusIcons.edit,
-            onClick: () => { },
-        },
-        {
-            icon: mopsusIcons.trash,
-            onClick: () => { },
-        },
-    ];
+    const getOptions = async () => {
+        await getCategory(INITIAL_FILTERS);
+        await getBrand(INITIAL_FILTERS)
+    }
 
     useEffect(() => {
         if (firstLoad) {
             const getCategoriesOptions = async () => {
                 try {
-                    await getCategory(INITIAL_FILTERS);
-                    await getBrand(INITIAL_FILTERS)
+                    await getOptions()
+
                 } catch (error) {
                     console.error('Error fetching categories:', error);
                 }
@@ -67,24 +77,33 @@ export const SettingsPage = () => {
                 <h1 className={`${styles.title}`}>Opciones</h1>
             </header>
             <section className={styles.Container}>
-                <TableSettings title={'Marcas'} mapped={mappedBrand} optionsTableColumns={optionsTableColumns} isLoading={isLoading} set={setMappedBrand} options={options} endPoint={addBrand} goToNextPage={goToNextPage} goToPreviousPage={goToPreviousPage} goToFirstPage={goToFirstPage} goToLastPage={goToLastPage} />
-                <TableSettings title={'Categorias'} mapped={mappedCategory} optionsTableColumns={optionsTableColumns} isLoading={isLoading} set={setMappedCategory} options={options} endPoint={addCategory} goToNextPage={goToNextPage} goToPreviousPage={goToPreviousPage} goToFirstPage={goToFirstPage} goToLastPage={goToLastPage} />
+                <TableSettings title={'Marcas'}
+                    mapped={mappedBrand}
+                    optionsTableColumns={optionsTableColumns}
+                    isLoading={isLoadingBrand}
+                    set={setMappedBrand}
+                    endPoint={addBrand}
+                    totalPage={totalPagesBrand}
+                    totalCount={totalCountBrand}
+                    deleteFuntion={deleteBrandFromTable}
+                    setFilters={setFiltersBrand}
+                    get={getBrand}
+                    filter={filtersBrand}
+                    setEdition={setEditOptionBrand} />
+                <TableSettings title={'Categorías'}
+                    mapped={mappedCategory}
+                    optionsTableColumns={optionsTableColumns}
+                    isLoading={isLoadingCat}
+                    set={setMappedCategory}
+                    endPoint={addCategory}
+                    totalPage={totalPagesCategory}
+                    totalCount={totalCountCat}
+                    deleteFuntion={deleteCatFromTable}
+                    setFilters={setFiltersCat}
+                    get={getCategory}
+                    filter={filtersCat}
+                    setEdition={setEditOptionCat} />
             </section>
-            {isOpenFilter && (
-                <Filter
-                    isOpen={isOpenFilter}
-                    setIsOpen={setIsOpenFilter}
-                    onApplyFilters={() => {
-                        setIsOpenFilter(false);
-                    }}
-                    onDeleteFilters={() => {
-
-                        setIsOpenFilter(false);
-                    }}
-                >
-                    <FilterSettings filters={undefined} setFilters={undefined}></FilterSettings>
-                </Filter>
-            )}
         </Box>
     )
 }

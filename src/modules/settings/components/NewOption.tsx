@@ -33,8 +33,6 @@ export const NewOption = ({ titleModal, onClose, endPoint }) => {
         validateForm
     );
 
-
-
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -42,7 +40,6 @@ export const NewOption = ({ titleModal, onClose, endPoint }) => {
                 form.name,
                 form.description
             );
-            console.log('NOMBRE' + form.name + 'DESCRIPCION' + form.description)
 
             if (res) {
                 handleModalChange({
@@ -59,7 +56,6 @@ export const NewOption = ({ titleModal, onClose, endPoint }) => {
                 handleOpen();
             }
         } catch ({ errors }) {
-            console.log('NOMBRE' + form.name + 'DESCRIPCION' + form.description)
             switch (errors[0].status) {
                 case 400:
                     handleModalChange({
