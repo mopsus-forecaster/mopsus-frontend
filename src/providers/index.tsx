@@ -5,6 +5,7 @@ import { LoadingProvider } from '../contexts/loading/LoadingContext';
 import { ModalProvider } from '../contexts/modal/ModalContext';
 import { ProductsProvider } from '../contexts/Products/ProductsContext';
 import { SalesProvider } from '../contexts/Sales/SalesContext';
+import { SettingsProvider } from '../contexts/settings/SettingsContext';
 
 export const Providers = ({ children }) => {
   return (
@@ -14,12 +15,14 @@ export const Providers = ({ children }) => {
           <HomeProvider>
             <ProductsProvider>
               <SalesProvider>
-                <InventoryProvider>{children}</InventoryProvider>
+                <SettingsProvider>
+                  <InventoryProvider>{children}</InventoryProvider>
+                </SettingsProvider>
               </SalesProvider>
             </ProductsProvider>
           </HomeProvider>
         </ModalProvider>
       </AuthProvider>
-    </LoadingProvider>
+    </LoadingProvider >
   );
 };

@@ -60,6 +60,18 @@ export const Navbar = () => {
           </div>
         </NavLink>
 
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? styles.itemContainerActive : styles.itemContainer
+          }
+          to={`/opciones`}
+        >
+          <div className={styles.navItem}>
+            <Icon icon={mopsusIcons.settings} />
+            <span>Opciones</span>
+          </div>
+        </NavLink>
+
         <hr />
         <NavLink
           onClick={logout}
