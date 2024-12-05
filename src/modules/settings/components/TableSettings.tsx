@@ -131,7 +131,6 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
                 <ModifySetting
                     editOption={editOptionBrand}
                     setEditOption={handleSetOptionToEditBrand}
-                    get={get}
                     edit={onEditBrand}
                     title={'marca'}
                 />
@@ -142,7 +141,6 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
                 <ModifySetting
                     editOption={editOptionCat}
                     setEditOption={handleSetOptionToEditCat}
-                    get={get}
                     edit={onEditCat}
                     title={'categoría'}
                 />
