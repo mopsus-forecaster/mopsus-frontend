@@ -5,15 +5,16 @@ import { useContext } from 'react';
 import { SaleContext } from '../../../contexts/Sales/SalesContext';
 
 export const ProductInfo = ({ producto }) => {
-    const { productName, measureUnitDescription, stock } = producto;
+    const { productName, measureUnitDescription, stock, brand } = producto;
     const { addProductToSale } = useContext(SaleContext)
 
-
+    console.log(brand)
     return (
         <div className={styles.productInfoContainer}>
             <div className={styles.productInfo}>
                 <p className={styles.infoName}>{productName}</p>
                 <p className={styles.infoUnit}>Unidad: {measureUnitDescription}</p>
+                <p className={styles.infoUnit}>Marca: {brand}</p>
                 <p className={styles.infoUnit}>Stock: {stock}</p>
             </div>
             <div className={styles.priceButtonContainer}>

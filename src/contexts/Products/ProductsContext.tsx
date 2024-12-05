@@ -15,6 +15,7 @@ export const INITIAL_FILTERS = {
   title: '',
   category_id: null,
   unit_id: null,
+  brand_id: null,
   below_reposition: null,
   price_min: null,
   price_max: null,
@@ -48,6 +49,8 @@ export const ProductsProvider = ({ children }) => {
           repositionPoint: product.reposition_point,
           category: product.categoria,
           state: product.is_active ? 'Activo' : 'Inactivo',
+          brand: product.brand,
+          brandId: product.id_brand
         }));
         if (total_count) {
           setTotalCount(total_count);
