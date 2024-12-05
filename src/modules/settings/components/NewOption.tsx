@@ -1,10 +1,11 @@
 import { useContext } from 'react';
 import { useForm } from '../../../hooks';
 import { mopsusIcons } from '../../../icons'
-import { getCategories } from '../../../services';
 import styles from '../styles/styles.module.scss'
 import { Icon } from '@iconify/react/dist/iconify.cjs'
 import { ModalContext } from '../../../contexts/modal/ModalContext';
+import { INITIAL_FILTERS, SettingsContext } from '../../../contexts/settings/SettingsContext';
+import { LoadingContext } from '../../../contexts/loading/LoadingContext';
 
 interface FormData {
     name: string;
@@ -16,15 +17,14 @@ const validateForm = (form: FormData) => {
     if (!form.name) {
         errors.name = 'El nombre es requerido'
     }
-    if (!form.description) {
-        errors.description = 'La descripción es requerido'
-    }
     return errors
 }
 
 
-export const NewOption = ({ titleModal, onClose, endPoint }) => {
+export const NewOption = ({ titleModal, onClose, endPoint, title }) => {
     const { handleOpen, handleModalChange } = useContext(ModalContext);
+    const { getCategory, getBrand } = useContext(SettingsContext);
+    const { setShowLoading } = useContext(LoadingContext);
     const { form, errors, handleChange } = useForm<FormData>(
         {
             name: '',
@@ -36,26 +36,33 @@ export const NewOption = ({ titleModal, onClose, endPoint }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
+            setShowLoading(true);
             const res = await endPoint(
                 form.name,
                 form.description
             );
 
             if (res) {
+                setShowLoading(false);
                 handleModalChange({
                     accept: {
                         title: 'Aceptar',
                         action: () => {
                             onClose();
-                            getCategories();
+                            if (titleModal == 'Categorías') {
+                                getCategory(INITIAL_FILTERS)
+                            } else {
+                                getBrand(INITIAL_FILTERS)
+                            }
                         },
                     },
-                    title: 'Producto registrado con éxito',
-                    message: 'Podrá ver el producto registrado en la tabla',
+                    title: `${titleModal} registrado con éxito`,
+                    message: `Podrá ver la ${title} registrado en la tabla`,
                 });
                 handleOpen();
             }
         } catch ({ errors }) {
+            setShowLoading(false);
             switch (errors[0].status) {
                 case 400:
                     handleModalChange({
@@ -64,7 +71,7 @@ export const NewOption = ({ titleModal, onClose, endPoint }) => {
                             action: () => { },
                         },
                         title: 'Error en el registro',
-                        message: 'Ya existe un producto con dicho nombre.',
+                        message: `Ya existe una ${title} con dicho nombre.`,
                         icon: mopsusIcons.error,
                     });
                     handleOpen();
@@ -125,7 +132,6 @@ export const NewOption = ({ titleModal, onClose, endPoint }) => {
                                     className={styles.modalInput}
                                     value={form.description}
                                     onChange={handleChange}
-                                    required
                                 />
                                 {errors.description && <p className={styles.error}>{errors.description}</p>}
                             </div>

@@ -12,7 +12,7 @@ import { ModifySetting } from './ModifySetting';
 import { onEditBrand, onEditCat } from '../../../services/settings';
 
 
-export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set, endPoint, totalPage, totalCount, setFilters, get, filter }) => {
+export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set, endPoint, totalPage, totalCount, setFilters, get, filter, titleMin }) => {
     const [search, setSearch] = useState(null);
     const [isOpenFilter, setIsOpenFilter] = useState(false);
     const [newOption, setNewOption] = useState(false)
@@ -26,8 +26,7 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
         editOptionCat,
         handleSetOptionToEditBrand,
         handleSetOptionToEditCat,
-        getBrand,
-        getCategories
+
     } = useContext(SettingsContext)
 
 
@@ -106,7 +105,7 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
             />
             {
                 newOption && (
-                    <NewOption titleModal={title} onClose={() => setNewOption(false)} endPoint={endPoint} />
+                    <NewOption titleModal={title} onClose={() => setNewOption(false)} endPoint={endPoint} title={titleMin} />
                 )
             }
             {isOpenFilter && (
@@ -132,7 +131,7 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
                     editOption={editOptionBrand}
                     setEditOption={handleSetOptionToEditBrand}
                     edit={onEditBrand}
-                    title={'marca'}
+                    title={titleMin}
                 />
 
             )}
@@ -142,7 +141,7 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
                     editOption={editOptionCat}
                     setEditOption={handleSetOptionToEditCat}
                     edit={onEditCat}
-                    title={'categoría'}
+                    title={titleMin}
                 />
             )}
         </div >
