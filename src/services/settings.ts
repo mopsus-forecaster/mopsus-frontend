@@ -5,8 +5,8 @@ export const getCategories = async ({ page, name = '', is_active = null }) => {
 
   if (page) queryParams.append('page', page);
 
-  if (name) queryParams.append('name', name);
-  if (is_active) queryParams.append('is_active', is_active);
+  if (name !== null) queryParams.append('name', name);
+  if (is_active !== null) queryParams.append('is_active', is_active);
 
   const response = await apiClient({
     api: 'products',
@@ -111,5 +111,29 @@ export const onEditBrand = async (id, name, description) => {
     },
   });
 
+  return response.data;
+};
+
+export const reactivateCat = async (id) => {
+  const response = await apiClient({
+    api: 'products',
+    service: '/activate_category',
+    verb: 'put',
+    dataSend: {
+      id,
+    },
+  });
+  return response.data;
+};
+
+export const reactivateBrand = async (id) => {
+  const response = await apiClient({
+    api: 'products',
+    service: '/activate_brand',
+    verb: 'put',
+    dataSend: {
+      id,
+    },
+  });
   return response.data;
 };

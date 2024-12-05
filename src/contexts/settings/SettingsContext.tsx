@@ -1,8 +1,9 @@
 import { createContext, useContext, useState } from 'react';
 import { _descriptors } from 'chart.js/helpers';
-import { deleteBrand, deleteCategory, getBrands, getCategories, onEditCat } from '../../services/settings';
+import { deleteBrand, deleteCategory, getBrands, getCategories, onEditCat, reactivateBrand, reactivateCat } from '../../services/settings';
 import { mopsusIcons } from '../../icons';
 import { ModalContext } from '../modal/ModalContext';
+import { LoadingContext } from '../loading/LoadingContext';
 export const SettingsContext = createContext(null);
 
 export const INITIAL_FILTERS = {
@@ -26,14 +27,13 @@ export const SettingsProvider = ({ children }) => {
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const [editOptionCat, setEditOptionCat] = useState(null)
   const [editOptionBrand, setEditOptionBrand] = useState(null)
+  const { setShowLoading } = useContext(LoadingContext);
 
 
   const getCategory = async (customFilters?) => {
     try {
       setIsLoadingCat(true);
       const { categories, total_pages, total_count } = await getCategories(customFilters);
-
-
       if (categories) {
         const mapped = categories.map((category) => ({
           id: category.id,
@@ -45,7 +45,6 @@ export const SettingsProvider = ({ children }) => {
           setTotalCountCat(total_count);
         }
         setTotalPagesCategory(total_pages)
-        console.log(total_pages)
         setMappedCategory(mapped);
       }
 
@@ -123,38 +122,47 @@ export const SettingsProvider = ({ children }) => {
     }
   };
 
-  const handleSetOptionToEdit = (index = null, mapped, setEdition) => {
-    if (!index && index != 0) {
+  const handleSetOptionToEditBrand = (setting = null) => {
+    if (!setting) {
       setEditOptionBrand(null);
-      setEditOptionCat(null)
       return;
     }
-    setEdition(mapped[index]);
+    setEditOptionBrand(setting);
   };
 
-  const deleteCatFromTable = (index) => {
-    const optionToDelete = mappedCategory[index];
+  const handleSetOptionToEditCat = (setting = null) => {
+    if (!setting) {
+      setEditOptionCat(null);
+      return;
+    }
+    setEditOptionCat(setting);
+  };
+
+  const deleteCatFromTable = (optionToDelete) => {
     handleModalChange({
       accept: {
         title: 'Aceptar',
         action: async () => {
           try {
+            setShowLoading(true);
             const response = await deleteCategory(optionToDelete.id);
             if (response) {
+              setShowLoading(false);
               handleModalChange({
                 accept: {
                   title: 'Aceptar',
                   action: () => {
-                    getCategory();
+                    getCategory(INITIAL_FILTERS);
                   },
                 },
                 title: `"${optionToDelete.name}" dado de baja exitosamente`,
                 message:
-                  'Puede restaurar el producto desde la tabla de productos.',
+                  'Puede restaurar la categoría desde la tabla de categorías.',
               });
               handleOpen();
             }
           } catch (error) {
+            setShowLoading(false);
             handleModalChange({
               accept: {
                 title: 'Aceptar',
@@ -162,28 +170,29 @@ export const SettingsProvider = ({ children }) => {
               },
               title: `"${optionToDelete.name}" no pudo darse de baja`,
               message:
-                'Lo sentimos, no pudimos concretar la opercion. Intente mas tarde',
+                'Lo sentimos, no pudimos concretar la operción. Intente mas tarde',
             });
             handleOpen();
           }
         },
       },
       title: `Dar de baja "${optionToDelete.name}"`,
-      message: '¿Está seguro que desea dar de baja el producto?',
+      message: '¿Está seguro que desea dar de baja la categoría?',
       icon: mopsusIcons.warning,
     });
     handleOpen();
   };
 
-  const deleteBrandFromTable = (index) => {
-    const optionToDelete = mappedBrand[index];
+  const deleteBrandFromTable = (optionToDelete) => {
     handleModalChange({
       accept: {
         title: 'Aceptar',
         action: async () => {
           try {
+            setShowLoading(true);
             const response = await deleteBrand(optionToDelete.id);
             if (response) {
+              setShowLoading(false);
               handleModalChange({
                 accept: {
                   title: 'Aceptar',
@@ -193,11 +202,12 @@ export const SettingsProvider = ({ children }) => {
                 },
                 title: `"${optionToDelete.name}" dado de baja exitosamente`,
                 message:
-                  'Puede restaurar el producto desde la tabla de productos.',
+                  'Puede restaurar la marca desde la tabla de marcas.',
               });
               handleOpen();
             }
           } catch (error) {
+            setShowLoading(false);
             handleModalChange({
               accept: {
                 title: 'Aceptar',
@@ -212,7 +222,99 @@ export const SettingsProvider = ({ children }) => {
         },
       },
       title: `Dar de baja "${optionToDelete.name}"`,
-      message: '¿Está seguro que desea dar de baja el producto?',
+      message: '¿Está seguro que desea dar de baja la marca?',
+      icon: mopsusIcons.warning,
+    });
+    handleOpen();
+  };
+
+
+  const reactivateSettingFromTableCat = (settingToReactivate) => {
+    handleModalChange({
+      accept: {
+        title: 'Aceptar',
+        action: async () => {
+          try {
+            setShowLoading(true);
+            const response = await reactivateCat(settingToReactivate.id);
+            if (response) {
+              setShowLoading(false);
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    getCategory();
+                  },
+                },
+                title: `"${settingToReactivate.name}" dado de alta exitosamente`,
+                message:
+                  'Puede consultar la marca desde la tabla de marcas.',
+              });
+              handleOpen();
+            }
+          } catch (error) {
+            setShowLoading(false);
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: () => { },
+              },
+              title: `"${settingToReactivate.name}" no pudo darse de alta`,
+              message:
+                'Lo sentimos, no pudimos concretar la operción. Intente más tarde',
+            });
+            handleOpen();
+          }
+        },
+      },
+      title: `Dar de alta "${settingToReactivate.name}"`,
+      message: '¿Está seguro que desea dar de alta la marca?',
+      icon: mopsusIcons.warning,
+    });
+    handleOpen();
+  };
+
+
+  const reactivateSettingFromTableBrand = (settingToReactivate) => {
+    handleModalChange({
+      accept: {
+        title: 'Aceptar',
+        action: async () => {
+          try {
+            setShowLoading(true);
+            const response = await reactivateBrand(settingToReactivate.id);
+            if (response) {
+              setShowLoading(false);
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    getBrand();
+                  },
+                },
+                title: `"${settingToReactivate.name}" dado de alta exitosamente`,
+                message:
+                  'Puede consultar la marca desde la tabla de marcas.',
+              });
+              handleOpen();
+            }
+          } catch (error) {
+            setShowLoading(false);
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: () => { },
+              },
+              title: `"${settingToReactivate.name}" no pudo darse de alta`,
+              message:
+                'Lo sentimos, no pudimos concretar la operción. Intente más tarde',
+            });
+            handleOpen();
+          }
+        },
+      },
+      title: `Dar de alta "${settingToReactivate.name}"`,
+      message: '¿Está seguro que desea dar de alta la marca?',
       icon: mopsusIcons.warning,
     });
     handleOpen();
@@ -244,11 +346,14 @@ export const SettingsProvider = ({ children }) => {
         totalPagesBrand,
         deleteCatFromTable,
         deleteBrandFromTable,
-        handleSetOptionToEdit,
+        handleSetOptionToEditBrand,
         editOptionCat,
         editOptionBrand,
         setEditOptionCat,
-        setEditOptionBrand
+        setEditOptionBrand,
+        reactivateSettingFromTableCat,
+        reactivateSettingFromTableBrand,
+        handleSetOptionToEditCat
       }}
     >
       {children}

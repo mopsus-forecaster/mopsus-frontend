@@ -110,12 +110,6 @@ export const Sales = () => {
     <Box>
       <header className={`${styles.header}`}>
         <h1 className={`${styles.title}`}>Ventas</h1>
-        {(totalCount === 0 || totalCount) && (
-          <div className={`${styles.saleInformationContainer}`}>
-            <div className={`${styles.circle}`}></div>
-            <p className={`${styles.saleInfoTitle}`}>{totalCount} ventas</p>
-          </div>
-        )}
       </header>
       <section className={styles.tableActionsContainer}>
         <div className={styles.tableSearchComponent}>
@@ -130,7 +124,7 @@ export const Sales = () => {
             className={styles.filterButton}
             onClick={() => setIsOpenFilter(true)}
           >
-            <Icon fontSize={24} icon={mopsusIcons.filters} />
+            <Icon fontSize={20} icon={mopsusIcons.filters} />
             Filtros
           </button>
         </div>

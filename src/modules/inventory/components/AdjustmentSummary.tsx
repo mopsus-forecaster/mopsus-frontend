@@ -57,7 +57,6 @@ export const AdjustmentSummary = () => {
     try {
       setShowLoading(true);
       const res = await createAdjustment(addProduct, description);
-      console.log('entra al trys');
       if (res) {
         setShowLoading(false);
         handleModalChange({

@@ -18,7 +18,7 @@ export const MopsusTable = ({
   goToNextPage,
   page,
   totalPages,
-  options,
+  options = [],
   totalElements = 0,
 }) => {
   type Order = 'asc' | 'desc';

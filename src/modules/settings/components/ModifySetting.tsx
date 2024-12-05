@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { useForm } from '../../../hooks';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import { LoadingContext } from '../../../contexts/loading/LoadingContext';
-import { INITIAL_FILTERS } from '../../../contexts/Inventory/InventoryContext';
+import { INITIAL_FILTERS, SettingsContext } from '../../../contexts/settings/SettingsContext';
 
 interface FormData {
     id: number | string;
@@ -13,12 +13,13 @@ interface FormData {
     description: number | string;
 }
 
-export const ModifySetting = ({ editOption, setEditOption, get, handleEdit, title }) => {
+export const ModifySetting = ({ editOption, setEditOption, edit, title }) => {
     const { form, errors, handleChange } = useForm<FormData>({
         id: editOption.id,
         name: editOption.name,
         description: editOption.description,
     });
+    const { getCategory, getBrand } = useContext(SettingsContext);
     const { handleModalChange, handleOpen } = useContext(ModalContext);
     const { setShowLoading } = useContext(LoadingContext);
 
@@ -31,7 +32,7 @@ export const ModifySetting = ({ editOption, setEditOption, get, handleEdit, titl
                     try {
                         setShowLoading(true);
 
-                        const res = await handleEdit(
+                        const res = await edit(
                             editOption.id,
                             form.name,
                             form.description
@@ -45,7 +46,11 @@ export const ModifySetting = ({ editOption, setEditOption, get, handleEdit, titl
                                     title: 'Aceptar',
                                     action: () => {
                                         setEditOption();
-                                        get(INITIAL_FILTERS)
+                                        if (title == 'categoría') {
+                                            getCategory(INITIAL_FILTERS)
+                                        } else {
+                                            getBrand(INITIAL_FILTERS)
+                                        }
                                     },
                                 },
                                 title: `${form.name} editado exitósamente`,
@@ -166,9 +171,9 @@ export const ModifySetting = ({ editOption, setEditOption, get, handleEdit, titl
                                                 title: 'Cancelar',
                                                 action: () => { },
                                             },
-                                            title: `Cancelar la modificación del producto`,
+                                            title: `Cancelar la modificación de la ${title}`,
                                             message:
-                                                '¿Seguro que desea cancelar la modificación del producto?',
+                                                `¿Seguro que desea cancelar la modificación la ${title}?`,
                                         });
                                         handleOpen();
                                     }}

@@ -9,10 +9,10 @@ import { FilterSettings } from './FilterSettings';
 import { Icon } from '@iconify/react/dist/iconify.cjs';
 import { INITIAL_FILTERS } from '../../../contexts/Inventory/InventoryContext';
 import { ModifySetting } from './ModifySetting';
-import { getBrands, onEditBrand, onEditCat, getCategories } from '../../../services/settings';
+import { onEditBrand, onEditCat } from '../../../services/settings';
 
 
-export const TableSettings = ({ title, mapped, optionsTableColumns, isLoading, set, endPoint, totalPage, totalCount, deleteFuntion, setFilters, get, filter, setEdition }) => {
+export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set, endPoint, totalPage, totalCount, setFilters, get, filter }) => {
     const [search, setSearch] = useState(null);
     const [isOpenFilter, setIsOpenFilter] = useState(false);
     const [newOption, setNewOption] = useState(false)
@@ -24,7 +24,10 @@ export const TableSettings = ({ title, mapped, optionsTableColumns, isLoading, s
         firstLoad,
         editOptionBrand,
         editOptionCat,
-        handleSetOptionToEdit,
+        handleSetOptionToEditBrand,
+        handleSetOptionToEditCat,
+        getBrand,
+        getCategories
     } = useContext(SettingsContext)
 
 
@@ -33,16 +36,6 @@ export const TableSettings = ({ title, mapped, optionsTableColumns, isLoading, s
         setNewOption(true)
     }
 
-    const options = [
-        {
-            icon: mopsusIcons.edit,
-            onClick: (index) => handleSetOptionToEdit(index, mapped, setEdition),
-        },
-        {
-            icon: mopsusIcons.trash,
-            onClick: deleteFuntion,
-        },
-    ];
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -102,12 +95,11 @@ export const TableSettings = ({ title, mapped, optionsTableColumns, isLoading, s
                 goToLastPage={() => { goToLastPage(totalPage, filter, setFilters, get) }}
                 goToNextPage={() => { goToNextPage(totalPage, filter, setFilters, get) }}
                 goToPreviousPage={() => { goToPreviousPage(filter, setFilters, get) }}
-                includeOptions={true}
+                includeOptions={false}
                 includePagination={true}
                 isLoading={isLoading}
-                options={options}
                 page={filter.page}
-                rows={mapped}
+                rows={rows}
                 setRows={set}
                 totalPages={totalPage}
                 totalElements={totalCount}
@@ -138,19 +130,20 @@ export const TableSettings = ({ title, mapped, optionsTableColumns, isLoading, s
             {editOptionBrand && (
                 <ModifySetting
                     editOption={editOptionBrand}
-                    setEditOption={handleSetOptionToEdit}
-                    get={getBrands}
-                    handleEdit={onEditBrand}
+                    setEditOption={handleSetOptionToEditBrand}
+                    get={get}
+                    edit={onEditBrand}
                     title={'marca'}
                 />
+
             )}
 
             {editOptionCat && (
                 <ModifySetting
                     editOption={editOptionCat}
-                    setEditOption={handleSetOptionToEdit}
-                    get={getCategories}
-                    handleEdit={onEditCat}
+                    setEditOption={handleSetOptionToEditCat}
+                    get={get}
+                    edit={onEditCat}
                     title={'categoría'}
                 />
             )}

@@ -3,13 +3,13 @@ import styles from '../styles/styles.module.scss'
 import { TableSettings } from '../components/TableSettings';
 import { useContext, useEffect } from 'react';
 import { SettingsContext } from '../../../contexts/settings/SettingsContext';
-import { addBrand, addCategory } from '../../../services/settings';
+import { addBrand, addCategory, onEditBrand, onEditCat } from '../../../services/settings';
 import { INITIAL_FILTERS } from '../../../contexts/Inventory/InventoryContext';
+import { MapSettingTablesCat } from '../utils/settingsCat-table-mapper';
+import { MapSettingTablesBrand } from '../utils/settingsBrand-table-mapper';
 
 export const SettingsPage = () => {
     const {
-        deleteCatFromTable,
-        deleteBrandFromTable,
         getCategory,
         mappedCategory,
         isLoadingCat,
@@ -28,8 +28,6 @@ export const SettingsPage = () => {
         setFiltersCat,
         filtersBrand,
         filtersCat,
-        setEditOptionBrand,
-        setEditOptionCat
     } = useContext(SettingsContext)
 
     const optionsTableColumns = [
@@ -69,7 +67,7 @@ export const SettingsPage = () => {
             getCategoriesOptions();
             setFirstLoad(false);
         }
-    }, [firstLoad, setFirstLoad, setMappedCategory]);
+    }, []);
 
     return (
         <Box>
@@ -78,31 +76,29 @@ export const SettingsPage = () => {
             </header>
             <section className={styles.Container}>
                 <TableSettings title={'Marcas'}
-                    mapped={mappedBrand}
                     optionsTableColumns={optionsTableColumns}
                     isLoading={isLoadingBrand}
                     set={setMappedBrand}
                     endPoint={addBrand}
                     totalPage={totalPagesBrand}
                     totalCount={totalCountBrand}
-                    deleteFuntion={deleteBrandFromTable}
                     setFilters={setFiltersBrand}
                     get={getBrand}
                     filter={filtersBrand}
-                    setEdition={setEditOptionBrand} />
+                    rows={mappedBrand.map((setting) => MapSettingTablesBrand(setting))}
+                />
                 <TableSettings title={'Categorías'}
-                    mapped={mappedCategory}
                     optionsTableColumns={optionsTableColumns}
                     isLoading={isLoadingCat}
                     set={setMappedCategory}
                     endPoint={addCategory}
                     totalPage={totalPagesCategory}
                     totalCount={totalCountCat}
-                    deleteFuntion={deleteCatFromTable}
                     setFilters={setFiltersCat}
                     get={getCategory}
                     filter={filtersCat}
-                    setEdition={setEditOptionCat} />
+                    rows={mappedCategory.map((setting) => MapSettingTablesCat(setting))}
+                />
             </section>
         </Box>
     )

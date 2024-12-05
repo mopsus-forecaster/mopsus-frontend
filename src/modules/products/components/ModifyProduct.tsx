@@ -167,7 +167,24 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
             fontSize={25}
             icon={mopsusIcons.closeModal}
             className={styles.iconClose}
-            onClick={() => setEditProduct()}
+            onClick={() => {
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    setEditProduct();
+                  },
+                },
+                reject: {
+                  title: 'Cancelar',
+                  action: () => { },
+                },
+                title: `Cancelar la modificación del producto`,
+                message:
+                  '¿Seguro que desea cancelar la modificación del producto?',
+              });
+              handleOpen();
+            }}
           />
           <h2 className={styles.titleRegister}>Modificar Producto</h2>
           <hr className={styles.line} />
