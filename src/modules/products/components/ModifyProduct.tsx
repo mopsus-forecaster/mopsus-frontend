@@ -27,7 +27,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
     price: editProduct.price,
     reposition_point: editProduct.repositionPoint,
     stock: editProduct.stock,
-    category: editProduct.category,
+    category: editProduct.idCategory,
     unit: editProduct.measureUnitId,
   });
   const [categories, setCategories] = useState([]);
@@ -72,6 +72,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
 
     fetchData();
   }, []);
+  console.log(categories);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -81,8 +82,10 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
         action: async () => {
           try {
             setShowLoading(true);
-
-            const category = categories.filter((c) => c.name === form.category);
+            console.log(form.category);
+            const category = categories.filter(
+              (c) => c.id === Number(form.category)
+            );
 
             const res = await onEditProduct(
               editProduct.id,
@@ -206,7 +209,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
                   </option>
                   {categories.length > 0 ? (
                     categories.map((c) => (
-                      <option key={c.name} value={c.name}>
+                      <option key={c.name} value={c.id}>
                         {c.name}
                       </option>
                     ))
