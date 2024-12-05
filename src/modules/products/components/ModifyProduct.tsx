@@ -35,7 +35,6 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
   const { handleModalChange, handleOpen } = useContext(ModalContext);
   const { getProducts } = useContext(ProductsContext);
   const { setShowLoading } = useContext(LoadingContext);
-
   useEffect(() => {
     const fetchData = async () => {
       setShowLoading(true);
@@ -113,7 +112,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
             }
           } catch ({ errors }) {
             setShowLoading(false);
-            console.log(errors);
+
             switch (errors[0].status) {
               case 404:
                 handleModalChange({
@@ -207,7 +206,7 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
                   </option>
                   {categories.length > 0 ? (
                     categories.map((c) => (
-                      <option key={c.id} value={c.id}>
+                      <option key={c.name} value={c.name}>
                         {c.name}
                       </option>
                     ))
