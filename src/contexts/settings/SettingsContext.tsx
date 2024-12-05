@@ -9,6 +9,7 @@ export const SettingsContext = createContext(null);
 export const INITIAL_FILTERS = {
   id: null,
   name: '',
+  description: '',
   is_active: null,
   page: 1,
 }
@@ -248,7 +249,7 @@ export const SettingsProvider = ({ children }) => {
                 },
                 title: `"${settingToReactivate.name}" dado de alta exitosamente`,
                 message:
-                  'Puede consultar la marca desde la tabla de marcas.',
+                  'Puede consultar la categoría desde la tabla de categoría.',
               });
               handleOpen();
             }
@@ -268,7 +269,7 @@ export const SettingsProvider = ({ children }) => {
         },
       },
       title: `Dar de alta "${settingToReactivate.name}"`,
-      message: '¿Está seguro que desea dar de alta la marca?',
+      message: '¿Está seguro que desea dar de alta la categoría?',
       icon: mopsusIcons.warning,
     });
     handleOpen();

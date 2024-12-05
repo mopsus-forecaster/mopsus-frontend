@@ -57,7 +57,7 @@ export const NewOption = ({ titleModal, onClose, endPoint, title }) => {
                         },
                     },
                     title: `${titleModal} registrado con éxito`,
-                    message: `Podrá ver la ${title} registrado en la tabla`,
+                    message: `Podrá ver la ${title} registrada en la tabla.`,
                 });
                 handleOpen();
             }
