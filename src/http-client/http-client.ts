@@ -94,12 +94,14 @@ export const makeHttpCall = async (
       ? err.response.data.errors.map((error) => ({
           message: error.message,
           status: error.status || err.response?.status,
+          data: err.response.data,
         }))
       : [
           {
             message:
               err.response?.data?.error || err.message || 'Unknown error',
             status: err.response?.status,
+            data: err.response.data,
           },
         ];
 

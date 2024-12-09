@@ -45,11 +45,13 @@ export const Login = () => {
     handleSetRecoverEmail,
     handlesetPrevRoute,
     setCurrentMfaFlow,
+    setSession,
   } = useContext(AuthContext);
   const { setShowLoading } = useContext(LoadingContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
   const from = comesFrom || routes.home;
+
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
     {
       email: '',
@@ -114,6 +116,7 @@ export const Login = () => {
       });
     } catch (error) {
       const { errors } = error;
+      const { data } = errors[0];
 
       switch (errors[0].status) {
         case 400:
@@ -180,6 +183,27 @@ export const Login = () => {
             title: 'Por seguridad hemos bloqueado su usuario',
             message: 'Para recuperarlo debe restaurar su contraseña.',
             icon: mopsusIcons.error,
+          });
+          handleOpen();
+          break;
+
+        case 412:
+          handleModalChange({
+            accept: {
+              title: 'Cambiar contraseña',
+              action: async () => {
+                handleSetRecoverEmail(form.email);
+                setSession(data?.session);
+                navigate(`/${routes.changePassword}`);
+              },
+            },
+            reject: {
+              title: 'Cancelar',
+              action: async () => {},
+            },
+            title: 'Bienvenido a Mopsus',
+            message:
+              'Como es su primer acceso debe cambiar la contraseña enviada a su correo.',
           });
           handleOpen();
           break;
