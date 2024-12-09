@@ -1,4 +1,4 @@
-import { del, get, post, put } from './http-client';
+import { callHttpClient } from './http-client';
 import { AuthenticationInterceptor } from './interceptors';
 
 interface IAPIClientParam {
@@ -24,39 +24,12 @@ export declare type InterceptorRecipe = {
   responseInterceptors: Interceptor[];
 };
 
-const methodMap = {
-  get,
-  post,
-  put,
-  del,
-};
-
-const apiClientCore = async (
-  param: IAPIClientParam,
-  _interceptors?: InterceptorRecipe
-) => {
-  const { api, service = '', dataSend, verb, headers } = param;
-
-  if (!methodMap[verb]) {
-    throw new Error(`Método HTTP '${verb}' no soportado.`);
-  }
-
-  const { data, errors, status } = await methodMap[verb](service, {
-    api: api,
-    data: dataSend || {},
-    interceptorsRecipe: _interceptors,
-    headers,
-  });
-
-  return { data, errors, status };
-};
-
 const interceptors: InterceptorRecipe = {
   requestInterceptors: [AuthenticationInterceptor],
   responseInterceptors: [],
 };
 
-export const apiClient = (param: IAPIClientParam) => {
+export const apiClient = async (param: IAPIClientParam) => {
   let myInterceptors = interceptors;
 
   if (param.interceptorsRecipe) {
@@ -71,5 +44,18 @@ export const apiClient = (param: IAPIClientParam) => {
       ],
     };
   }
-  return apiClientCore(param, myInterceptors);
+  const { api, service = '', dataSend, verb, headers } = param;
+
+  const { data, errors, status } = await callHttpClient(
+    service,
+    {
+      api: api,
+      data: dataSend || {},
+      interceptorsRecipe: myInterceptors,
+      headers,
+    },
+    verb
+  );
+
+  return { data, errors, status };
 };

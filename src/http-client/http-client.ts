@@ -1,10 +1,8 @@
-import axios, { AxiosRequestConfig, AxiosResponse, Canceler } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Interceptor, InterceptorRecipe } from './api-client';
-import localConfig from '../config';
-import { useRefreshToken } from '../hooks/useRefreshToken/useRefreshToken';
+import config from '../config';
 
 export interface Options extends AxiosRequestConfig {
-  cancel?: (cancel: Canceler) => void;
   requestInterceptors?: Interceptor[];
   responseInterceptors?: Interceptor[];
   interceptorsRecipe?: InterceptorRecipe;
@@ -13,9 +11,6 @@ export interface Options extends AxiosRequestConfig {
   headers?: any;
   method?: string;
   params?: string;
-  cache?: boolean;
-  cacheMinutes?: number;
-  status?: number;
 }
 
 export const BasicResponseTransformInterceptor: Interceptor = [
@@ -32,24 +27,16 @@ export const BasicInterceptors: InterceptorRecipe = {
   responseInterceptors: [BasicResponseTransformInterceptor],
 };
 
-export class FetchError extends Error {
-  static CANCEL = 'cancel-request';
-
-  type = null;
-  baseError = null;
-
-  constructor(ctx) {
-    super(ctx);
-    this.type = ctx.type;
-    this.baseError = ctx.baseError;
-  }
+function fulfillInterceptors(interceptors, instance) {
+  interceptors.forEach(([resolve, reject]) => {
+    instance.interceptors.request.use(resolve, reject);
+  });
 }
 
-export const fetch = async (
+export const makeHttpCall = async (
   url: string,
   {
     interceptorsRecipe = BasicInterceptors,
-    cancel,
     requestInterceptors,
     responseInterceptors,
     headers = {},
@@ -59,12 +46,8 @@ export const fetch = async (
     ...otherOptions
   }: Options = {}
 ): Promise<any> => {
-  const { dev } = localConfig;
-  const { config } = dev;
-
   if (api) {
     const apiConfig = config.api[api];
-
     if (apiConfig) {
       url = apiConfig.basepath + url;
     } else {
@@ -74,43 +57,18 @@ export const fetch = async (
 
   const instance = axios.create();
 
-  (requestInterceptors
-    ? requestInterceptors
-    : interceptorsRecipe.requestInterceptors
-  ).forEach(([resolve, reject]) => {
-    instance.interceptors.request.use(resolve, reject);
-  });
+  fulfillInterceptors(
+    requestInterceptors
+      ? requestInterceptors
+      : interceptorsRecipe.requestInterceptors,
+    instance
+  );
 
-  (responseInterceptors
-    ? responseInterceptors
-    : interceptorsRecipe.responseInterceptors
-  ).forEach(([resolve, reject]) => {
-    instance.interceptors.response.use(resolve, reject);
-  });
-
-  const retryRequest = async (prevRequest) => {
-    return instance(prevRequest);
-  };
-
-  instance.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-      const prevRequest = error?.config;
-      if (error?.response?.status === 403 && !prevRequest?.sent) {
-        prevRequest.sent = true;
-        try {
-          const refresh = useRefreshToken();
-          const newAccessToken = await refresh();
-          prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-          return retryRequest(prevRequest);
-        } catch (err) {
-          window.location.href = '/login';
-          return Promise.reject(error);
-        }
-      }
-
-      return Promise.reject(error);
-    }
+  fulfillInterceptors(
+    responseInterceptors
+      ? responseInterceptors
+      : interceptorsRecipe.responseInterceptors,
+    instance
   );
 
   headers = {
@@ -121,7 +79,6 @@ export const fetch = async (
     const response = (await instance.request({
       url,
       headers,
-      cancelToken: cancel ? new axios.CancelToken(cancel) : null,
       method,
       params,
       ...otherOptions,
@@ -133,44 +90,34 @@ export const fetch = async (
       error: null,
     };
   } catch (err) {
-    if (axios.isCancel(err)) {
-      throw new FetchError({ type: FetchError.CANCEL, baseError: err });
-    } else {
-      const errors = err.response?.data?.errors
-        ? err.response.data.errors.map((error) => ({
-            message: error.message,
-            status: error.status || err.response?.status,
-          }))
-        : [
-            {
-              message:
-                err.response?.data?.error || err.message || 'Unknown error',
-              status: err.response?.status,
-            },
-          ];
+    const errors = err.response?.data?.errors
+      ? err.response.data.errors.map((error) => ({
+          message: error.message,
+          status: error.status || err.response?.status,
+        }))
+      : [
+          {
+            message:
+              err.response?.data?.error || err.message || 'Unknown error',
+            status: err.response?.status,
+          },
+        ];
 
-      const generalStatus = errors.length > 1 ? 500 : errors[0].status;
+    const generalStatus = errors.length > 1 ? 500 : errors[0].status;
 
-      const errorResponse = {
-        data: null,
-        status: generalStatus,
-        errors: errors,
-      };
+    const errorResponse = {
+      data: null,
+      status: generalStatus,
+      errors: errors,
+    };
 
-      throw errorResponse;
-    }
+    throw errorResponse;
   }
 };
 
-const makeMethod =
-  (method: string) =>
-  (url: string, options: Options = {}) =>
-    fetch(url, {
-      ...options,
-      method,
-    });
-
-export const get = makeMethod('get');
-export const post = makeMethod('post');
-export const put = makeMethod('put');
-export const del = makeMethod('delete');
+export const callHttpClient = (url: string, options: Options = {}, method) => {
+  return makeHttpCall(url, {
+    ...options,
+    method,
+  });
+};
