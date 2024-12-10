@@ -84,6 +84,7 @@ export const ProductsProvider = ({ children }) => {
         customFilters ? customFilters : filters
       );
       if (productos) {
+        console.log(productos);
         const mapped = productos.map((product) => ({
           id: product.id,
           measureUnitId: product.id_units,
