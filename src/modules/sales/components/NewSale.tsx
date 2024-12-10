@@ -34,7 +34,7 @@ export const NewSale = () => {
               value={search}
               type="text"
               className={styles.tableSearchInput}
-              placeholder="Buscar por nombre de producto"
+              placeholder="Buscar por nombre de producto o códogo de barra..."
             />
           </div>
         </section>

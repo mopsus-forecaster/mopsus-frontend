@@ -5,15 +5,25 @@ export const addProduct = async (
   priceNoCasted,
   repositionPointNoCasted,
   stockNoCasted,
-  unitNoCasted,
-  categoryNoCasted
+  unidad_id,
+  category_id,
+  id_brand,
+  barcode
 ) => {
   const price = Number(priceNoCasted);
   const reposition_point = Number(repositionPointNoCasted);
   const stock = Number(stockNoCasted);
-  const unidad_id = Number(unitNoCasted);
-  const category_id = Number(categoryNoCasted);
 
+  console.log('Datos a enviar al API:', {
+    title,
+    price,
+    reposition_point,
+    stock,
+    category_id,
+    unidad_id,
+    id_brand,
+    barcode,
+  });
   const response = await apiClient({
     api: 'products',
     service: '',
@@ -25,6 +35,8 @@ export const addProduct = async (
       stock,
       category_id,
       unidad_id,
+      id_brand,
+      barcode,
     },
   });
   return response.data;
@@ -48,10 +60,19 @@ export const getUnits = async () => {
   return response.data;
 };
 
+export const getBrands = async () => {
+  const response = await apiClient({
+    api: 'products',
+    service: '/get_brands',
+    verb: 'get',
+  });
+  return response.data;
+};
+
 export const deleteProduct = async (id) => {
   const response = await apiClient({
     api: 'products',
-    service: '/delete_product',
+    service: `/delete_product`,
     verb: 'put',
     dataSend: {
       id,
@@ -108,8 +129,10 @@ export const onEditProduct = async (
   title,
   id_categoria,
   id_units,
+  id_brand,
   reposition_point,
-  price
+  price,
+  barcode
 ) => {
   const priceCasted = Number(price);
   const product = {
@@ -117,8 +140,10 @@ export const onEditProduct = async (
     title,
     id_categoria,
     id_units,
+    id_brand,
     reposition_point,
     price: priceCasted,
+    barcode,
   };
   const response = await apiClient({
     api: 'products',

@@ -125,7 +125,7 @@ export const Inventory = () => {
             Filtros
           </button>
         </div>
-        <div className={styles.btnContainer}>
+        <div className={styles.btnContainerPage}>
           <button
             className={styles.buttonAdd}
             onClick={() => navigate('/nuevo-ajuste')}

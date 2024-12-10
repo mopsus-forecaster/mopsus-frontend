@@ -225,6 +225,8 @@
   position: relative;
   width: 30%;
   height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .verticalLine {
@@ -337,13 +339,41 @@ td:nth-child(5) {
 }
 
 .btnContainer {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  margin-left: 0.5vw;
+  justify-content: space-between;
+}
+
+.btnContainerPage {
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  gap: 1%;
+}
+.btnCancel {
+  position: relative;
+  height: 5vh;
+  color: $color-white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-weight: 600;
+  background-color: $color-primary;
+  border: 1px solid $color-primary;
+  transition:
+    background-color 0.3s,
+    border 0.3s;
+  background-color: transparent;
+  border: 1px solid $color-primary;
+}
+
+.btnCancel:hover {
+  background-color: $color-primary;
 }
 
 .buttonRegsiter {
-  position: absolute;
+  position: relative;
   color: $color-white;
   background-color: $color-primary;
   border: 1px solid $color-primary;

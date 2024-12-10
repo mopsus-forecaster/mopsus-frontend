@@ -21,7 +21,7 @@ export const InventortSummary = () => {
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => {},
+          action: () => { },
         },
         title: 'Datos incompletos',
         message: 'Debe haber almenos un producto agregado.',
@@ -54,7 +54,7 @@ export const InventortSummary = () => {
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => {},
+          action: () => { },
         },
         title: 'Error técnico',
         message: 'No pudimos concretar su solicitud. Intente más tarde.',
@@ -122,9 +122,33 @@ export const InventortSummary = () => {
           />
         </div>
         <div className={styles.btnContainer}>
-          <button className={styles.buttonRegsiter} onClick={onSubmit}>
-            Registrar Ingreso
-          </button>
+          <div>
+            <button className={styles.buttonRegsiter} type='submit' onClick={onSubmit}>
+              Registrar Ajuste
+            </button>
+          </div>
+          <div>
+            <button className={styles.btnCancel} type='button' onClick={() => {
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    navigate('/inventario')
+                  },
+                },
+                reject: {
+                  title: 'Cancelar',
+                  action: () => { },
+                },
+                title: `Cancelar el registro del ingreso`,
+                message:
+                  '¿Seguro que desea cancelar el registro del ingreso?',
+              });
+              handleOpen();
+            }}>
+              Cancelar
+            </button>
+          </div>
         </div>
       </div>
     </div>

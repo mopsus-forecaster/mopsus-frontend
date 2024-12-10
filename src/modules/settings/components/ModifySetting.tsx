@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { useForm } from '../../../hooks';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import { LoadingContext } from '../../../contexts/loading/LoadingContext';
-import { INITIAL_FILTERS, SettingsContext } from '../../../contexts/settings/SettingsContext';
+import { SettingsContext } from '../../../contexts/settings/SettingsContext';
 
 interface FormData {
     id: number | string;
@@ -13,7 +13,7 @@ interface FormData {
     description: number | string;
 }
 
-export const ModifySetting = ({ editOption, setEditOption, edit, title }) => {
+export const ModifySetting = ({ editOption, setEditOption, edit, titleMin }) => {
     const { form, errors, handleChange } = useForm<FormData>({
         id: editOption.id,
         name: editOption.name,
@@ -27,7 +27,7 @@ export const ModifySetting = ({ editOption, setEditOption, edit, title }) => {
         e.preventDefault();
         handleModalChange({
             accept: {
-                title: 'Editar ' + { title },
+                title: 'Editar ' + titleMin,
                 action: async () => {
                     try {
                         setShowLoading(true);
@@ -46,16 +46,16 @@ export const ModifySetting = ({ editOption, setEditOption, edit, title }) => {
                                     title: 'Aceptar',
                                     action: () => {
                                         setEditOption();
-                                        if (title == 'categoría') {
-                                            getCategory(INITIAL_FILTERS)
+                                        if (titleMin == 'categoría') {
+                                            getCategory()
                                         } else {
-                                            getBrand(INITIAL_FILTERS)
+                                            getBrand()
                                         }
                                     },
                                 },
                                 title: `${form.name} editado exitósamente`,
                                 message:
-                                    `Puede consultar la ${title} en la tabla.`,
+                                    `Puede consultar la ${titleMin} en la tabla.`,
                             });
                             handleOpen();
                         }
@@ -69,9 +69,9 @@ export const ModifySetting = ({ editOption, setEditOption, edit, title }) => {
                                         title: 'Aceptar',
                                         action: () => { },
                                     },
-                                    title: `La ${title} no se encontró`,
+                                    title: `La ${titleMin} no se encontró`,
                                     message:
-                                        `La ${title} que intenta editar no fue encontrado. Intente más tarde`,
+                                        `La ${titleMin} que intenta editar no fue encontrado. Intente más tarde`,
                                     icon: mopsusIcons.error,
                                 });
                                 handleOpen();
@@ -100,8 +100,8 @@ export const ModifySetting = ({ editOption, setEditOption, edit, title }) => {
                 action: () => { },
             },
 
-            title: `Edición de la ${title}: ${form.name}`,
-            message: `¿Está seguro que desea editar la ${title}?`,
+            title: `Edición de la ${titleMin}: ${form.name}`,
+            message: `¿Está seguro que desea editar la ${titleMin}?`,
             icon: mopsusIcons.warning,
         });
         handleOpen();
@@ -117,7 +117,7 @@ export const ModifySetting = ({ editOption, setEditOption, edit, title }) => {
                         className={styles.iconClose}
                         onClick={() => setEditOption()}
                     />
-                    <h2 className={styles.titleRegister}>Modificar {title}</h2>
+                    <h2 className={styles.titleRegister}>Modificar {titleMin}</h2>
                     <hr className={styles.line} />
                     <form onSubmit={(e) => onSubmit(e)}>
                         <div>
@@ -171,9 +171,9 @@ export const ModifySetting = ({ editOption, setEditOption, edit, title }) => {
                                                 title: 'Cancelar',
                                                 action: () => { },
                                             },
-                                            title: `Cancelar la modificación de la ${title}`,
+                                            title: `Cancelar la modificación de la ${titleMin}`,
                                             message:
-                                                `¿Seguro que desea cancelar la modificación la ${title}?`,
+                                                `¿Seguro que desea cancelar la modificación la ${titleMin}?`,
                                         });
                                         handleOpen();
                                     }}

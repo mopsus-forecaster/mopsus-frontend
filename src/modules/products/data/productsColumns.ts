@@ -35,6 +35,16 @@ export const productsTableColumns = [
     sort: true,
   },
   {
+    text: 'Marca',
+    value: 'brand',
+    sort: true,
+  },
+  {
+    text: 'Código de Barra',
+    value: 'barcode',
+    sort: true,
+  },
+  {
     text: 'Opciones',
     value: 'options',
     sort: false,
