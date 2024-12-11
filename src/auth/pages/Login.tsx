@@ -234,6 +234,7 @@ export const Login = () => {
     <article>
       <LoginCommonHeader title="Bienvenido" />
       <form
+        className={styles.form}
         noValidate
         onSubmit={(e) => {
           e.preventDefault();
@@ -242,6 +243,7 @@ export const Login = () => {
       >
         <div className={styles.inputGroup}>
           <input
+            className={styles.input}
             type="email"
             name="email"
             onChange={handleChange}
@@ -254,6 +256,7 @@ export const Login = () => {
         {errors.email && <p className={styles.errors}>{errors.email}</p>}
         <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
+            className={styles.input}
             type={showPwd ? 'text' : 'password'}
             name="password"
             onChange={handleChange}

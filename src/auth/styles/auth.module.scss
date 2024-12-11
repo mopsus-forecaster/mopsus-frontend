@@ -53,7 +53,7 @@ h4 {
   align-items: center;
 }
 
-form {
+.form {
   display: flex;
   padding: 0;
   flex-direction: column;
@@ -69,7 +69,7 @@ form {
   flex-direction: column;
 }
 
-input {
+.input {
   width: 100%;
   outline: none;
   font-size: 1rem;
@@ -109,8 +109,8 @@ input {
   z-index: 1;
 }
 
-input:focus + .labelline,
-input:not(:placeholder-shown) + .labelline {
+.input:focus + .labelline,
+.input:not(:placeholder-shown) + .labelline {
   top: -2px;
   left: 25px;
   font-size: 1rem;

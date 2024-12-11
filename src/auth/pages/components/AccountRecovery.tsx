@@ -58,9 +58,10 @@ export const AccountRecovery = () => {
           Ingrese su correo para recibr un código de autenticación
         </p>
       </div>
-      <form onSubmit={onSubmit} action="">
+      <form className={styles.form} onSubmit={onSubmit} action="">
         <div className={styles.inputGroup}>
           <input
+            className={styles.input}
             type="email"
             name="email"
             onChange={handleChange}

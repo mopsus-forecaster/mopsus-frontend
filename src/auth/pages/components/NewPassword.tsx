@@ -166,9 +166,10 @@ export const NewPassword = () => {
           Ingrese su nueva contraseña
         </p>
       </div>
-      <form onSubmit={onSubmit} action="">
+      <form className={styles.form} onSubmit={onSubmit} action="">
         <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
+            className={styles.input}
             type={showNewPwd ? 'text' : 'password'}
             name="newPassword"
             onChange={handleChange}
@@ -188,6 +189,7 @@ export const NewPassword = () => {
         )}{' '}
         <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
+            className={styles.input}
             type={showNewPwdConfirmation ? 'text' : 'password'}
             name="newPasswordConfirmation"
             onChange={handleChange}

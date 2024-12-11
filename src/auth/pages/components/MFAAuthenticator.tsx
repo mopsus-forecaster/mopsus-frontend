@@ -244,7 +244,7 @@ export const MFAAuthenticator = () => {
         Hemos enviado un código de autenticación a {censorEmail()}
       </p>
 
-      <form>
+      <form className={styles.form}>
         <div className={styles.otpContainer}>
           {otp.map((_, index) => (
             <input

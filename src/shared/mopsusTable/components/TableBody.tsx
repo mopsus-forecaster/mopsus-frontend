@@ -7,6 +7,8 @@ import {
 } from '@mui/material';
 import styles from '../styles/table.module.scss';
 
+import { ActionsVert } from './Actions';
+
 export const Body = ({
   isLoading,
   columns,
@@ -15,6 +17,7 @@ export const Body = ({
   valueToOrderBy,
   includeOptions,
   options,
+  actions = false,
 }) => {
   type Order = 'asc' | 'desc';
 
@@ -51,6 +54,7 @@ export const Body = ({
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
+
   return (
     <TableBody>
       {isLoading ? (
@@ -105,6 +109,8 @@ export const Body = ({
                         />
                       ))}
                     </div>
+                  ) : actions === true && column.value === 'actions' ? (
+                    <ActionsVert options={row['actions']} />
                   ) : (
                     row[column.value]
                   )}

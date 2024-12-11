@@ -56,9 +56,10 @@ export const RegisterNameEmail = () => {
   return (
     <article className={styles.mfaContainer}>
       <LoginCommonHeader title="Registrar Usuario" />
-      <form onSubmit={onSubmit}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <div className={styles.inputGroup}>
           <input
+            className={styles.input}
             type="email"
             name="email"
             onChange={handleChange}
@@ -72,6 +73,7 @@ export const RegisterNameEmail = () => {
 
         <div className={styles.inputGroup}>
           <input
+            className={styles.input}
             type="text"
             name="name"
             onChange={handleChange}

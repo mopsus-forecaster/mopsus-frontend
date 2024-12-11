@@ -20,6 +20,7 @@ export const MopsusTable = ({
   totalPages,
   options = [],
   totalElements = 0,
+  actions = false,
 }) => {
   type Order = 'asc' | 'desc';
   const [valueToOrderBy, setValueToOrderBy] = useState();
@@ -73,6 +74,7 @@ export const MopsusTable = ({
             orderDirection={orderDirection}
             rows={rows}
             valueToOrderBy={valueToOrderBy}
+            actions={actions}
           />
         </Table>
       </TableContainer>
