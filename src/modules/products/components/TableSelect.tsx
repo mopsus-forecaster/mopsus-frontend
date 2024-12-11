@@ -70,7 +70,7 @@ export const TablelSelect = ({ setFilters, isLoading, rows, set, totalPage, tota
                             <input
                                 onChange={(e) => setSearch(e.target.value)}
                                 value={search}
-                                className={stylesSettings.tableSearchInput}
+                                className={styles.tableSearchInput}
                                 placeholder="Buscar por nombre..."
                                 type="text"
                             />

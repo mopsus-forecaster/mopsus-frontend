@@ -47,7 +47,7 @@
   color: $color-white;
   border: none;
   border-radius: 20px;
-  width: 20%;
+  width: 15%;
 }
 
 .tableSearchInput {
@@ -56,6 +56,12 @@
   border: none;
   height: 2.5rem;
   border-radius: 20px;
+  padding: 3%;
+  color: white;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
 }
 
 .buttonAdd {
@@ -164,6 +170,8 @@
   height: 1vh;
   padding: 2vb;
   width: 100%;
+  border-radius: 20px;
+  color: white;
   background-color: #363636;
   border: none;
   &:focus {
@@ -286,6 +294,7 @@ form {
 
 .formFilter {
   display: flex;
+  flex-direction: column;
   padding-left: 1.5vw;
 }
 
@@ -343,6 +352,7 @@ form {
   padding: 7px 12px;
   font-size: 1rem;
   border: none;
+  color: white;
   border-radius: 32.5px;
   background-color: #363636;
   transition: border-color 0.3s ease;

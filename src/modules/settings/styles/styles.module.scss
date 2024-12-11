@@ -70,6 +70,12 @@
   border: none;
   height: 2.5rem;
   border-radius: 20px;
+  padding: 3%;
+  color: white;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
 }
 
 .filterButton {

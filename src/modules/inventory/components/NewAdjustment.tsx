@@ -28,18 +28,19 @@ export const NewAdjustment = () => {
         <Box>
             <header className={styles.header}>
                 <h1 className={styles.title}>Registrar Ajuste</h1>
-                <section className={styles.tableActionsContainerBuscar}>
-                    <div className={styles.tableSearchComponent}>
-                        <input
-                            onChange={(e) => setSearch(e.target.value)}
-                            value={search}
-                            type="text"
-                            className={styles.tableSearchInput}
-                            placeholder="Buscar por nombre..."
-                        />
-                    </div>
-                </section>
             </header>
+            <section className={styles.tableActionsContainer}>
+                <div className={styles.tableSearchComponent}>
+                    <input
+                        onChange={(e) => setSearch(e.target.value)}
+                        value={search}
+                        type="text"
+                        className={styles.tableSearchInput}
+                        placeholder="Buscar por nombre..."
+                    />
+                </div>
+
+            </section>
             <div className={styles.boxContainer}>
                 <ProductFind />
             </div>

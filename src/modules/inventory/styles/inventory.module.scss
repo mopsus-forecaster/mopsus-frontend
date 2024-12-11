@@ -67,7 +67,13 @@
   background-color: $color-gray-dark;
   border: none;
   height: 2.5rem;
+  padding: 2%;
   border-radius: 20px;
+  color: white;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
 }
 
 .boxContainer {
@@ -781,17 +787,10 @@ input:not(:placeholder-shown) + .placeholder {
   cursor: pointer;
 }
 
-.tableSearchInput {
-  width: 60%;
-  background-color: $color-gray-dark;
-  border: none;
-  height: 2.5rem;
-  border-radius: 20px;
-}
-
 .tableSearchComponent {
   width: 65%;
   display: flex;
+  height: 1%;
   gap: 5%;
 }
 

@@ -99,6 +99,12 @@
   border: none;
   height: 2.5rem;
   border-radius: 20px;
+  padding: 3%;
+  color: white;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
 }
 
 .titleBox {
@@ -354,8 +360,13 @@ td:nth-child(5) {
   width: 25%;
   height: 3vh;
   padding: 10px;
+  border-radius: 15px;
   background-color: $color-dark-primary;
   border: none;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
 }
 
 .buttonRegsiter {
@@ -449,6 +460,8 @@ input:not(:placeholder-shown) + .placeholder {
 
 .formFilter {
   display: flex;
+  flex-direction: column;
+  color: white;
   padding-left: 1.5vw;
 }
 
@@ -466,6 +479,7 @@ input:not(:placeholder-shown) + .placeholder {
   border: none;
   border-radius: 32.5px;
   background-color: #363636;
+  color: white;
   transition: border-color 0.3s ease;
 
   &:focus {
