@@ -48,6 +48,7 @@ export const AuthProvider = ({ children }) => {
   const [currentMfaFlow, setCurrentMfaFlow] = useState('');
   const [recoverEmail, setRecoverEmail] = useState('');
   const [recoverPassword, setRecoverPassword] = useState('');
+  const [session, setSession] = useState('');
   const [registerData, setRegisterData] = useState({
     name: '',
     email: '',
@@ -150,6 +151,8 @@ export const AuthProvider = ({ children }) => {
         logout,
         auth,
         handleSetRecoverEmail,
+        session,
+        setSession,
         recoverEmail,
         handlesetPrevRoute,
         prevRoute,

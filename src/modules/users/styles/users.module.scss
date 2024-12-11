@@ -1,0 +1,400 @@
+.header {
+  width: 100%;
+  padding-left: 3%;
+  margin-top: 3%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  color: $color-white;
+  font-weight: bold;
+}
+
+.tableActionsContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-top: 35px;
+  padding: 0 5% 0 3%;
+  justify-content: space-between;
+}
+
+.tableSearchComponent {
+  width: 40%;
+  display: flex;
+  gap: 5%;
+}
+
+.buttonAdd {
+  color: $color-white;
+  background-color: $color-primary;
+  border: 1px solid $color-primary;
+  border-radius: 20px;
+  padding: 0.5% 1.5%;
+  font-weight: 600;
+  transition: all 0.4s;
+}
+
+.buttonAdd:hover {
+  background-color: transparent;
+  border: 1px solid $color-primary;
+}
+
+.successChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #31572c;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 10px;
+}
+
+.successChipText {
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.warningChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ef233c;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 10px;
+}
+
+.tableSearchInput {
+  width: 60%;
+  background-color: $color-gray-dark;
+  border: none;
+  height: 2.5rem;
+  border-radius: 20px;
+}
+
+.chipText {
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.header {
+  width: 100%;
+  padding-left: 3%;
+  margin-top: 3%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  color: $color-white;
+  font-weight: bold;
+}
+
+.productInformationContainer {
+  display: flex;
+  margin-left: 0.5%;
+  align-items: center;
+}
+
+.productInfoTitle {
+  color: $color-white;
+}
+
+.tableActionsContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-top: 35px;
+  padding: 0 5% 0 3%;
+  justify-content: space-between;
+}
+
+.tableSearchComponent {
+  width: 40%;
+  display: flex;
+  gap: 5%;
+}
+
+.filterButton {
+  background-color: $color-gray-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+  color: $color-white;
+  border: none;
+  border-radius: 20px;
+  width: 20%;
+}
+
+.tableSearchInput {
+  width: 60%;
+  background-color: $color-gray-dark;
+  border: none;
+  height: 2.5rem;
+  border-radius: 20px;
+}
+
+.buttonAdd {
+  color: $color-white;
+  background-color: $color-primary;
+  border: 1px solid $color-primary;
+  border-radius: 20px;
+  padding: 0.5% 1.5%;
+  font-weight: 600;
+  transition: all 0.4s;
+}
+
+.buttonAdd:hover {
+  background-color: transparent;
+  border: 1px solid $color-primary;
+}
+
+.tableFooter {
+  width: 95%;
+  height: 5vh;
+  border-top: 1px solid #979797;
+  display: flex;
+  margin: 0 auto;
+  justify-content: end;
+  opacity: 100%;
+}
+
+.paginatorContainer {
+  background-color: #292929;
+  color: #ffff;
+  width: 15rem;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.paginator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(32, 32, 32, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.registerContainer {
+  position: absolute;
+  width: 35vw;
+  height: 90vh;
+  border-radius: 30px;
+  background-color: #282828;
+  overflow-y: auto;
+}
+
+.registerHeading {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5%;
+}
+
+.titleRegister {
+  font-size: 2rem;
+  color: white;
+  margin-left: 5%;
+}
+
+.line {
+  margin: 1.25rem auto;
+  width: 90%;
+  color: white;
+  background-color: white;
+  border: white;
+  height: 0.5px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 0 5%;
+  height: 72.5%;
+}
+
+.formFieldsContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.fieldGroup {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.iconClose {
+  margin-right: 5%;
+
+  cursor: pointer;
+}
+
+.modalLabel {
+  color: white;
+}
+
+.modalInput {
+  width: 95%;
+  padding: 0.25rem 2rem;
+  border-radius: 10px;
+  background-color: #363636;
+  color: #c0c0c0;
+  border: none;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+}
+
+.btn {
+  height: 5vh;
+  color: $color-white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-weight: 600;
+  background-color: $color-primary;
+  border: 1px solid $color-primary;
+  transition:
+    background-color 0.3s,
+    border 0.3s;
+}
+
+.btnRegister {
+  margin-right: 2vw;
+}
+
+.btnRegister:hover {
+  background-color: transparent;
+  border: 1px solid $color-primary;
+}
+
+.btnCancel {
+  background-color: transparent;
+  border: 1px solid $color-primary;
+}
+
+.btnCancel:hover {
+  background-color: $color-primary;
+}
+
+.btnBox {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.error {
+  width: 95%;
+  padding: 0.25rem 2rem;
+  padding: 0.3vh 0.3vw 0.3vw 1vw;
+  margin-bottom: 15px;
+  background-color: rgba(206, 57, 60, 0.6);
+  border: 1px solid #d71d1d;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.rolesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  column-gap: 10%;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.roleContainer {
+  border: 1px solid #888;
+  border-radius: 20px;
+  width: 35%;
+  padding: 1rem;
+  margin-bottom: 5%;
+  height: 40%;
+  transition: all 0.5s;
+  text-align: center;
+}
+
+.roleContainer:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.roleContainer:active {
+  cursor: pointer;
+  transform: scale(0.95);
+}
+
+.roleTile {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 1.25rem;
+}
+
+.roleDescription {
+  color: #c0c0c0;
+  font-size: 1rem;
+}
+
+.activeRole {
+  border: none;
+  border-radius: 20px;
+  width: 35%;
+  padding: 1rem;
+  margin-bottom: 5%;
+  height: 40%;
+
+  transition: all 0.5s;
+  text-align: center;
+  background-color: white;
+}
+
+.activeRole:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.activeRole:active {
+  cursor: pointer;
+  transform: scale(0.95);
+}
+
+.activeTitle {
+  color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 1.25rem;
+}
+.activeDescription {
+  color: #555;
+  font-size: 1rem;
+}

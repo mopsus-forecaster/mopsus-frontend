@@ -6,7 +6,10 @@ import { mopsusIcons } from '../../../icons';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useNavigate } from 'react-router-dom';
 import routes from '../../../router/routes';
-import { forgottenPassword } from '../../../services';
+import {
+  firstAccessPasswordChange,
+  forgottenPassword,
+} from '../../../services';
 import { AuthContext } from '../../../contexts';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import { MfaFlow } from '../../../types';
@@ -48,6 +51,8 @@ export const NewPassword = () => {
     setRecoverPassword,
     handlesetPrevRoute,
     currentMfaFlow,
+    session,
+    recoverEmail,
   } = useContext(AuthContext);
   const navigate = useNavigate();
   const { setShowLoading } = useContext(LoadingContext);
@@ -59,7 +64,52 @@ export const NewPassword = () => {
 
   const { newPassword, newPasswordConfirmation } = form;
   const { handleModalChange, handleOpen } = useContext(ModalContext);
+
+  const handleFirstAccessPasswordChange = async () => {
+    try {
+      setShowLoading(true);
+
+      const response = await firstAccessPasswordChange(
+        recoverEmail,
+        form.newPassword,
+        session
+      );
+      if (response) {
+        handleModalChange({
+          accept: {
+            title: 'Aceptar',
+            action: () => {
+              navigate(`/${routes.login}`);
+            },
+          },
+          title: 'Contraseña actualizada correctamente',
+          message: 'Ya puede dirigirse al login para comenzar a usar Mopsus.',
+        });
+        handleOpen();
+      }
+    } catch (error) {
+      setShowLoading(false);
+      handleModalChange({
+        accept: {
+          title: 'Aceptar',
+          action: () => {},
+        },
+        title: 'Error técnico',
+        message:
+          'Lo sentimos, no pudimos completar su solicitud. Intente más tarde',
+        icon: mopsusIcons.error,
+      });
+      handleOpen();
+    } finally {
+      setShowLoading(false);
+    }
+  };
+
   const handleSetNewPassword = async () => {
+    if (session) {
+      handleFirstAccessPasswordChange();
+      return;
+    }
     try {
       setShowLoading(true);
       const response = await forgottenPassword(email);
@@ -116,9 +166,10 @@ export const NewPassword = () => {
           Ingrese su nueva contraseña
         </p>
       </div>
-      <form onSubmit={onSubmit} action="">
+      <form className={styles.form} onSubmit={onSubmit} action="">
         <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
+            className={styles.input}
             type={showNewPwd ? 'text' : 'password'}
             name="newPassword"
             onChange={handleChange}
@@ -138,6 +189,7 @@ export const NewPassword = () => {
         )}{' '}
         <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
+            className={styles.input}
             type={showNewPwdConfirmation ? 'text' : 'password'}
             name="newPasswordConfirmation"
             onChange={handleChange}

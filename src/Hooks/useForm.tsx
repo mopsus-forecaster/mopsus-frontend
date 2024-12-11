@@ -34,5 +34,6 @@ export const useForm = <T extends object>(
     errors,
     handleChange,
     handleSubmit,
+    setErrors,
   };
 };

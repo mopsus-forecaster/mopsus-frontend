@@ -6,23 +6,26 @@ import { ModalProvider } from '../contexts/modal/ModalContext';
 import { ProductsProvider } from '../contexts/Products/ProductsContext';
 import { SalesProvider } from '../contexts/Sales/SalesContext';
 import { SettingsProvider } from '../contexts/settings/SettingsContext';
+import { UsersProvider } from '../contexts/users/UsersContext';
 
 export const Providers = ({ children }) => {
   return (
     <LoadingProvider>
       <AuthProvider>
-        <ModalProvider>
-          <HomeProvider>
-            <SettingsProvider>
-              <ProductsProvider>
-                <SalesProvider>
-                  <InventoryProvider>{children}</InventoryProvider>
-                </SalesProvider>
-              </ProductsProvider>
-            </SettingsProvider>
-          </HomeProvider>
-        </ModalProvider>
+        <UsersProvider>
+          <ModalProvider>
+            <HomeProvider>
+              <SettingsProvider>
+                <ProductsProvider>
+                  <SalesProvider>
+                    <InventoryProvider>{children}</InventoryProvider>
+                  </SalesProvider>
+                </ProductsProvider>
+              </SettingsProvider>
+            </HomeProvider>
+          </ModalProvider>
+        </UsersProvider>
       </AuthProvider>
-    </LoadingProvider >
+    </LoadingProvider>
   );
 };

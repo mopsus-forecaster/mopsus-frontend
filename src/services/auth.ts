@@ -20,7 +20,7 @@ export const getCategories = async () => {
     verb: 'get',
   });
   return response.data;
-}
+};
 
 export const createUser = async (
   email: string,
@@ -102,6 +102,20 @@ export const blockedUserVerificationCode = async (
       new_password,
       confirmation_code,
     },
+  });
+  return response;
+};
+
+export const firstAccessPasswordChange = async (
+  email: string,
+  password: string,
+  session: string
+) => {
+  const response = await apiClient({
+    api: 'auth',
+    service: '/change_password_required',
+    verb: 'put',
+    dataSend: { session, email, password },
   });
   return response;
 };

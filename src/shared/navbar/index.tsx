@@ -72,6 +72,18 @@ export const Navbar = () => {
           </div>
         </NavLink>
 
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? styles.itemContainerActive : styles.itemContainer
+          }
+          to={`/usuarios`}
+        >
+          <div className={styles.navItem}>
+            <Icon icon={mopsusIcons.user} />
+            <span>Usuarios</span>
+          </div>
+        </NavLink>
+
         <hr />
         <NavLink
           onClick={logout}

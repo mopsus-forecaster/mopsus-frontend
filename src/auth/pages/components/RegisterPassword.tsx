@@ -114,9 +114,10 @@ export const RegisterPassword = () => {
   return (
     <article className={styles.mfaContainer}>
       <LoginCommonHeader title="Registrar Usuario" />
-      <form onSubmit={onSubmit}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
+            className={styles.input}
             type={showPwd ? 'text' : 'password'}
             name="password"
             onChange={handleChange}
@@ -135,6 +136,7 @@ export const RegisterPassword = () => {
 
         <div className={`${styles.inputGroup} ${styles.pointer}`}>
           <input
+            className={styles.input}
             type={showConfirmPwd ? 'text' : 'password'}
             name="passwordConfirmation"
             onChange={handleChange}
