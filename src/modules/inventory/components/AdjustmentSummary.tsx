@@ -22,7 +22,7 @@ export const AdjustmentSummary = () => {
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => {},
+          action: () => { },
         },
         title: 'Datos incompletos',
         message: 'Debe haber almenos un producto agregado.',
@@ -44,7 +44,7 @@ export const AdjustmentSummary = () => {
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => {},
+          action: () => { },
         },
         title: 'Datos incompletos',
         message: `Debe especificar si se realiza un ingreso o egreso y asegurarse de que la cantidad sea mayor a 0 en todos los productos.`,
@@ -78,7 +78,7 @@ export const AdjustmentSummary = () => {
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => {},
+          action: () => { },
         },
         title: 'Error técnico',
         message: 'No pudimos concretar su solicitud. Intente más tarde.',
@@ -149,9 +149,33 @@ export const AdjustmentSummary = () => {
           />
         </div>
         <div className={styles.btnContainer}>
-          <button className={styles.buttonRegsiter} onClick={onSubmit}>
-            Registrar Ajuste
-          </button>
+          <div>
+            <button className={styles.buttonRegsiter} type='submit' onClick={onSubmit}>
+              Registrar Ajuste
+            </button>
+          </div>
+          <div>
+            <button className={styles.btnCancel} type='button' onClick={() => {
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    navigate('/inventario')
+                  },
+                },
+                reject: {
+                  title: 'Cancelar',
+                  action: () => { },
+                },
+                title: `Cancelar el registro del ajuste`,
+                message:
+                  '¿Seguro que desea cancelar el registro del ajuste?',
+              });
+              handleOpen();
+            }}>
+              Cancelar
+            </button>
+          </div>
         </div>
       </div>
     </div>

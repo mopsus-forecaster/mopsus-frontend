@@ -1,16 +1,21 @@
-import { Icon } from '@iconify/react/dist/iconify.js';
+
 import styles from '../styles/products.module.scss';
 import { mopsusIcons } from '../../../icons';
 import { useForm } from '../../../hooks/useForm';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import {
   addProduct,
-  getCategories,
   getUnits,
 } from '../../../services/products';
 import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 import { LoadingContext } from '../../../contexts/loading/LoadingContext';
+import Box from '../../../shared/box';
+import { useNavigate } from 'react-router-dom';
+import { TablelSelect } from './TableSelect';
+import { SettingsContext } from '../../../contexts/settings/SettingsContext';
+
+
 
 interface FormData {
   title: string;
@@ -19,44 +24,17 @@ interface FormData {
   stock: number | string;
   category: string;
   unit: string;
+  brand: string;
+  barcode: string
 }
 
-const validateForm = (form: FormData) => {
-  const errors: Partial<FormData> = {};
-
-  if (!form.category) {
-    errors.category = 'El stock actual es requerido';
-  }
-
-  if (!form.unit) {
-    errors.unit = 'El stock actual es requerido';
-  }
-
-  if (!form.title) {
-    errors.title = 'El nombre del producto es requerido';
-  }
-
-  if (!form.price) {
-    errors.price = 'El precio de venta es requerido';
-  }
-
-  if (!form.reposition_point) {
-    errors.reposition_point = 'El punto de reposición es requerido';
-  }
-
-  if (!form.stock) {
-    errors.stock = 'El stock actual es requerido';
-  }
-
-  return errors;
-};
-
-export const NewProduct = ({ isOpenNewProduct, onClose }) => {
+export const NewProduct = () => {
   const { getProducts } = useContext(ProductsContext);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const { setShowLoading } = useContext(LoadingContext);
+  const navigate = useNavigate()
 
-  const { form, errors, handleChange } = useForm<FormData>(
+  const { form, handleChange } = useForm<FormData>(
     {
       title: '',
       price: '',
@@ -64,24 +42,82 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
       stock: '',
       category: '',
       unit: '',
-    },
-    validateForm
+      brand: '',
+      barcode: '',
+    }
   );
+  const [isCategories, setIsCategories] = useState(false)
+  const [isBrand, setIsBrand] = useState(false)
+  const [isUnits, setIsUnits] = useState(false)
 
-  const [categories, setCategories] = useState([]);
-  const [units, setUnits] = useState([]);
+  const [unidades, setUnidades] = useState([])
+
+  const [isLoadingUnits, setIsLoadingUnits] = useState(false);
+  const totalCountUnits = useState(5)
+  const totalPagesUnits = useState(1)
+
+  const {
+    setFiltersBrand,
+    setFiltersCat,
+    setMappedCategory,
+    setMappedBrand,
+    isLoadingBrand,
+    isLoadingCat,
+    totalPagesBrand,
+    totalPagesCategory,
+    totalCountBrand,
+    totalCountCat,
+    mappedCategory,
+    mappedBrand,
+    setMappedUnits
+  } = useContext(SettingsContext)
+
+
+  const {
+    categorySelect,
+    brandSelect,
+    unitSelect,
+    handleNotSelectSetting,
+    categorySelectName,
+    brandSelectName,
+    unitSelectName
+  } = useContext(ProductsContext)
+  const [selectionError, setSelectionError] = useState('');
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (!form.title) {
+      setSelectionError('El nombre del producto es requerido');
+      return
+    }
+
+    if (!form.price) {
+      setSelectionError('El precio de venta es requerido');
+      return
+    }
+
+    if (!form.reposition_point) {
+      setSelectionError('El punto de reposición es requerido');
+      return
+    }
+
+    if (!categorySelect || !unitSelect || !brandSelect) {
+      setSelectionError('Debe seleccionar una categoría, una unidad y una marca.');
+      return;
+    }
+
     try {
       setShowLoading(true);
+      console.log(unitSelect, categorySelect, brandSelect)
       const res = await addProduct(
         form.title,
         form.price,
         form.reposition_point,
         form.stock,
-        form.unit,
-        form.category
+        unitSelect,
+        categorySelect,
+        brandSelect,
+        form.barcode
       );
 
       if (res) {
@@ -90,8 +126,9 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
           accept: {
             title: 'Aceptar',
             action: () => {
-              onClose();
               getProducts();
+              navigate('/productos')
+              handleNotSelectSetting()
             },
           },
           title: 'Producto registrado con éxito',
@@ -131,202 +168,251 @@ export const NewProduct = ({ isOpenNewProduct, onClose }) => {
       }
     }
   };
+  const handleCloseNewProduct = (e) => {
+    e.preventDefault();
+    handleNotSelectSetting()
+    navigate('/productos')
+  }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setShowLoading(true);
+  const handleCategories = () => {
+    setIsCategories(true)
+    setIsBrand(false)
+    setIsUnits(false)
+  }
 
-      try {
-        await Promise.all([getCategoriesOptions(), getUnitsOptions()]);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setShowLoading(false);
+  const handleBrand = () => {
+    setIsCategories(false)
+    setIsBrand(true)
+    setIsUnits(false)
+  }
+
+  const getOptions = async () => {
+    setIsLoadingUnits(true)
+    try {
+      const { unidades } = await getUnits();
+      if (unidades) {
+        setUnidades(unidades);
+        setIsLoadingUnits(false)
       }
-    };
-
-    const getCategoriesOptions = async () => {
-      try {
-        const { categorias } = await getCategories();
-        if (categorias) {
-          setCategories(categorias);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const getUnitsOptions = async () => {
-      try {
-        const { unidades } = await getUnits();
-        if (unidades) {
-          setUnits(unidades);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const handleUnits = async () => {
+    setIsCategories(false)
+    setIsBrand(false)
+    setIsUnits(true)
+    getOptions()
+  }
 
   return (
-    <div className={styles.modal}>
-      <div className={styles.registerContainer}>
-        <div className={styles.modalContents}>
-          <Icon
-            fontSize={25}
-            icon={mopsusIcons.closeModal}
-            className={styles.iconClose}
-            onClick={onClose}
-          />
-          <h2 className={styles.titleRegister}>Registrar Producto</h2>
-          <hr className={styles.lineTable} />
+    <Box>
+      <header className={styles.header}>
+        <h2 className={styles.title}>Registrar Producto</h2>
+      </header>
+      <div className={styles.sectionContainer}>
+        <section className={styles.formProduct}>
           <form onSubmit={onSubmit}>
-            <div>
-              <div>
-                <label htmlFor="category" className={styles.modalLabel}>
-                  Categorías
-                </label>
-                <select
-                  onChange={handleChange}
-                  value={form.category}
-                  name="category"
-                  id="category"
-                  className={styles.select}
-                  required
-                >
-                  <option value="" disabled>
-                    Selecciona una categoría
-                  </option>
-                  {categories.length > 0 ? (
-                    categories.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))
-                  ) : (
-                    <option value="" disabled>
-                      No hay categorías disponibles
-                    </option>
-                  )}
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="unit" className={styles.modalLabel}>
-                  Unidades
-                </label>
-                <select
-                  name="unit"
-                  id="unit"
-                  value={form.unit}
-                  onChange={handleChange}
-                  className={styles.select}
-                  required
-                >
-                  <option value="" disabled>
-                    Selecciona una unidad
-                  </option>
-                  {units.length > 0 ? (
-                    units.map((unit) => (
-                      <option key={unit.id} value={unit.id}>
-                        {unit.name} - {unit.description}
-                      </option>
-                    ))
-                  ) : (
-                    <option value="" disabled>
-                      No hay unidades disponibles
-                    </option>
-                  )}
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="title" className={styles.modalLabel}>
-                  Nombre del producto
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  className={styles.modalInput}
-                  value={form.title}
-                  onChange={handleChange}
-                  required
-                />
-                {errors.title && <p className={styles.error}>{errors.title}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="price" className={styles.modalLabel}>
-                  Precio de venta
-                </label>
-                <input
-                  type="number"
-                  name="price"
-                  className={styles.modalInput}
-                  min="0"
-                  step="0.01"
-                  value={form.price}
-                  onChange={handleChange}
-                  required
-                />
-                {errors.price && <p className={styles.error}>{errors.price}</p>}
-              </div>
-
-              <div>
-                <label htmlFor="reposition_point" className={styles.modalLabel}>
-                  Punto de reposición
-                </label>
-                <input
-                  type="number"
-                  name="reposition_point"
-                  className={styles.modalInput}
-                  min="0"
-                  value={form.reposition_point}
-                  onChange={handleChange}
-                  required
-                />
-                {errors.reposition_point && (
-                  <p className={styles.error}>{errors.reposition_point}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="stock" className={styles.modalLabel}>
-                  Stock actual
-                </label>
-                <input
-                  type="number"
-                  name="stock"
-                  className={styles.modalInput}
-                  min="0"
-                  value={form.stock}
-                  onChange={handleChange}
-                  required
-                />
-                {errors.stock && <p className={styles.error}>{errors.stock}</p>}
-              </div>
-
-              <div className={styles.btnBox}>
-                <button
-                  type="submit"
-                  className={`${styles.btn} ${styles.btnRegister}`}
-                >
-                  Registrar Producto
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.btn} ${styles.btnCancel}`}
-                  onClick={onClose}
-                >
-                  Cancelar
-                </button>
-              </div>
+            <div className={styles.infoProduct}>
+              <label htmlFor="title" className={styles.modalLabel}>
+                Nombre del producto
+              </label>
+              <input
+                type="text"
+                name="title"
+                className={styles.modalInput}
+                value={form.title}
+                onChange={handleChange}
+              />
             </div>
+
+            <div className={styles.infoProduct}>
+              <label htmlFor="price" className={styles.modalLabel}>
+                Precio de venta (ARS)
+              </label>
+              <input
+                type="number"
+                name="price"
+                className={styles.modalInput}
+                min="0"
+                step="0.01"
+                value={form.price}
+                onChange={handleChange}
+
+              />
+            </div>
+
+            <div className={styles.infoProduct}>
+              <label htmlFor="reposition_point" className={styles.modalLabel}>
+                Punto de reposición
+              </label>
+              <input
+                type="number"
+                name="reposition_point"
+                className={styles.modalInput}
+                min="0"
+                value={form.reposition_point}
+                onChange={handleChange}
+
+              />
+            </div>
+
+            <div className={styles.infoProduct}>
+              <label htmlFor="stock" className={styles.modalLabel}>
+                Stock actual
+              </label>
+              <input
+                type="number"
+                name="stock"
+                className={styles.modalInput}
+                min="0"
+                value={form.stock}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={styles.infoProduct}>
+              <label htmlFor="barcode" className={styles.modalLabel}>
+                Codigo de Barra
+              </label>
+              <input
+                type="text"
+                name="barcode"
+                className={styles.modalInput}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={styles.selectContainer}>
+
+              <div className={styles.infoProductSelectContainer}>
+                <div className={styles.optionSelect}>
+                  <p style={{ color: '#fff', marginTop: '8px' }}>
+                    Categoría seleccionada:
+                  </p>
+                  {categorySelect && (
+                    <strong style={{ color: '#fff', marginTop: '8px' }}>{categorySelectName}</strong>
+                  )}
+                </div>
+
+                <div className={styles.infoProductSelect}>
+                  <button className={categorySelect ? ` ${styles.btnS} ` : `${styles.btnSelect}`} type='button' onClick={handleCategories}> Seleccionar Categoría</button>
+
+                </div>
+              </div>
+
+              <div className={styles.infoProductSelectContainer}>
+                <div className={styles.optionSelect}>
+                  <p style={{ color: '#fff', marginTop: '8px' }}>
+                    Unidad seleccionada:
+                  </p>
+                  {unitSelect && (
+                    <strong style={{ color: '#fff', marginTop: '8px' }}>{unitSelectName}</strong>
+                  )}
+                </div>
+                <div className={styles.infoProductSelect}>
+
+                  <button className={unitSelect ? ` ${styles.btnS} ` : `${styles.btnSelect}`} type='button' onClick={handleUnits}> Seleccionar Unidad</button>
+                </div>
+              </div>
+
+              <div className={styles.infoProductSelectContainer}>
+                <div className={styles.optionSelect}>
+                  <p style={{ color: '#fff', marginTop: '8px' }}>
+                    Marca seleccionada:
+                  </p>
+                  {brandSelect && (
+                    <strong style={{ color: '#fff', marginTop: '8px' }}>{brandSelectName}</strong>
+                  )}
+                </div>
+                <div className={styles.infoProductSelect}>
+                  <button className={brandSelect ? ` ${styles.btnS} ` : `${styles.btnSelect}`} type='button' onClick={handleBrand}> Seleccionar Marca</button>
+                </div>
+              </div>
+
+              {selectionError && (
+                <p className={styles.error}>{selectionError}</p>
+              )}
+
+            </div>
+            <div className={styles.btnBox}>
+              <button
+                type="submit"
+                className={`${styles.btn} ${styles.btnRegister}`}
+              >
+                Registrar Producto
+              </button>
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.btnCancel}`}
+                onClick={handleCloseNewProduct}
+              >
+                Cancelar
+              </button>
+            </div>
+
+
           </form>
-        </div>
+        </section>
+        <section className={styles.selectOptions}>
+          {
+            isCategories && (
+              <TablelSelect
+                title={'Categorías'}
+                isLoading={isLoadingCat}
+                set={setMappedCategory}
+                totalPage={totalPagesCategory}
+                totalCount={totalCountCat}
+                setFilters={setFiltersCat}
+                rows={mappedCategory}
+                filter={() => { }}
+                select={categorySelect}
+                buscador={true}
+              />
+            )
+
+          }
+
+          {
+            isBrand && (
+              <TablelSelect
+                title={'Marcas'}
+                isLoading={isLoadingBrand}
+                set={setMappedBrand}
+                totalPage={totalPagesBrand}
+                totalCount={totalCountBrand}
+                setFilters={setFiltersBrand}
+                rows={mappedBrand}
+                filter={() => { }}
+                select={brandSelect}
+                buscador={true}
+              />
+            )
+          }
+          {
+            isUnits && (
+              <TablelSelect
+                title={'Unidades'}
+                isLoading={isLoadingUnits}
+                set={setMappedUnits}
+                totalPage={totalPagesUnits}
+                totalCount={totalCountUnits}
+                setFilters={() => { }}
+                rows={unidades}
+                filter={() => { }}
+                select={unitSelect}
+                buscador={false}
+              />
+            )
+          }
+          {
+            !(isCategories || isBrand || isUnits) && (
+              <div>Debe seleccionar alguna categoría, unidad o marca</div>
+            )
+          }
+        </section>
       </div>
-    </div>
+
+    </Box >
   );
 };

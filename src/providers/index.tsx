@@ -15,13 +15,13 @@ export const Providers = ({ children }) => {
         <UsersProvider>
           <ModalProvider>
             <HomeProvider>
-              <ProductsProvider>
-                <SalesProvider>
-                  <SettingsProvider>
+              <SettingsProvider>
+                <ProductsProvider>
+                  <SalesProvider>
                     <InventoryProvider>{children}</InventoryProvider>
-                  </SettingsProvider>
-                </SalesProvider>
-              </ProductsProvider>
+                  </SalesProvider>
+                </ProductsProvider>
+              </SettingsProvider>
             </HomeProvider>
           </ModalProvider>
         </UsersProvider>

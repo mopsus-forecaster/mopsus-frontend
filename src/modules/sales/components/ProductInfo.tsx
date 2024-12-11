@@ -5,16 +5,30 @@ import { useContext } from 'react';
 import { SaleContext } from '../../../contexts/Sales/SalesContext';
 
 export const ProductInfo = ({ producto }) => {
-    const { productName, price, measureUnitDescription, stock } = producto;
+    const { productName, price, measureUnitDescription, stock, brand, barcode } = producto;
+    console.log(producto)
     const { addProductToSale } = useContext(SaleContext)
 
 
     return (
         <div className={styles.productInfoContainer}>
             <div className={styles.productInfo}>
-                <p className={styles.infoName}>{productName}</p>
+                <div className={styles.info}>
+                    <div>
+                        <p className={styles.infoName}>{productName}</p>
+                    </div>
+                    <div>
+                        {
+                            barcode && (
+                                <p>Codigo: {barcode}</p>
+                            )
+                        }
+                    </div>
+                </div>
+
                 <p className={styles.infoUnit}>Unidad: {measureUnitDescription}</p>
                 <p className={styles.infoUnit}>Stock: {stock}</p>
+                <p className={styles.infoUnit}>Marca: {brand}</p>
             </div>
             <div className={styles.priceButtonContainer}>
                 <p className={styles.priceInfo}>$ {price}</p>

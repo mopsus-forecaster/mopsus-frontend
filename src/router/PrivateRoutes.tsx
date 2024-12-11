@@ -8,6 +8,8 @@ import { NewSale } from '../modules/sales/components/NewSale';
 import { NewAdjustment } from '../modules/inventory/components/NewAdjustment';
 import { SettingsPage } from '../modules/settings/pages/SettingsPage';
 import { Users } from '../modules/users/pages/Users';
+import { NewProduct } from '../modules/products/components';
+import { ModifyProduct } from '../modules/products/components/ModifyProduct';
 export const PrivateRoutes = () => {
   return (
     <section className={styles.layout}>
@@ -22,6 +24,12 @@ export const PrivateRoutes = () => {
         </Route>
         <Route element={<RequireAuth />}>
           <Route path="productos" element={<ProductsPage />} />
+          <Route>
+            <Route path="nuevo-producto" element={<NewProduct />} />
+          </Route>
+          <Route>
+            <Route path="modificar-producto" element={<ModifyProduct />} />
+          </Route>
         </Route>
         <Route element={<RequireAuth />}>
           <Route path="inventario" element={<Inventory />} />

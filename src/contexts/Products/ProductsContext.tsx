@@ -8,6 +8,8 @@ import {
 import { ModalContext } from '../modal/ModalContext';
 import { mopsusIcons } from '../../icons';
 import { LoadingContext } from '../loading/LoadingContext';
+import { SettingsContext } from '../settings/SettingsContext';
+import { useNavigate } from 'react-router-dom';
 
 export const ProductsContext = createContext(null);
 
@@ -30,7 +32,51 @@ export const ProductsProvider = ({ children }) => {
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const [editProduct, setEditProduct] = useState(null);
   const { setShowLoading } = useContext(LoadingContext);
+  const [categorySelect, setCategorySelect] = useState(null);
+  const [categorySelectName, setCategorySelectName] = useState(null);
+  const [brandSelectName, setBrandSelectName] = useState(null);
+  const [brandSelect, setBrandSelect] = useState(null);
+  const [unitSelectName, setUnitSelectName] = useState(null);
+  const [unitSelect, setUnitSelect] = useState(null);
+  const navigate = useNavigate()
+  const {
+    getCategory,
+    getBrand
+  } = useContext(SettingsContext)
 
+  const handleSelectSetting = async (title, settings) => {
+    if (title === 'Categorías') {
+      setCategorySelect(settings.id)
+      setCategorySelectName(settings.name)
+      getCategory()
+    }
+    if (title === 'Marcas') {
+      setBrandSelect(settings.id)
+      setBrandSelectName(settings.name)
+      getBrand()
+    }
+    if (title === 'Unidades') {
+      setUnitSelect(settings.id)
+      setUnitSelectName(settings.name)
+    }
+  }
+
+  const handleNotSelectSetting = async (title) => {
+    if (title === 'Categorías') {
+      setCategorySelect(null)
+      setCategorySelectName(null)
+      getCategory()
+    }
+    if (title === 'Marcas') {
+      setBrandSelectName(null)
+      setBrandSelect(null)
+      getBrand()
+    }
+    if (title === 'Unidades') {
+      setUnitSelectName(null)
+      setUnitSelect(null)
+    }
+  }
   const getProducts = async (customFilters?) => {
     try {
       setIsLoading(true);
@@ -48,9 +94,13 @@ export const ProductsProvider = ({ children }) => {
           stock: product.stock,
           repositionPoint: product.reposition_point,
           category: product.categoria,
+          categoryId: product.id_categoria,
           state: product.is_active ? 'Activo' : 'Inactivo',
-          idCategory: product.id_categoria,
+          brandId: product.id_brand,
+          brand: product.brand,
+          barcode: product.barcode
         }));
+        console.log(mapped)
         if (total_count) {
           setTotalCount(total_count);
         }
@@ -93,7 +143,10 @@ export const ProductsProvider = ({ children }) => {
           price: product.price,
           stock: product.stock,
           repositionPoint: product.reposition_point,
+          categoryId: product.id_categoria,
           category: product.categoria,
+          brand: product.brand,
+          brandId: product.id_brand,
           state: product.is_active ? 'Activo' : 'Inactivo',
         }));
         setMappedProducts(mapped);
@@ -150,7 +203,14 @@ export const ProductsProvider = ({ children }) => {
       setEditProduct(null);
       return;
     }
+    setBrandSelect(product.brandId)
+    setBrandSelectName(product.brand)
+    setCategorySelect(product.categoryId)
+    setCategorySelectName(product.category)
+    setUnitSelect(product.measureUnitId)
+    setUnitSelectName(product.measureUnitDescription)
     setEditProduct(product);
+    navigate('/modificar-producto')
   };
 
   const deleteProductFromTable = (productToDelete) => {
@@ -263,6 +323,14 @@ export const ProductsProvider = ({ children }) => {
         editProduct,
         getProductsAll,
         totalCount,
+        handleSelectSetting,
+        categorySelect,
+        brandSelect,
+        unitSelect,
+        handleNotSelectSetting,
+        categorySelectName,
+        brandSelectName,
+        unitSelectName
       }}
     >
       {children}

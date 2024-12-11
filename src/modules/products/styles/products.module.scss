@@ -25,14 +25,15 @@
 .tableActionsContainer {
   width: 100%;
   display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   margin-top: 35px;
   padding: 0 5% 0 3%;
-  justify-content: space-between;
 }
 
 .tableSearchComponent {
-  width: 40%;
+  width: 50%;
   display: flex;
   gap: 5%;
 }
@@ -150,11 +151,19 @@
   color: white;
 }
 
+.infoProduct {
+  width: 100%;
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
 .modalInput {
   margin: 2vh 0;
+  font-size: 0.9rem;
+  height: 1vh;
   padding: 2vb;
-  width: 25vw;
-  height: 4vh;
+  width: 100%;
   background-color: #363636;
   border: none;
   &:focus {
@@ -164,7 +173,7 @@
 }
 
 form {
-  margin-top: 4vh;
+  margin-top: 1vh;
 }
 
 .btn {
@@ -181,6 +190,28 @@ form {
     border 0.3s;
 }
 
+.btnSelect {
+  position: relative;
+  height: 4vh;
+  color: $color-white;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  width: 9vw;
+  background-color: $color-primary;
+  border: 1px solid $color-primary;
+  transition:
+    background-color 0.3s,
+    border 0.3s;
+}
+
+.btnSelect:hover {
+  background-color: transparent;
+}
+
+.labelBtnContainer {
+  display: flex;
+  justify-content: left;
+}
 .btnRegister {
   margin-right: 2vw;
 }
@@ -206,7 +237,7 @@ form {
 }
 
 .error {
-  width: 25vw;
+  width: 100%;
   height: 3vh;
   padding: 0.3vh 0.3vw 0.3vw 1vw;
   margin-bottom: 15px;
@@ -218,7 +249,7 @@ form {
 }
 
 .select {
-  width: 25vw;
+  width: 100%;
   margin: 15px 0px;
   padding: 7px 12px;
   font-size: 1rem;
@@ -337,4 +368,79 @@ form {
     outline: none;
     box-shadow: 0 0 5px $color-primary;
   }
+}
+
+.formProduct {
+  width: 50%;
+  padding: 0 1% 1% 1%;
+  margin: 1%;
+  border-radius: 15px;
+  background-color: $box-background-color;
+}
+
+.selectOptions {
+  width: 50%;
+  padding: 1%;
+  margin: 1%;
+  flex-direction: column;
+  border-radius: 15px;
+  background-color: $box-background-color;
+}
+
+.sectionContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.infoProductSelectContainer {
+  width: 100%;
+  margin: 2% 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selectContainer {
+  width: 100%;
+}
+
+.tableActionsContainertable {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin: 0 0 40px 20px;
+}
+.optionSelect {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.btnS {
+  position: relative;
+  height: 4vh;
+  color: $color-white;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  width: 9vw;
+  background-color: transparent;
+  border: 1px solid $color-primary;
+  transition:
+    background-color 0.3s,
+    border 0.3s;
+}
+
+.btnS:hover {
+  background-color: $color-primary;
+}
+
+.title2 {
+  color: white;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  font-size: 1.3rem;
+  margin: 4vh 0;
 }

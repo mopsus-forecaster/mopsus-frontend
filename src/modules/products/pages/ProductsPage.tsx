@@ -13,6 +13,7 @@ import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 import { productsTableColumns } from '../data/productsColumns';
 import { ProductFilters } from '../components/ProductFilters';
 import { MapProductTables } from '../utils/product-table-mapper';
+import { useNavigate } from 'react-router-dom';
 
 export const ProductsPage = () => {
   const {
@@ -38,10 +39,11 @@ export const ProductsPage = () => {
   const [categories, setCategories] = useState([]);
   const [units, setUnits] = useState([]);
   const [firstLoad, setFirstLoad] = useState(true);
+  const navigate = useNavigate()
 
-  const handleOpenNewProduct = (e) => {
+  const handleNewProduct = (e) => {
     e.preventDefault();
-    setIsOpenNewProduct(true);
+    navigate('/nuevo-producto')
   };
 
   const handleOpenFilter = (e) => {
@@ -117,7 +119,7 @@ export const ProductsPage = () => {
             onChange={(e) => setSearch(e.target.value)}
             value={search}
             className={styles.tableSearchInput}
-            placeholder="Buscar por nombre"
+            placeholder="Buscar por nombre o código de barra..."
             type="text"
           />
           <button className={styles.filterButton} onClick={handleOpenFilter}>
@@ -125,7 +127,7 @@ export const ProductsPage = () => {
             Filtros
           </button>
         </div>
-        <button className={styles.buttonAdd} onClick={handleOpenNewProduct}>
+        <button className={styles.buttonAdd} onClick={handleNewProduct}>
           Agregar producto
         </button>
       </section>
@@ -146,12 +148,6 @@ export const ProductsPage = () => {
         totalElements={totalCount}
       />
 
-      {isOpenNewProduct && (
-        <NewProduct
-          isOpenNewProduct={isOpenNewProduct}
-          onClose={() => setIsOpenNewProduct(false)}
-        />
-      )}
 
       {isOpenFilter && (
         <Filter
@@ -176,12 +172,6 @@ export const ProductsPage = () => {
         </Filter>
       )}
 
-      {editProduct && (
-        <ModifyProduct
-          editProduct={editProduct}
-          setEditProduct={handleSetProductToEdit}
-        />
-      )}
     </Box>
   );
 };

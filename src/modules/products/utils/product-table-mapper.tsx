@@ -65,6 +65,8 @@ export const MapProductTables = (product) => {
     repositionPoint: product.repositionPoint,
     category: product.category,
     state: product.state === 'Activo' ? 'Activo' : 'Inactivo',
+    brand: product.brand,
+    barcode: product.barcode,
     options,
   };
 };

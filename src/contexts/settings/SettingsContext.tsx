@@ -29,12 +29,15 @@ export const SettingsProvider = ({ children }) => {
   const [editOptionCat, setEditOptionCat] = useState(null)
   const [editOptionBrand, setEditOptionBrand] = useState(null)
   const { setShowLoading } = useContext(LoadingContext);
+  const [mappedUnits, setMappedUnits] = useState([])
 
 
   const getCategory = async (customFilters?) => {
     try {
       setIsLoadingCat(true);
-      const { categories, total_pages, total_count } = await getCategories(customFilters);
+      const { categories, total_pages, total_count } = await getCategories(
+        customFilters ? customFilters : filtersCat
+      );
       if (categories) {
         const mapped = categories.map((category) => ({
           id: category.id,
@@ -59,8 +62,7 @@ export const SettingsProvider = ({ children }) => {
   const getBrand = async (customFilters?) => {
     try {
       setIsLoadingBrand(true);
-      const { marcas, total_pages, total_count } = await getBrands(customFilters);
-      console.log(marcas)
+      const { marcas, total_pages, total_count } = await getBrands(customFilters ? customFilters : filtersBrand);
 
       if (marcas) {
         const mapped = marcas.map((marca) => ({
@@ -153,7 +155,7 @@ export const SettingsProvider = ({ children }) => {
                 accept: {
                   title: 'Aceptar',
                   action: () => {
-                    getCategory(INITIAL_FILTERS);
+                    getCategory();
                   },
                 },
                 title: `"${optionToDelete.name}" dado de baja exitosamente`,
@@ -244,7 +246,7 @@ export const SettingsProvider = ({ children }) => {
                 accept: {
                   title: 'Aceptar',
                   action: () => {
-                    getCategory(INITIAL_FILTERS);
+                    getCategory();
                   },
                 },
                 title: `"${settingToReactivate.name}" dado de alta exitosamente`,
@@ -290,7 +292,7 @@ export const SettingsProvider = ({ children }) => {
                 accept: {
                   title: 'Aceptar',
                   action: () => {
-                    getBrand(INITIAL_FILTERS);
+                    getBrand();
                   },
                 },
                 title: `"${settingToReactivate.name}" dado de alta exitosamente`,
@@ -354,7 +356,9 @@ export const SettingsProvider = ({ children }) => {
         setEditOptionBrand,
         reactivateSettingFromTableCat,
         reactivateSettingFromTableBrand,
-        handleSetOptionToEditCat
+        handleSetOptionToEditCat,
+        mappedUnits,
+        setMappedUnits,
       }}
     >
       {children}
