@@ -330,7 +330,8 @@ export const ProductsProvider = ({ children }) => {
         handleNotSelectSetting,
         categorySelectName,
         brandSelectName,
-        unitSelectName
+        unitSelectName,
+        setEditProduct
       }}
     >
       {children}

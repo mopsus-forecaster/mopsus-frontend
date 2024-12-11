@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import styles from '../styles/products.module.scss';
 import { mopsusIcons } from '../../../icons';
-import { Icon } from '@iconify/react/dist/iconify.js';
 import { useForm } from '../../../hooks';
 import {
-  getCategories,
   getUnits,
   onEditProduct,
 } from '../../../services/products';
@@ -30,7 +28,7 @@ interface FormData {
 export const ModifyProduct = () => {
   const { getProducts, editProduct } = useContext(ProductsContext);
   console.log(editProduct)
-  const { form, errors, handleChange, handleSubmit } = useForm<FormData>({
+  const { form, errors, handleChange } = useForm<FormData>({
     title: editProduct.productName,
     price: editProduct.price,
     reposition_point: editProduct.repositionPoint,
@@ -40,8 +38,6 @@ export const ModifyProduct = () => {
     brand: editProduct.brand,
     barcode: editProduct.barcode,
   });
-  const [categories, setCategories] = useState([]);
-  const [units, setUnits] = useState([]);
   const { handleModalChange, handleOpen } = useContext(ModalContext);
 
   const {
@@ -72,7 +68,6 @@ export const ModifyProduct = () => {
     categorySelectName,
     brandSelectName,
     unitSelectName,
-    setEditProduct
   } = useContext(ProductsContext)
   const navigate = useNavigate()
   const [unidades, setUnidades] = useState([])
@@ -129,7 +124,6 @@ export const ModifyProduct = () => {
                     getProducts();
                     navigate('/productos')
                     handleNotSelectSetting()
-                    setEditProduct()
                   },
                 },
                 title: `${form.title} editado exitósamente`,
@@ -138,7 +132,7 @@ export const ModifyProduct = () => {
               });
               handleOpen();
             }
-          } catch ({ errors }) {
+          } catch ({ erraors }) {
             setShowLoading(false);
 
             switch (errors[0].status) {
@@ -280,6 +274,7 @@ export const ModifyProduct = () => {
                 min="0"
                 value={form.stock}
                 onChange={handleChange}
+                readOnly
               />
             </div>
 
