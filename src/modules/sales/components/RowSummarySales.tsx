@@ -1,12 +1,13 @@
 import { Icon } from '@iconify/react/dist/iconify.cjs';
 import styles from '../styles/sales.module.scss'
+import stylesInventory from '../../inventory/styles/inventory.module.scss'
 import { mopsusIcons } from '../../../icons';
 import { useContext } from 'react';
 import { SaleContext } from '../../../contexts/Sales/SalesContext';
 
 export const RowSummarySales = ({ product }) => {
     const { productName, price, category, quantity } = product;
-    const { increaseProductQuantity, decreaseProductQuantity, removeProductFromSale } = useContext(SaleContext)
+    const { increaseProductQuantity, decreaseProductQuantity, removeProductFromSale, productQuantity } = useContext(SaleContext)
     const subtotal = price * quantity;
 
     return (
@@ -18,11 +19,13 @@ export const RowSummarySales = ({ product }) => {
 
                 <td className={styles.category}>$ {price}</td>
                 <td className={styles.category}>
-                    <div>
-                        <button className={styles.circleBtn} onClick={() => decreaseProductQuantity(product.id)}><Icon icon={mopsusIcons.guion} /></button>
-                        {quantity}
-                        <button className={styles.circleBtn} onClick={() => increaseProductQuantity(product.id)}><Icon icon={mopsusIcons.plus} /></button>
-                    </div>
+                    <input
+                        type="number"
+                        className={stylesInventory.inputQuantity}
+                        min={1}
+                        defaultValue={1}
+                        onChange={(e) => productQuantity(product.id, e.target.value)}
+                    />
                 </td>
                 <td className={styles.category}>$ {subtotal}</td>
                 <td className={styles.category}>

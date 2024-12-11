@@ -102,7 +102,7 @@ export const NewOption = ({ titleModal, onClose, endPoint, title }) => {
                         className={styles.iconClose}
                         onClick={onClose}
                     />
-                    <h2 className={styles.titleRegister}>Registrar {titleModal}</h2>
+                    <h2 className={styles.titleRegister}>Registrar {title}</h2>
                     <hr className={styles.line2} />
                     <form onSubmit={onSubmit}>
                         <div>
@@ -124,7 +124,7 @@ export const NewOption = ({ titleModal, onClose, endPoint, title }) => {
 
                             <div>
                                 <label htmlFor="description" className={styles.modalLabel}>
-                                    Descripcion
+                                    Descripción
                                 </label>
                                 <input
                                     type="text"
@@ -141,7 +141,7 @@ export const NewOption = ({ titleModal, onClose, endPoint, title }) => {
                                     type="submit"
                                     className={`${styles.btn} ${styles.btnRegister}`}
                                 >
-                                    Registrar {titleModal}
+                                    Registrar {title}
                                 </button>
                                 <button
                                     type="button"

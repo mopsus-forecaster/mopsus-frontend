@@ -13,13 +13,13 @@ export const Providers = ({ children }) => {
       <AuthProvider>
         <ModalProvider>
           <HomeProvider>
-            <ProductsProvider>
-              <SalesProvider>
-                <SettingsProvider>
+            <SettingsProvider>
+              <ProductsProvider>
+                <SalesProvider>
                   <InventoryProvider>{children}</InventoryProvider>
-                </SettingsProvider>
-              </SalesProvider>
-            </ProductsProvider>
+                </SalesProvider>
+              </ProductsProvider>
+            </SettingsProvider>
           </HomeProvider>
         </ModalProvider>
       </AuthProvider>

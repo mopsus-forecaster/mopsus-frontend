@@ -11,6 +11,10 @@ import {
 import { ModalContext } from '../../../contexts/modal/ModalContext';
 import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 import { LoadingContext } from '../../../contexts/loading/LoadingContext';
+import Box from '../../../shared/box';
+import { SettingsContext } from '../../../contexts/settings/SettingsContext';
+import { TablelSelect } from './TableSelect';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   title: string;
@@ -19,81 +23,100 @@ interface FormData {
   stock: number | string;
   category: string;
   unit: string;
+  brand: string;
+  barcode: string;
 }
 
-export const ModifyProduct = ({ editProduct, setEditProduct }) => {
+export const ModifyProduct = () => {
+  const { getProducts, editProduct } = useContext(ProductsContext);
+  console.log(editProduct)
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>({
     title: editProduct.productName,
     price: editProduct.price,
     reposition_point: editProduct.repositionPoint,
     stock: editProduct.stock,
-    category: editProduct.idCategory,
-    unit: editProduct.measureUnitId,
+    category: editProduct.category,
+    unit: editProduct.measureUnitDescription,
+    brand: editProduct.brand,
+    barcode: editProduct.barcode,
   });
   const [categories, setCategories] = useState([]);
   const [units, setUnits] = useState([]);
   const { handleModalChange, handleOpen } = useContext(ModalContext);
-  const { getProducts } = useContext(ProductsContext);
+
+  const {
+    setFiltersBrand,
+    setFiltersCat,
+    setMappedCategory,
+    setMappedBrand,
+    isLoadingBrand,
+    isLoadingCat,
+    totalPagesBrand,
+    totalPagesCategory,
+    totalCountBrand,
+    totalCountCat,
+    mappedCategory,
+    mappedBrand,
+    setMappedUnits
+  } = useContext(SettingsContext)
+
+  const [isCategories, setIsCategories] = useState(false)
+  const [isBrand, setIsBrand] = useState(false)
+  const [isUnits, setIsUnits] = useState(false)
+  const [selectionError, setSelectionError] = useState('');
+  const {
+    categorySelect,
+    brandSelect,
+    unitSelect,
+    handleNotSelectSetting,
+    categorySelectName,
+    brandSelectName,
+    unitSelectName,
+    setEditProduct
+  } = useContext(ProductsContext)
+  const navigate = useNavigate()
+  const [unidades, setUnidades] = useState([])
+  const [isLoadingUnits, setIsLoadingUnits] = useState(false);
+  const totalCountUnits = useState(5)
+  const totalPagesUnits = useState(1)
   const { setShowLoading } = useContext(LoadingContext);
-  useEffect(() => {
-    const fetchData = async () => {
-      setShowLoading(true);
-
-      try {
-        await Promise.all([getCategoriesOptions(), getUnitsOptions()]);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setShowLoading(false);
-      }
-    };
-
-    const getCategoriesOptions = async () => {
-      try {
-        const { categorias } = await getCategories();
-        if (categorias) {
-          setCategories(categorias);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const getUnitsOptions = async () => {
-      try {
-        const { unidades } = await getUnits();
-        if (unidades) {
-          setUnits(unidades);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-  console.log(categories);
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (!form.title) {
+      setSelectionError('El nombre del producto es requerido');
+      return
+    }
+
+    if (!form.price) {
+      setSelectionError('El precio de venta es requerido');
+      return
+    }
+
+    if (!form.reposition_point) {
+      setSelectionError('El punto de reposición es requerido');
+      return
+    }
+
+    if (!categorySelect || !unitSelect || !brandSelect) {
+      setSelectionError('Debe seleccionar una categoría, una unidad y una marca.');
+      return;
+    }
     handleModalChange({
       accept: {
         title: 'Editar producto',
         action: async () => {
           try {
             setShowLoading(true);
-            console.log(form.category);
-            const category = categories.filter(
-              (c) => c.id === Number(form.category)
-            );
-
             const res = await onEditProduct(
               editProduct.id,
               form.title,
-              category[0].id,
-              form.unit,
+              categorySelect,
+              unitSelect,
+              brandSelect,
               form.reposition_point,
-              form.price
+              form.price,
+              form.barcode,
             );
 
             if (res) {
@@ -103,8 +126,10 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
                 accept: {
                   title: 'Aceptar',
                   action: () => {
-                    setEditProduct();
                     getProducts();
+                    navigate('/productos')
+                    handleNotSelectSetting()
+                    setEditProduct()
                   },
                 },
                 title: `${form.title} editado exitósamente`,
@@ -161,196 +186,262 @@ export const ModifyProduct = ({ editProduct, setEditProduct }) => {
     handleOpen();
   };
 
+  const handleCategories = () => {
+    setIsCategories(true)
+    setIsBrand(false)
+    setIsUnits(false)
+  }
+
+  const handleBrand = () => {
+    setIsCategories(false)
+    setIsBrand(true)
+    setIsUnits(false)
+  }
+
+  const getOptions = async () => {
+    setIsLoadingUnits(true)
+    try {
+      const { unidades } = await getUnits();
+      if (unidades) {
+        setUnidades(unidades);
+        setIsLoadingUnits(false)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const handleUnits = async () => {
+    setIsCategories(false)
+    setIsBrand(false)
+    setIsUnits(true)
+    getOptions()
+  }
+
   return (
-    <div className={styles.modal}>
-      <div className={styles.registerContainer}>
-        <div className={styles.modalContents}>
-          <Icon
-            fontSize={25}
-            icon={mopsusIcons.closeModal}
-            className={styles.iconClose}
-            onClick={() => {
-              handleModalChange({
-                accept: {
-                  title: 'Aceptar',
-                  action: () => {
-                    setEditProduct();
-                  },
-                },
-                reject: {
-                  title: 'Cancelar',
-                  action: () => { },
-                },
-                title: `Cancelar la modificación del producto`,
-                message:
-                  '¿Seguro que desea cancelar la modificación del producto?',
-              });
-              handleOpen();
-            }}
-          />
-          <h2 className={styles.titleRegister}>Modificar Producto</h2>
-          <hr className={styles.line} />
-          <form onSubmit={(e) => handleSubmit(onSubmit(e))}>
-            <div>
-              <div>
-                <label htmlFor="category" className={styles.modalLabel}>
-                  Categorías
-                </label>
-                <select
-                  onChange={handleChange}
-                  value={form.category}
-                  name="category"
-                  id="category"
-                  className={styles.select}
-                  required
-                >
-                  <option value="" disabled>
-                    Selecciona una categoría
-                  </option>
-                  {categories.length > 0 ? (
-                    categories.map((c) => (
-                      <option key={c.name} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))
-                  ) : (
-                    <option value="" disabled>
-                      No hay categorías disponibles
-                    </option>
+    <Box>
+      <header className={styles.header}>
+        <h2 className={styles.title}>Modificar Producto</h2>
+      </header>
+      <div className={styles.sectionContainer}>
+        <section className={styles.formProduct}>
+          <form onSubmit={onSubmit}>
+            <div className={styles.infoProduct}>
+              <label htmlFor="title" className={styles.modalLabel}>
+                Nombre del producto
+              </label>
+              <input
+                type="text"
+                name="title"
+                className={styles.modalInput}
+                value={form.title}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={styles.infoProduct}>
+              <label htmlFor="price" className={styles.modalLabel}>
+                Precio de venta (ARS)
+              </label>
+              <input
+                type="number"
+                name="price"
+                className={styles.modalInput}
+                min="0"
+                step="0.01"
+                value={form.price}
+                onChange={handleChange}
+
+              />
+            </div>
+
+            <div className={styles.infoProduct}>
+              <label htmlFor="reposition_point" className={styles.modalLabel}>
+                Punto de reposición
+              </label>
+              <input
+                type="number"
+                name="reposition_point"
+                className={styles.modalInput}
+                min="0"
+                value={form.reposition_point}
+                onChange={handleChange}
+
+              />
+            </div>
+
+            <div className={styles.infoProduct}>
+              <label htmlFor="stock" className={styles.modalLabel}>
+                Stock actual
+              </label>
+              <input
+                type="number"
+                name="stock"
+                className={styles.modalInput}
+                min="0"
+                value={form.stock}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={styles.infoProduct}>
+              <label htmlFor="barcode" className={styles.modalLabel}>
+                Codigo de Barra
+              </label>
+              <input
+                type="text"
+                name="barcode"
+                value={form.barcode}
+                className={styles.modalInput}
+                onChange={handleChange}
+              />
+            </div>
+            <div className={styles.selectContainer}>
+
+              <div className={styles.infoProductSelectContainer}>
+                <div className={styles.optionSelect}>
+                  <p style={{ color: '#fff', marginTop: '8px' }}>
+                    Categoría seleccionada:
+                  </p>
+                  {categorySelect && (
+                    <strong style={{ color: '#fff', marginTop: '8px' }}>{categorySelectName}</strong>
                   )}
-                </select>
+                </div>
+
+                <div className={styles.infoProductSelect}>
+                  <button className={categorySelect ? ` ${styles.btnS} ` : `${styles.btnSelect}`} type='button' onClick={handleCategories}> Seleccionar Categoría</button>
+                </div>
               </div>
 
-              <div>
-                <label htmlFor="unit" className={styles.modalLabel}>
-                  Unidad de medida
-                </label>
-                <select
-                  name="unit"
-                  id="unit"
-                  value={form.unit}
-                  onChange={handleChange}
-                  className={styles.select}
-                  required
-                >
-                  <option value="" disabled>
-                    Selecciona una unidad
-                  </option>
-                  {units.length > 0 ? (
-                    units.map((unit) => (
-                      <option key={unit.id} value={unit.id}>
-                        {unit.name} - {unit.description}
-                      </option>
-                    ))
-                  ) : (
-                    <option value="" disabled>
-                      No hay unidades disponibles
-                    </option>
+              <div className={styles.infoProductSelectContainer}>
+                <div className={styles.optionSelect}>
+                  <p style={{ color: '#fff', marginTop: '8px' }}>
+                    Unidad seleccionada:
+                  </p>
+                  {unitSelect && (
+                    <strong style={{ color: '#fff', marginTop: '8px' }}>{unitSelectName}</strong>
                   )}
-                </select>
+                </div>
+                <div className={styles.infoProductSelect}>
+
+                  <button className={unitSelect ? ` ${styles.btnS} ` : `${styles.btnSelect}`} type='button' onClick={handleUnits}> Seleccionar Unidad</button>
+                </div>
               </div>
 
-              <div>
-                <label htmlFor="title" className={styles.modalLabel}>
-                  Nombre del producto
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  className={styles.modalInput}
-                  value={form.title}
-                  onChange={handleChange}
-                  required
-                />
-                {errors.title && <p className={styles.error}>{errors.title}</p>}
+              <div className={styles.infoProductSelectContainer}>
+                <div className={styles.optionSelect}>
+                  <p style={{ color: '#fff', marginTop: '8px' }}>
+                    Marca seleccionada:
+                  </p>
+                  {brandSelect && (
+                    <strong style={{ color: '#fff', marginTop: '8px' }}>{brandSelectName}</strong>
+                  )}
+                </div>
+                <div className={styles.infoProductSelect}>
+                  <button className={brandSelect ? ` ${styles.btnS} ` : `${styles.btnSelect}`} type='button' onClick={handleBrand}> Seleccionar Marca</button>
+                </div>
               </div>
 
-              <div>
-                <label htmlFor="price" className={styles.modalLabel}>
-                  Precio de venta
-                </label>
-                <input
-                  type="number"
-                  name="price"
-                  className={styles.modalInput}
-                  min="0"
-                  step="0.01"
-                  value={form.price}
-                  onChange={handleChange}
-                  required
-                />
-                {errors.price && <p className={styles.error}>{errors.price}</p>}
-              </div>
+              {selectionError && (
+                <p className={styles.error}>{selectionError}</p>
+              )}
 
-              <div>
-                <label htmlFor="reposition_point" className={styles.modalLabel}>
-                  Punto de reposición
-                </label>
-                <input
-                  type="number"
-                  name="reposition_point"
-                  className={styles.modalInput}
-                  min="0"
-                  value={form.reposition_point}
-                  onChange={handleChange}
-                  required
-                />
-                {errors.reposition_point && (
-                  <p className={styles.error}>{errors.reposition_point}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="stock" className={styles.modalLabel}>
-                  Stock actual
-                </label>
-                <input
-                  type="number"
-                  name="stock"
-                  className={styles.modalInputDesabled}
-                  min="0"
-                  value={form.stock}
-                  onChange={handleChange}
-                  disabled
-                />
-              </div>
-
-              <div className={styles.btnBox}>
-                <button
-                  type="submit"
-                  className={`${styles.btn} ${styles.btnRegister}`}
-                >
-                  Guardar Cambios
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.btn} ${styles.btnCancel}`}
-                  onClick={() => {
-                    handleModalChange({
-                      accept: {
-                        title: 'Aceptar',
-                        action: () => {
-                          setEditProduct();
-                        },
+            </div>
+            <div className={styles.btnBox}>
+              <button
+                type="submit"
+                className={`${styles.btn} ${styles.btnRegister}`}
+              >
+                Guardar Cambios
+              </button>
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.btnCancel}`}
+                onClick={() => {
+                  handleModalChange({
+                    accept: {
+                      title: 'Aceptar',
+                      action: () => {
+                        getProducts();
+                        navigate('/productos')
+                        handleNotSelectSetting()
                       },
-                      reject: {
-                        title: 'Cancelar',
-                        action: () => { },
-                      },
-                      title: `Cancelar la modificación del producto`,
-                      message:
-                        '¿Seguro que desea cancelar la modificación del producto?',
-                    });
-                    handleOpen();
-                  }}
-                >
-                  Cancelar
-                </button>
-              </div>
+                    },
+                    reject: {
+                      title: 'Cancelar',
+                      action: () => { },
+                    },
+                    title: `Cancelar la modificación del producto`,
+                    message:
+                      '¿Seguro que desea cancelar la modificación del producto?',
+                  });
+                  handleOpen();
+                }}
+              >
+                Cancelar
+              </button>
             </div>
           </form>
-        </div>
+        </section>
+
+
+        <section className={styles.selectOptions}>
+          {
+            isCategories && (
+              <TablelSelect
+                title={'Categorías'}
+                isLoading={isLoadingCat}
+                set={setMappedCategory}
+                totalPage={totalPagesCategory}
+                totalCount={totalCountCat}
+                setFilters={setFiltersCat}
+                rows={mappedCategory}
+                filter={() => { }}
+                select={categorySelect}
+                buscador={true}
+              />
+            )
+
+          }
+
+          {
+            isBrand && (
+              <TablelSelect
+                title={'Marcas'}
+                isLoading={isLoadingBrand}
+                set={setMappedBrand}
+                totalPage={totalPagesBrand}
+                totalCount={totalCountBrand}
+                setFilters={setFiltersBrand}
+                rows={mappedBrand}
+                filter={() => { }}
+                select={brandSelect}
+                buscador={true}
+              />
+            )
+          }
+          {
+            isUnits && (
+              <TablelSelect
+                title={'Unidades'}
+                isLoading={isLoadingUnits}
+                set={setMappedUnits}
+                totalPage={totalPagesUnits}
+                totalCount={totalCountUnits}
+                setFilters={() => { }}
+                rows={unidades}
+                filter={() => { }}
+                select={unitSelect}
+                buscador={false}
+              />
+            )
+          }
+          {
+            !(isCategories || isBrand || isUnits) && (
+              <div>Debe seleccionar alguna categoría, unidad o marca</div>
+            )
+          }
+        </section>
       </div>
-    </div>
+    </Box >
   );
 };

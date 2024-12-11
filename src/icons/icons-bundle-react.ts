@@ -9922,4 +9922,14 @@ export const mopsusIcons = {
     height: 24,
     body: '<path fill="currentColor" d="M12 2.25c5.385 0 9.75 4.365 9.75 9.75s-4.365 9.75-9.75 9.75a9.72 9.72 0 0 1-6.894-2.856a.75.75 0 0 1 1.06-1.06A8.25 8.25 0 1 0 12 3.75c-2.556 0-4.422 1.168-6.167 2.833L7.75 8.5a.75.75 0 0 1-.75.75H3a.75.75 0 0 1-.75-.75v-4A.75.75 0 0 1 3 3.75l1.77 1.77C6.67 3.705 8.905 2.25 12 2.25" />',
   },
+  no: {
+    width: 21,
+    height: 21,
+    body: '<circle cx="10.5" cy="10.5" r="8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />',
+  },
+  yes: {
+    width: 48,
+    height: 48,
+    body: '<g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 42c9.941 0 18-8.059 18-18S33.941 6 24 6S6 14.059 6 24s8.059 18 18 18m0 2c11.046 0 20-8.954 20-20S35.046 4 24 4S4 12.954 4 24s8.954 20 20 20" /><path d="M34.67 16.259a1 1 0 0 1 .072 1.412L21.386 32.432l-8.076-7.709a1 1 0 0 1 1.38-1.446l6.59 6.29L33.259 16.33a1 1 0 0 1 1.413-.07" /></g>',
+  },
 };

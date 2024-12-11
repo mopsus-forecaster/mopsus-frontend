@@ -4,7 +4,6 @@ import { TableSettings } from '../components/TableSettings';
 import { useContext, useEffect } from 'react';
 import { SettingsContext } from '../../../contexts/settings/SettingsContext';
 import { addBrand, addCategory } from '../../../services/settings';
-import { INITIAL_FILTERS } from '../../../contexts/Inventory/InventoryContext';
 import { MapSettingTablesCat } from '../utils/settingsCat-table-mapper';
 import { MapSettingTablesBrand } from '../utils/settingsBrand-table-mapper';
 
@@ -49,8 +48,8 @@ export const SettingsPage = () => {
     ];
 
     const getOptions = async () => {
-        await getCategory(INITIAL_FILTERS);
-        await getBrand(INITIAL_FILTERS)
+        await getCategory();
+        await getBrand()
     }
 
     useEffect(() => {

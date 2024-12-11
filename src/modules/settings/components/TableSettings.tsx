@@ -7,7 +7,6 @@ import { mopsusIcons } from '../../../icons';
 import { Filter } from '../../../shared/filter/Filter';
 import { FilterSettings } from './FilterSettings';
 import { Icon } from '@iconify/react/dist/iconify.cjs';
-import { INITIAL_FILTERS } from '../../../contexts/Inventory/InventoryContext';
 import { ModifySetting } from './ModifySetting';
 import { onEditBrand, onEditCat } from '../../../services/settings';
 
@@ -117,8 +116,8 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
                         setIsOpenFilter(false);
                     }}
                     onDeleteFilters={() => {
-                        setFilters(INITIAL_FILTERS);
-                        get(INITIAL_FILTERS);
+                        setFilters();
+                        get();
                         setIsOpenFilter(false);
                     }}
                 >
@@ -131,7 +130,7 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
                     editOption={editOptionBrand}
                     setEditOption={handleSetOptionToEditBrand}
                     edit={onEditBrand}
-                    title={titleMin}
+                    titleMin={'marca'}
                 />
 
             )}
@@ -141,7 +140,7 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
                     editOption={editOptionCat}
                     setEditOption={handleSetOptionToEditCat}
                     edit={onEditCat}
-                    title={titleMin}
+                    titleMin={'categoría'}
                 />
             )}
         </div >

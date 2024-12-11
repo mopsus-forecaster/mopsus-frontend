@@ -44,7 +44,7 @@ export const SummarySales = () => {
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => {},
+          action: () => { },
         },
         title: 'Error tecnico',
         message: 'No pudimos concretar su solicitud. Intente mas tarde',
@@ -103,8 +103,6 @@ export const SummarySales = () => {
             <p className={styles.p}>Subtotal (ARS)</p>
             <p className={styles.p}>{subTotal}</p>
           </div>
-
-          <hr className={styles.lineResumen} />
         </div>
 
         <div>
@@ -124,10 +122,34 @@ export const SummarySales = () => {
             <p className={styles.p}>{total}</p>
           </div>
         </div>
-        <div>
-          <button className={styles.buttonRegsiter} onClick={onSubmit}>
-            Registrar Venta
-          </button>
+        <div className={styles.btnContainer}>
+          <div>
+            <button className={styles.buttonRegsiter} type='submit' onClick={onSubmit}>
+              Registrar Ajuste
+            </button>
+          </div>
+          <div>
+            <button className={styles.btnCancel} type='button' onClick={() => {
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    navigate('/ventas')
+                  },
+                },
+                reject: {
+                  title: 'Cancelar',
+                  action: () => { },
+                },
+                title: `Cancelar el registro de la venta`,
+                message:
+                  '¿Seguro que desea cancelar el registro de la venta?',
+              });
+              handleOpen();
+            }}>
+              Cancelar
+            </button>
+          </div>
         </div>
       </div>
     </div>
