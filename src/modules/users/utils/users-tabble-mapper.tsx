@@ -1,6 +1,11 @@
 import styles from '../styles/users.module.scss';
 
-export const MapUsersTable = (user, handleSetOpenEditRole) => {
+export const MapUsersTable = (
+  user,
+  handleSetOpenEditRole,
+  disableUser,
+  activateUser
+) => {
   let chipInfo;
 
   switch (user.status) {
@@ -30,6 +35,18 @@ export const MapUsersTable = (user, handleSetOpenEditRole) => {
       break;
   }
 
+  const enableSwitcher = {
+    label: user.enabled ? 'Dar de baja' : 'Dar de alta',
+    function: () => {
+      if (user.enabled) {
+        disableUser(user);
+        return;
+      }
+
+      activateUser(user);
+    },
+  };
+
   const actions = [
     {
       label: 'Editar rol',
@@ -37,6 +54,7 @@ export const MapUsersTable = (user, handleSetOpenEditRole) => {
         handleSetOpenEditRole({ state: true, user });
       },
     },
+    enableSwitcher,
   ];
 
   const status = chipInfo ? (

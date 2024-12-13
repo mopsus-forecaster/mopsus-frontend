@@ -1,8 +1,15 @@
-import { createContext, useState } from 'react';
-import { getUsers } from '../../services/users';
+import { createContext, useContext, useState } from 'react';
+import {
+  disableUserByMail,
+  enableUserByMail,
+  getUsers,
+} from '../../services/users';
+import { ModalContext } from '../modal/ModalContext';
+import { LoadingContext } from '../loading/LoadingContext';
 
 export const INITIAL_FILTERS = {
   page: 1,
+  name: '',
 };
 
 export const UsersContext = createContext(null);
@@ -13,12 +20,15 @@ export const UsersProvider = ({ children }) => {
   const [totalPages, setTotalPages] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(null);
+  const { handleModalChange, handleOpen } = useContext(ModalContext);
+  const { setShowLoading } = useContext(LoadingContext);
 
-  const getEnterpriseUsers = async (customFilters) => {
+  const getEnterpriseUsers = async (customFilters?) => {
     try {
       setIsLoading(true);
+      console.log(customFilters);
       const { users, total_pages, total_count } = await getUsers(
-        customFilters || INITIAL_FILTERS
+        customFilters || filters
       );
       if (users) {
         setTotalCount(total_count);
@@ -93,6 +103,107 @@ export const UsersProvider = ({ children }) => {
     }
   };
 
+  const searchUserByName = (name) => {
+    setFilters({ ...filters, name });
+    getEnterpriseUsers({ ...filters, name: name || '' });
+  };
+
+  const disableUser = async (user) => {
+    handleModalChange({
+      accept: {
+        title: 'Aceptar',
+        action: async () => {
+          try {
+            setShowLoading(true);
+            const response = await disableUserByMail(user.email);
+            if (response) {
+              setShowLoading(false);
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: async () => {
+                    getEnterpriseUsers();
+                  },
+                },
+
+                title: `${user.name} dado de baja`,
+                message: 'Podrá consultar su estado desde la tabla de usuarios',
+              });
+              handleOpen();
+            }
+          } catch (error) {
+            setShowLoading(false);
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: async () => {},
+              },
+
+              title: 'Error técnico',
+              message: `${user.name} no pudo ser dado de baja. Pruebe en otro momento`,
+            });
+            handleOpen();
+          }
+        },
+      },
+      reject: {
+        title: 'Cancelar',
+        action: async () => {},
+      },
+      title: `Dar de baja a ${user.name}`,
+      message: '¿Está seguro que desea dar de baja a este usuario?',
+    });
+    handleOpen();
+  };
+
+  const activateUser = (user) => {
+    handleModalChange({
+      accept: {
+        title: 'Aceptar',
+        action: async () => {
+          try {
+            setShowLoading(true);
+            const response = await enableUserByMail(user.email);
+            if (response) {
+              setShowLoading(false);
+              handleModalChange({
+                accept: {
+                  title: 'Aceptar',
+                  action: async () => {
+                    getEnterpriseUsers();
+                  },
+                },
+
+                title: `${user.name} dado de alta`,
+                message: 'Podrá consultar su estado desde la tabla de usuarios',
+              });
+              handleOpen();
+            }
+          } catch (error) {
+            setShowLoading(false);
+            handleModalChange({
+              accept: {
+                title: 'Aceptar',
+                action: async () => {},
+              },
+
+              title: 'Error técnico',
+              message: `${user.name} no pudo ser dado de alta. Pruebe en otro momento`,
+            });
+            handleOpen();
+          }
+        },
+      },
+      reject: {
+        title: 'Cancelar',
+        action: async () => {},
+      },
+      title: `Dar de alta a ${user.name}`,
+      message: '¿Está seguro que desea dar de alta a este usuario?',
+    });
+    handleOpen();
+  };
+
   return (
     <UsersContext.Provider
       value={{
@@ -107,6 +218,9 @@ export const UsersProvider = ({ children }) => {
         filters,
         totalCount,
         totalPages,
+        disableUser,
+        activateUser,
+        searchUserByName,
       }}
     >
       {children}

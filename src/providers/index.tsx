@@ -12,8 +12,8 @@ export const Providers = ({ children }) => {
   return (
     <LoadingProvider>
       <AuthProvider>
-        <UsersProvider>
-          <ModalProvider>
+        <ModalProvider>
+          <UsersProvider>
             <HomeProvider>
               <SettingsProvider>
                 <ProductsProvider>
@@ -23,8 +23,8 @@ export const Providers = ({ children }) => {
                 </ProductsProvider>
               </SettingsProvider>
             </HomeProvider>
-          </ModalProvider>
-        </UsersProvider>
+          </UsersProvider>
+        </ModalProvider>
       </AuthProvider>
     </LoadingProvider>
   );
