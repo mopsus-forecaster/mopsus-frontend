@@ -39,3 +39,23 @@
 
   letter-spacing: 0.25px;
 }
+
+.inputPrice {
+  width: 100%;
+  padding: 7px 12px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 32.5px;
+  background-color: #363636;
+  color: white;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+
+  &:hover {
+    border-color: #888;
+  }
+}
