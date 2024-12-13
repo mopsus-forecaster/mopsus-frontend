@@ -7,6 +7,7 @@ import { usersTableColumns } from '../data/usersTableColumns';
 import { MapUsersTable } from '../utils/users-tabble-mapper';
 import { AddUser } from '../components/AddUser';
 import { EditUserRole } from '../components/EditRole';
+import { UserInfo } from '../components/UserInfo.';
 
 export const Users = () => {
   const [search, setSearch] = useState('');
@@ -28,6 +29,10 @@ export const Users = () => {
   } = useContext(UsersContext);
 
   const [addUserOpen, setAddUserOpen] = useState(false);
+  const [userInfoOpen, setUserInfoOpen] = useState({
+    state: false,
+    user: {},
+  });
   const [editUserRoleOpen, setEditUserRoleOpen] = useState({
     state: false,
     user: {},
@@ -82,7 +87,13 @@ export const Users = () => {
       <MopsusTable
         columns={usersTableColumns}
         rows={mappedUsers.map((user) =>
-          MapUsersTable(user, setEditUserRoleOpen, disableUser, activateUser)
+          MapUsersTable(
+            user,
+            setEditUserRoleOpen,
+            disableUser,
+            activateUser,
+            setUserInfoOpen
+          )
         )}
         goToFirstPage={goToFirstPage}
         goToLastPage={goToLastPage}
@@ -100,6 +111,13 @@ export const Users = () => {
 
       {addUserOpen && (
         <AddUser onClose={() => setAddUserOpen(false)} open={addUserOpen} />
+      )}
+
+      {userInfoOpen.state && (
+        <UserInfo
+          onClose={() => setUserInfoOpen({ state: false, user: {} })}
+          user={userInfoOpen.user}
+        />
       )}
 
       {editUserRoleOpen.state && (

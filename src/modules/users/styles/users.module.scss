@@ -213,11 +213,26 @@
   overflow-y: auto;
 }
 
+.informationContainer {
+  position: absolute;
+  width: 30vw;
+  height: 65vh;
+  border-radius: 30px;
+  background-color: #282828;
+  overflow-y: auto;
+}
+
 .registerHeading {
   width: 100%;
   display: flex;
   justify-content: space-between;
   margin-top: 5%;
+}
+
+.informationTitle {
+  font-size: 1.75rem;
+  color: white;
+  margin-left: 5%;
 }
 
 .titleRegister {
@@ -399,4 +414,24 @@
 .activeDescription {
   color: #555;
   font-size: 1rem;
+}
+
+.informationGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.informationLabel {
+  color: white;
+  font-weight: 500;
+}
+
+.informationParagraph {
+  color: #c0c0c0;
+}
+
+.informationSection {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
 }

@@ -4,7 +4,8 @@ export const MapUsersTable = (
   user,
   handleSetOpenEditRole,
   disableUser,
-  activateUser
+  activateUser,
+  setUserInfoOpen
 ) => {
   let chipInfo;
 
@@ -48,6 +49,12 @@ export const MapUsersTable = (
   };
 
   const actions = [
+    {
+      label: 'Ver información completa',
+      function: () => {
+        setUserInfoOpen({ state: true, user });
+      },
+    },
     {
       label: 'Editar rol',
       function: () => {
