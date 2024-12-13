@@ -22,6 +22,9 @@ export const Users = () => {
     filters,
     totalCount,
     totalPages,
+    disableUser,
+    activateUser,
+    searchUserByName,
   } = useContext(UsersContext);
 
   const [addUserOpen, setAddUserOpen] = useState(false);
@@ -33,6 +36,22 @@ export const Users = () => {
   useEffect(() => {
     getEnterpriseUsers();
   }, []);
+
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [search]);
+
+  useEffect(() => {
+    searchUserByName(debouncedSearch);
+  }, [debouncedSearch]);
 
   return (
     <Box>
@@ -63,7 +82,7 @@ export const Users = () => {
       <MopsusTable
         columns={usersTableColumns}
         rows={mappedUsers.map((user) =>
-          MapUsersTable(user, setEditUserRoleOpen)
+          MapUsersTable(user, setEditUserRoleOpen, disableUser, activateUser)
         )}
         goToFirstPage={goToFirstPage}
         goToLastPage={goToLastPage}
