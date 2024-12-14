@@ -78,7 +78,7 @@ export const AdjustmentSummary = () => {
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => { },
+          action: () => { setAddProduct([]) },
         },
         title: 'Error técnico',
         message: 'No pudimos concretar su solicitud. Intente más tarde.',
@@ -87,6 +87,7 @@ export const AdjustmentSummary = () => {
       handleOpen();
     } finally {
       setShowLoading(false);
+      setAddProduct([])
     }
   };
 
@@ -160,6 +161,7 @@ export const AdjustmentSummary = () => {
                 accept: {
                   title: 'Aceptar',
                   action: () => {
+                    setAddProduct([])
                     navigate('/inventario')
                   },
                 },

@@ -72,7 +72,20 @@ export const NewProduct = () => {
     setMappedUnits
   } = useContext(SettingsContext)
 
-
+  const handleNavigation = () => {
+    switch (stateFrom) {
+      case 'I':
+        navigate('/nuevo-ingreso');
+        break;
+      case 'S':
+        navigate('/nueva-venta');
+        break;
+      default:
+        getProducts();
+        navigate('/productos');
+        break;
+    }
+  };
   const {
     categorySelect,
     brandSelect,
@@ -80,7 +93,8 @@ export const NewProduct = () => {
     handleNotSelectSetting,
     categorySelectName,
     brandSelectName,
-    unitSelectName
+    unitSelectName,
+    stateFrom
   } = useContext(ProductsContext)
   const [selectionError, setSelectionError] = useState('');
 
@@ -125,9 +139,8 @@ export const NewProduct = () => {
           accept: {
             title: 'Aceptar',
             action: () => {
-              getProducts();
-              navigate('/productos')
-              handleNotSelectSetting()
+              handleNavigation()
+              handleNotSelectSetting();
             },
           },
           title: 'Producto registrado con éxito',
@@ -142,7 +155,7 @@ export const NewProduct = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => { handleNotSelectSetting() },
             },
             title: 'Error en el registro',
             message: 'Ya existe un producto con dicho nombre.',
@@ -154,7 +167,7 @@ export const NewProduct = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => { handleNotSelectSetting() },
             },
             title: 'Error técnico',
             message:
@@ -162,7 +175,7 @@ export const NewProduct = () => {
             icon: mopsusIcons.error,
           });
           handleOpen();
-
+          handleNotSelectSetting();
           break;
       }
     }

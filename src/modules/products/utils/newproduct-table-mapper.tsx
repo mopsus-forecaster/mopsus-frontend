@@ -5,16 +5,19 @@ import { useContext } from 'react';
 import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 
 export const MapNewProductTables = (title, settings, select) => {
-  const { handleSelectSetting, handleNotSelectSetting } =
-    useContext(ProductsContext);
-
+  const {
+    handleSelectSetting,
+    handleNotSelectSetting
+  } = useContext(ProductsContext);
+  console.log(select)
   const addSetting = (
     <Icon
       className={styles.icon}
       style={{ color: '#ffff', fontSize: '1.2rem' }}
       icon={mopsusIcons.no}
+      fontSize={30}
       onClick={() => {
-        handleSelectSetting(title, settings);
+        handleSelectSetting(title, settings)
       }}
     />
   );
@@ -24,11 +27,13 @@ export const MapNewProductTables = (title, settings, select) => {
       className={styles.icon}
       style={{ color: '#ffff', fontSize: '1.2rem' }}
       icon={mopsusIcons.yes}
+      fontSize={30}
       onClick={() => {
-        handleNotSelectSetting(title);
+        handleNotSelectSetting(title)
       }}
     />
   );
+
 
   const options = (
     <div

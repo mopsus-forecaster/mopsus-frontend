@@ -106,7 +106,12 @@
   gap: 0.75rem;
   font-size: 0.95rem;
 }
-
+.registerHeading {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5%;
+}
 .modal {
   position: fixed;
   top: 0;
@@ -121,18 +126,17 @@
 }
 .registerContainer {
   position: absolute;
-  justify-content: center;
-  align-items: center;
-  width: 30vw;
+  width: 27vw;
   height: fit-content;
   border-radius: 30px;
   background-color: #282828;
+  overflow-y: auto;
 }
 
 .titleRegister {
   font-size: 2rem;
   color: white;
-  margin-top: 2vb;
+  margin: 2vb 0 0 4vb;
 }
 
 .line {
@@ -142,14 +146,22 @@
   height: 0.5px;
 }
 
+.line10 {
+  width: 90%;
+  color: white;
+  background-color: white;
+  border: white;
+  margin: auto;
+  height: 0.5px;
+}
+
 .modalContents {
   margin: 3vb;
 }
 
 .iconClose {
-  position: relative;
-  margin-top: 2vh;
-  margin-left: 25vw;
+  margin-right: 5%;
+
   cursor: pointer;
 }
 
@@ -286,7 +298,7 @@ form {
 }
 
 .formGroup {
-  margin: 15px auto 15px -10px;
+  margin: 10px auto 10px -10px;
   flex-basis: 48%;
   display: flex;
   flex-direction: column;
@@ -453,4 +465,49 @@ form {
   align-items: center;
   font-size: 1.3rem;
   margin: 4vh 0;
+}
+
+.btnContainerProd {
+  width: 40%;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 5%;
+}
+
+.animatedSelectContainer {
+  opacity: 0;
+  transform: translateY(-15px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.formUpdate {
+  padding: 5vb;
+}
+
+.inputPorcentaje {
+  width: 22vw;
+  padding: 7px 12px;
+  font-size: 1rem;
+  margin: 15px 0 20px 0;
+  border: none;
+  color: white;
+  border-radius: 32.5px;
+  background-color: #363636;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px $color-primary;
+  }
+
+  &:hover {
+    border-color: #888;
+  }
 }

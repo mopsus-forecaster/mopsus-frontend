@@ -88,6 +88,7 @@ export const getAllProducts = async ({
   title = '',
   category_id = null,
   unit_id = null,
+  id_brand = null,
   below_reposition = null,
   price_min = null,
   price_max = null,
@@ -100,6 +101,7 @@ export const getAllProducts = async ({
   if (title) queryParams.append('title', title);
   if (category_id !== null) queryParams.append('category_id', category_id);
   if (unit_id !== null) queryParams.append('unit_id', unit_id);
+  if (id_brand !== null) queryParams.append('id_brand', id_brand);
   if (below_reposition !== null)
     queryParams.append('below_reposition', below_reposition);
   if (price_min !== null) queryParams.append('price_min', price_min);
@@ -154,5 +156,20 @@ export const getProductsAllAll = async () => {
     verb: 'get',
   });
 
+  return response.data;
+};
+
+export const updatePrice = async (id, type, is_increase, percentage) => {
+  const response = await apiClient({
+    api: 'products',
+    service: '/update_prices_products',
+    verb: 'put',
+    dataSend: {
+      id,
+      type,
+      is_increase,
+      percentage,
+    },
+  });
   return response.data;
 };

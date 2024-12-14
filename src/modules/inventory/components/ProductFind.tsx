@@ -3,15 +3,27 @@ import styles from '../styles/inventory.module.scss';
 import { ProductInfo } from './ProductInfo';
 import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 import { CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export const ProductFind = () => {
-    const { mappedProducts, isLoading } = useContext(ProductsContext);
+    const { mappedProducts, isLoading, setStateFrom, stateFrom } = useContext(ProductsContext);
 
+    const navigate = useNavigate()
+
+    const handleNewProduct = () => {
+        navigate('/nuevo-producto')
+        setStateFrom('I')
+        console.log('estado', stateFrom)
+    }
     return (
         <div className={styles.box}>
             <header>
                 <div className={styles.contentBox}>
-                    <p className={styles.titleBox}>Productos Encontrados</p>
+                    <div className={styles.btnTitle}>
+                        <p className={styles.titleBox}>Productos Encontrados</p>
+                        <button type='button' onClick={handleNewProduct} className={styles.buttonAddProduct}>Agregar nuevo producto</button>
+                    </div>
+
                     <hr className={styles.line2} />
                 </div>
             </header>

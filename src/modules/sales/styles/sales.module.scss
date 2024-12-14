@@ -84,7 +84,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  margin: 10px 40px;
+  margin: 5px 40px;
 }
 
 .box {
@@ -126,6 +126,7 @@
 .line {
   width: 100%;
   margin: 0;
+  border: 1px solid #979797;
 }
 
 .productInfoContainer {
@@ -237,7 +238,7 @@
   position: relative;
   display: flex;
   width: 100%;
-  height: 30vh;
+  height: 34.5vh;
   padding: 10px;
   background-color: $box-background-color;
   border-radius: 20px;
@@ -245,18 +246,24 @@
   margin: 10px;
 }
 
+.resumen {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
 .tableContainer {
   position: relative;
   width: 70%;
   height: 100%;
-  padding: 10px;
+  padding: 5px;
 }
 
 .resumenContainer {
   position: relative;
   width: 30%;
   height: 100%;
-  padding: 10px;
+  padding: 5px;
 }
 
 .verticalLine {
@@ -372,6 +379,7 @@ td:nth-child(5) {
   height: 3vh;
   padding: 10px;
   border-radius: 15px;
+  color: white;
   background-color: $color-dark-primary;
   border: none;
   &:focus {
@@ -657,4 +665,55 @@ input:not(:placeholder-shown) + .placeholder {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.btnTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.btnAddProduct {
+  margin-bottom: 10px;
+}
+
+.buttonAddProduct {
+  color: $color-white;
+  background-color: $color-primary;
+  border: 1px solid $color-primary;
+  border-radius: 20px;
+  height: 4vh;
+  font-weight: 400;
+  transition: all 0.4s;
+}
+
+.buttonAddProduct:hover {
+  background-color: transparent;
+  border: 1px solid $color-primary;
+}
+
+.infoBarcode {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  color: white;
+  margin: 0;
+  gap: 20px;
+}
+
+.barcode {
+  display: flex;
+  flex-direction: row;
+  color: white;
+  margin: 0;
+  gap: 10px;
+}
+
+.pBarcode {
+  margin: 0;
 }
