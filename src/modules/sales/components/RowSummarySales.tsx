@@ -24,6 +24,11 @@ export const RowSummarySales = ({ product }) => {
                         className={stylesInventory.inputQuantity}
                         min={1}
                         defaultValue={1}
+                        onKeyDown={(e) => {
+                            if (e.key === '-' || e.key === 'e') {
+                                e.preventDefault();
+                            }
+                        }}
                         onChange={(e) => productQuantity(product.id, e.target.value)}
                     />
                 </td>

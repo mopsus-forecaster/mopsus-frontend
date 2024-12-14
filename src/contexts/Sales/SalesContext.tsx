@@ -195,33 +195,46 @@ export const SalesProvider = ({ children }) => {
                     getPaginatedSales();
                   },
                 },
-                title: `Venta n° "${saleToDelete.saleId}" anulada exitosamente`,
+                title: `Venta n° "${formatId(saleToDelete.saleId)}" anulada exitosamente`,
                 message: '',
               });
               handleOpen();
             }
           } catch (error) {
             setShowLoading(false);
-
             handleModalChange({
               accept: {
                 title: 'Aceptar',
                 action: () => { },
               },
-              title: `La venta n°"${saleToDelete.saleId}" no pudo ser anulada`,
-              message:
-                'Lo sentimos, no pudimos concretar la operción. Intente más tarde',
+              title: `La venta n° "${formatId(saleToDelete.saleId)}" no pudo ser anulada`,
+              message: 'Lo sentimos, no pudimos concretar la operción. Intente más tarde',
             });
             handleOpen();
           }
         },
       },
-      title: `Anular venta n° "${saleToDelete.saleId}"`,
+      reject: {
+        title: 'Cancelar',
+        action: () => {
+          handleModalChange({
+            accept: {
+              title: 'Aceptar',
+              action: () => { },
+            },
+            title: 'Operación cancelada',
+            message: 'No se realizaron cambios en las ventas.',
+          });
+          handleOpen();
+        },
+      },
+      title: `Anular venta n° "${formatId(saleToDelete.saleId)}"`,
       message: '¿Está seguro que desea dar de baja la venta?',
       icon: mopsusIcons.warning,
     });
     handleOpen();
   };
+
 
   const formatId = (id) => {
     return id.length > 5 ? id.slice(0, 5) : id;

@@ -9,7 +9,7 @@ import { updatePrice } from '../../../services/products';
 
 export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
     const [type, setType] = useState('');
-    const [id, setId] = useState(null);
+    const [id, setId] = useState('');
     const [isIncrease, setIsIncrease] = useState(null);
     const [porcentage, setPorcentage] = useState(null);
     const { handleOpen, handleModalChange } = useContext(ModalContext);
@@ -32,6 +32,8 @@ export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
     const handleSelectOption = (e) => {
         setType(e.target.value);
         setId(null);
+        setIsIncrease(null);
+        setPorcentage(null);
     };
 
     const handleChangeType = (e) => {
@@ -65,9 +67,8 @@ export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
                                         setPorcentage(null);
                                     },
                                 },
-                                title: `"Precios Actualizados`,
-                                message:
-                                    'Puede consultar los productos con los precios actualizados en la tabla.',
+                                title: `Precios Actualizados`,
+                                message: 'Puede consultar los productos con los precios actualizados en la tabla.',
                             });
                             handleOpen();
                         }
@@ -79,14 +80,19 @@ export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
                                 action: () => { },
                             },
                             title: `No se pudo completar la actualización.`,
-                            message:
-                                'Lo sentimos, no pudimos concretar la operación. Intente más tarde',
+                            message: 'Lo sentimos, no pudimos concretar la operación. Intente más tarde',
                         });
                         handleOpen();
                     }
                 },
-
             },
+            reject: {
+                title: 'Cancelar',
+                action: () => { },
+            },
+            title: 'Confirmar actualización de precios',
+            message: `¿Está seguro que desea aplicar un cambio del ${porcentage}% en los precios para ${type === 'brand' ? 'la marca seleccionada' : 'la categoría seleccionada'}?`,
+            icon: mopsusIcons.warning,
         });
         handleOpen();
     };
@@ -107,7 +113,6 @@ export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
                 <hr className={styles.line10} />
 
                 <form className={styles.formUpdate} onSubmit={(e) => e.preventDefault()}>
-
                     <div className={styles.formGroup}>
                         <label htmlFor="type" className={styles.modalLabel}>
                             Tipo de actualización
@@ -136,7 +141,7 @@ export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
                                 name="brand"
                                 id="brand"
                                 className={styles.selectFilter}
-                                value={id}
+                                value={id === null ? '' : id}
                                 onChange={handleSecondaryOptionChange}
                             >
                                 <option value="" disabled>
@@ -166,7 +171,7 @@ export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
                                 name="category"
                                 id="category"
                                 className={styles.selectFilter}
-                                value={id}
+                                value={id === null ? '' : id}
                                 onChange={handleSecondaryOptionChange}
                             >
                                 <option value="" disabled>
@@ -198,17 +203,17 @@ export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
                             value={isIncrease === null ? '' : isIncrease}
                             onChange={handleChangeType}
                         >
-                            <option value='' disabled>
+                            <option value="" disabled>
                                 Seleccione un tipo de cambio
                             </option>
-                            <option value='true'>Aumento</option>
-                            <option value='false'>Disminución</option>
+                            <option value="true">Aumento</option>
+                            <option value="false">Disminución</option>
                         </select>
                     </div>
 
                     <div className={styles.formGroup}>
                         <label htmlFor="percentage" className={styles.modalLabel}>
-                            Porcentaje
+                            Porcentaje (%)
                         </label>
                         <input
                             id="percentage"
@@ -217,6 +222,11 @@ export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
                             value={porcentage || ''}
                             className={styles.inputPorcentaje}
                             placeholder="Ingrese el porcentaje"
+                            onKeyDown={(e) => {
+                                if (e.key === '-' || e.key === 'e') {
+                                    e.preventDefault();
+                                }
+                            }}
                             onChange={handleChangePorcentage}
                         />
                     </div>

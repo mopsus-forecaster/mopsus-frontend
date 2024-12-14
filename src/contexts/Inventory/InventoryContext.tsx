@@ -41,6 +41,7 @@ export const InventoryProvider = ({ children }) => {
       if (incomes) {
         const mappedInventorys = incomes.map((income) => ({
           id: income.id,
+          date: income.date,
           dateReceipt: income.date_receipt,
           description: income.description || 'Sin descripción',
           isActive: income.is_active ? 'Activo' : 'Inactivo',

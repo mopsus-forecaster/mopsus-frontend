@@ -127,7 +127,12 @@ export const InventortSummary = () => {
               type="number"
               name='receiptNumber'
               onChange={(e) => setReceiptNumber(e.target.value)}
-              className={styles.inputDesc}
+              onKeyDown={(e) => {
+                if (e.key === '-' || e.key === 'e') {
+                  e.preventDefault();
+                }
+              }}
+              className={styles.inputNroCompro}
             />
           </div>
         </div>

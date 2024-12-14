@@ -116,7 +116,7 @@ export const Inventory = () => {
             onChange={(e) => setSearch(e.target.value)}
             value={search}
             className={styles.tableSearchInput}
-            placeholder="Buscar por id..."
+            placeholder="Buscar por N° comprobante..."
             type="text"
           />
           <button
