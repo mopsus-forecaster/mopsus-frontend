@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { CircularProgress } from '@mui/material';
 
 ChartJS.register(
   CategoryScale,
@@ -30,6 +31,7 @@ interface ChartProps {
   isMoney?: boolean;
   title: string;
   subtitle: string;
+  isLoading: boolean;
 }
 
 export const HorizontalChart = ({
@@ -37,6 +39,7 @@ export const HorizontalChart = ({
   isMoney = false,
   title,
   subtitle,
+  isLoading,
 }: ChartProps) => {
   const colors = [
     '#5A52C3',
@@ -62,13 +65,15 @@ export const HorizontalChart = ({
     '#2A3748',
   ];
 
-  const chartData = {
-    labels: data.labels,
-    datasets: data.dataset.map((ds) => ({
-      ...ds,
-      backgroundColor: colors.slice(0, data.labels.length),
-      borderRadius: 8,
-    })),
+  const chartData = (data) => {
+    return {
+      labels: data.labels,
+      datasets: data.dataset.map((ds) => ({
+        ...ds,
+        backgroundColor: colors.slice(0, data.labels.length),
+        borderRadius: 8,
+      })),
+    };
   };
 
   const options = {
@@ -157,8 +162,20 @@ export const HorizontalChart = ({
     >
       <h2 className={styles.graphicTitle}>{title}</h2>
       <p className={styles.graphicSubtitle}>{subtitle}</p>
-      <div style={{ height: '100%', width: '100%' }}>
-        <Bar data={chartData} options={options} />
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {!isLoading && data ? (
+          <Bar data={chartData(data)} options={options} />
+        ) : (
+          <CircularProgress sx={{ color: '#fff' }} size="4rem" />
+        )}
       </div>
     </div>
   );

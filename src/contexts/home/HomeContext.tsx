@@ -43,8 +43,26 @@ export const HomeProvider = ({ children }) => {
   const [forecastByProductByMoney, setForecastByProductByMoney] =
     useState(null);
 
+  const [loadings, setLoadings] = useState({
+    totalSalesByMoney: true,
+    totalSalesByAppareances: true,
+    topSalesByMoney: true,
+    salesForecastByAppareances: true,
+    salesForecastByMoney: true,
+    salesAndIncomesForecastByMoney: true,
+    productsForecastByAppareances: true,
+    productsForecastByMoney: true,
+  });
+
   const getTotalSalesByCategoryWanted = async (wantedFormat) => {
     try {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'totalSaleByCategoryByAppearances'
+          : 'totalSaleByCategoryByMoney']: true,
+      }));
+
       const response = await getTotalSalesByCategory(wantedFormat);
 
       if (response && wantedFormat === wantedFormats.APPREANCE) {
@@ -55,11 +73,24 @@ export const HomeProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'totalSaleByCategoryByAppearances'
+          : 'totalSaleByCategoryByMoney']: false,
+      }));
     }
   };
 
   const getTopSales = async (wantedFormat) => {
     try {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'topSalesByAppearances'
+          : 'topSalesByMoney']: true,
+      }));
       const response = await getTotalSales(wantedFormat);
 
       if (response && wantedFormat === wantedFormats.APPREANCE) {
@@ -70,12 +101,24 @@ export const HomeProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'topSalesByAppearances'
+          : 'topSalesByMoney']: false,
+      }));
     }
   };
 
   const getSalesForecasting = async (wantedFormat, startDate, endDate) => {
-    console.log(startDate, endDate);
     try {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'salesForecastByAppareances'
+          : 'salesForecastByMoney']: true,
+      }));
       const response = await salesForecast(startDate, endDate, wantedFormat);
       if (response && wantedFormat === wantedFormats.APPREANCE) {
         setSalesForecastingByAppareances(response);
@@ -85,11 +128,23 @@ export const HomeProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'salesForecastByAppareances'
+          : 'salesForecastByMoney']: false,
+      }));
     }
   };
-
   const getSalesAndIncomesForecast = async (wantedFormat, date) => {
     try {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'salesAndIncomesForecastByAppearances'
+          : 'salesAndIncomesForecastByMoney']: true,
+      }));
       const response = await salesAndIncmesForecastByHour(date, wantedFormat);
       if (response && wantedFormat === wantedFormats.APPREANCE) {
         setIncomesAndSalesByHourByAppareances(response);
@@ -99,11 +154,24 @@ export const HomeProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'salesAndIncomesForecastByAppearances'
+          : 'salesAndIncomesForecastByMoney']: false,
+      }));
     }
   };
 
   const getProductsForecast = async (wantedFormat, date) => {
     try {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'productsForecastByAppearances'
+          : 'productsForecastByMoney']: true,
+      }));
       const response = await forecastByProduct(date, wantedFormat);
       if (response && wantedFormat === wantedFormats.APPREANCE) {
         setForecastByProductByAppareances(response);
@@ -113,6 +181,13 @@ export const HomeProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadings((prevState) => ({
+        ...prevState,
+        [wantedFormat === wantedFormats.APPREANCE
+          ? 'productsForecastByAppearances'
+          : 'productsForecastByMoney']: false,
+      }));
     }
   };
 
@@ -134,6 +209,7 @@ export const HomeProvider = ({ children }) => {
         incomesAndSalesByHourByMoney,
         forecastByProductByAppareances,
         forecastByProductByMoney,
+        loadings,
       }}
     >
       {children}

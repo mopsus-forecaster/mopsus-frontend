@@ -1,6 +1,7 @@
 import { Doughnut } from 'react-chartjs-2';
 import styles from '../../styles/home.module.scss';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { CircularProgress } from '@mui/material';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -15,6 +16,7 @@ interface ChartProps {
   isMoney?: boolean;
   title: string;
   subtitle: string;
+  isLoading: boolean;
 }
 
 export const DoughnutChart = ({
@@ -22,6 +24,7 @@ export const DoughnutChart = ({
   isMoney = false,
   title,
   subtitle,
+  isLoading,
 }: ChartProps) => {
   const colors = [
     '#7367F0',
@@ -47,14 +50,16 @@ export const DoughnutChart = ({
     '#34495E',
   ];
 
-  const chartData = {
-    labels: data.labels,
-    datasets: data.dataset.map((ds) => ({
-      ...ds,
-      backgroundColor: colors.slice(0, data.labels.length),
-      borderColor: '#161616',
-      borderWidth: 2,
-    })),
+  const chartData = (data) => {
+    return {
+      labels: data.labels,
+      datasets: data.dataset.map((ds) => ({
+        ...ds,
+        backgroundColor: colors.slice(0, data.labels.length),
+        borderColor: '#161616',
+        borderWidth: 2,
+      })),
+    };
   };
 
   const options = {
@@ -103,8 +108,20 @@ export const DoughnutChart = ({
     >
       <h2 className={styles.graphicTitle}>{title}</h2>
       <p className={styles.graphicSubtitle}>{subtitle}</p>
-      <div style={{ height: '100%', width: '100%' }}>
-        <Doughnut data={chartData} options={options} />
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {!isLoading && data ? (
+          <Doughnut data={chartData(data)} options={options} />
+        ) : (
+          <CircularProgress sx={{ color: '#fff' }} size="4rem" />
+        )}
       </div>
     </div>
   );

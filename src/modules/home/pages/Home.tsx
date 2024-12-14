@@ -4,9 +4,9 @@ import styles from '../styles/home.module.scss';
 import { HomeContext } from '../../../contexts/home/HomeContext';
 import { HorizontalChart } from '../components/barGraphs/HorizontalChart';
 import { DoughnutChart } from '../components/doughnutChart/doughnutChart';
-import { VerticalChart } from '../components/barGraphs/VerticalChart';
-import { LineChart } from '../components/lineGraphs/LineGraphs';
+
 import { SalesForecastingGraph } from '../components/customGraphs/SalesForecastingGraph';
+import { VerticalChartWithDate } from '../components/customGraphs/VerticalChartWithDate';
 
 export const Home = () => {
   const {
@@ -25,6 +25,7 @@ export const Home = () => {
     incomesAndSalesByHourByMoney,
     forecastByProductByAppareances,
     forecastByProductByMoney,
+    loadings,
   } = useContext(HomeContext);
 
   useEffect(() => {
@@ -47,82 +48,84 @@ export const Home = () => {
           <h1 className={`${styles.title}`}>Inicio</h1>
         </header>
         <div className={styles.graphicsContainer}>
-          {salesForecastingByAppareances && (
-            <SalesForecastingGraph
-              data={salesForecastingByAppareances}
-              title="Prediccion de ventas"
-              subtitle="Por apariciones"
-            />
-          )}
+          <DoughnutChart
+            data={totalSaleByCategoryAppearances}
+            title="Ventas por categoría"
+            subtitle="Según número de apariciones en el último mes"
+            isLoading={loadings.totalSaleByCategoryAppearances}
+          />
 
-          {salesForecastingByMoney && (
-            <SalesForecastingGraph
-              data={salesForecastingByMoney}
-              title="Prediccion de ventas"
-              subtitle="Por unidades monetarias"
-              isMoney={true}
-            />
-          )}
-          {incomesAndSalesByHourByMoney && (
-            <VerticalChart
-              data={incomesAndSalesByHourByMoney}
-              title="Ventas e ingresos por hora"
-              subtitle="Por unidades monetarias"
-            />
-          )}
+          <DoughnutChart
+            data={totalSaleByCategoryMoney}
+            title="Ventas por categoría"
+            subtitle="Según ingresos generados en el último mes"
+            isMoney
+            isLoading={loadings.totalSaleByCategoryMoney}
+          />
 
-          {incomesAndSalesByHourByMoney && (
-            <VerticalChart
-              data={incomesAndSalesByHourByMoney}
-              title="Ventas e ingresos por hora"
-              subtitle="Por unidades monetarias"
-            />
-          )}
-          {forecastByProductByAppareances && (
-            <VerticalChart
-              data={forecastByProductByAppareances}
-              title="Prediciones de producto"
-              subtitle="Por apariciones"
-            />
-          )}
-          {forecastByProductByMoney && (
-            <VerticalChart
-              data={forecastByProductByMoney}
-              title="Prediciones de producto"
-              subtitle="Por unidades monetarias"
-            />
-          )}
-          {totalSaleByCategoryAppearances && (
-            <DoughnutChart
-              data={totalSaleByCategoryAppearances}
-              title="Ventas por categoría"
-              subtitle="Según número de apariciones en el último mes"
-            />
-          )}
-          {totalSaleByCategoryMoney && (
-            <DoughnutChart
-              data={totalSaleByCategoryMoney}
-              title="Ventas por categoría"
-              subtitle="Según ingresos generados en el último mes"
-              isMoney={true}
-            />
-          )}
-          {topSalesByAppearances && (
-            <HorizontalChart
-              data={topSalesByAppearances}
-              title="Top ventas"
-              subtitle="Según número de apariciones en el último mes"
-              isMoney={false}
-            />
-          )}
-          {topSalesByMoney && (
-            <HorizontalChart
-              data={topSalesByMoney}
-              title="Top ventas"
-              subtitle="Según ingresos generados en el último mes"
-              isMoney={true}
-            />
-          )}
+          <HorizontalChart
+            data={topSalesByAppearances}
+            title="Top ventas"
+            subtitle="Según número de apariciones en el último mes"
+            isLoading={loadings.topSalesByAppearances}
+          />
+
+          <HorizontalChart
+            data={topSalesByMoney}
+            title="Top ventas"
+            subtitle="Según ingresos generados en el último mes"
+            isMoney
+            isLoading={loadings.topSalesByMoney}
+          />
+
+          <SalesForecastingGraph
+            data={salesForecastingByAppareances}
+            title="Prediccion de ventas"
+            subtitle="Por apariciones"
+            isLoading={loadings.salesForecastByAppareances}
+          />
+
+          <SalesForecastingGraph
+            data={salesForecastingByMoney}
+            title="Prediccion de ventas"
+            subtitle="Por unidades monetarias"
+            isMoney
+            isLoading={loadings.salesForecastByMoney}
+          />
+
+          <VerticalChartWithDate
+            data={incomesAndSalesByHourByAppareances}
+            title="Ventas e ingresos por hora"
+            subtitle="Por apariciones"
+            isLoading={loadings.salesAndIncomesForecastByAppearances}
+            onApplyFilters={getSalesAndIncomesForecast}
+          />
+
+          <VerticalChartWithDate
+            data={incomesAndSalesByHourByMoney}
+            title="Ventas e ingresos por hora"
+            subtitle="Por unidades monetarias"
+            isLoading={loadings.salesAndIncomesForecastByMoney}
+            onApplyFilters={getSalesAndIncomesForecast}
+            isMoney
+          />
+
+          <VerticalChartWithDate
+            data={forecastByProductByAppareances}
+            title="Prediciones de producto"
+            subtitle="Por apariciones"
+            isLoading={loadings.productsForecastByAppearances}
+            onApplyFilters={getProductsForecast}
+          />
+
+          <VerticalChartWithDate
+            data={forecastByProductByMoney}
+            title="Prediciones de producto"
+            subtitle="Por unidades monetarias"
+            isLoading={loadings.productsForecastByMoney}
+            onApplyFilters={getProductsForecast}
+            isMoney
+          />
         </div>
       </div>
     </Box>
