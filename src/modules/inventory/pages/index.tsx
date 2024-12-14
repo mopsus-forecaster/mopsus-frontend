@@ -12,12 +12,15 @@ import {
 } from '../../../contexts/Inventory/InventoryContext';
 import { DetailsIncome } from '../components/DetailsIncome';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
+import { AuthContext } from '../../../contexts';
+import { ROLES_ENUM } from '../../../router/PrivateRoutes';
 
 export const Inventory = () => {
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [search, setSearch] = useState(null);
   const [firstLoad, setFirstLoad] = useState(true);
   const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
 
   const {
     filters,
@@ -125,12 +128,15 @@ export const Inventory = () => {
           </button>
         </div>
         <div className={styles.btnContainerPage}>
-          <button
-            className={styles.buttonAdd}
-            onClick={() => navigate('/nuevo-ajuste')}
-          >
-            Agregar Ajuste
-          </button>
+          {auth.roles.includes(ROLES_ENUM.admin) && (
+            <button
+              className={styles.buttonAdd}
+              onClick={() => navigate('/nuevo-ajuste')}
+            >
+              Agregar Ajuste
+            </button>
+          )}
+
           <button
             className={styles.buttonAdd}
             onClick={() => navigate('/nuevo-ingreso')}
