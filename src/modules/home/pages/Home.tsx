@@ -94,14 +94,6 @@ export const Home = () => {
           />
 
           <VerticalChartWithDate
-            data={forecastByProductByAppareances}
-            title="Prediciones de producto"
-            subtitle="Por apariciones"
-            isLoading={loadings.productsForecastByAppearances}
-            onApplyFilters={getProductsForecast}
-          />
-
-          <VerticalChartWithDate
             data={incomesAndSalesByHourByAppareances}
             title="Cantidad de ventas por horas"
             subtitle="Por apariciones"
@@ -116,6 +108,14 @@ export const Home = () => {
             isLoading={loadings.salesAndIncomesForecastByMoney}
             onApplyFilters={getSalesAndIncomesForecast}
             isMoney
+          />
+
+          <VerticalChartWithDate
+            data={forecastByProductByAppareances}
+            title="Predicciones de producto"
+            subtitle="Por apariciones"
+            isLoading={loadings.productsForecastByAppearances}
+            onApplyFilters={getProductsForecast}
           />
         </div>
       </div>
