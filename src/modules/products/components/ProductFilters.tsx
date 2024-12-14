@@ -2,16 +2,50 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import styles from '../styles/products.module.scss';
 import { mopsusIcons } from '../../../icons';
 
-export const ProductFilters = ({ filters, categories, setFilters, units }) => {
+export const ProductFilters = ({ filters, categories, setFilters, units, brands }) => {
   return (
     <form className={styles.formFilter}>
+      <div className={styles.formGroup}>
+        <label htmlFor="id_brand" className={styles.modalLabel}>
+          Marcas
+        </label>
+        <select
+          name="id_brand"
+          id="id_brand"
+          className={styles.selectFilter}
+          value={filters.id_brand || ''}
+          onChange={(e) =>
+            setFilters((prevFilters) => ({
+              ...prevFilters,
+              id_brand: e.target.value,
+            }))
+          }
+        >
+          <option value="" disabled>
+            Seleccione una marca
+          </option>
+          {brands.length > 0 ? (
+            brands.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))
+          ) : (
+            <option value="" disabled>
+              No hay marcas disponibles
+            </option>
+          )}
+        </select>
+      </div>
+
+
       <div className={styles.formGroup}>
         <label htmlFor="category_id" className={styles.modalLabel}>
           Categoría
         </label>
         <select
-          name=""
-          id=""
+          name="category_id"
+          id="category_id"
           className={styles.selectFilter}
           value={filters.category_id || ''}
           onChange={(e) =>

@@ -27,6 +27,7 @@ export const SalesProvider = ({ children }) => {
 
   const [subTotal, setSubTotal] = useState(null);
   const [totalCount, setTotalCount] = useState(null);
+
   const addProductToSale = (product) => {
     const productInSale = addProduct.findIndex(
       (item) => item.id === product.id
@@ -51,6 +52,14 @@ export const SalesProvider = ({ children }) => {
     setAddProduct((prevState) =>
       prevState.map((item) =>
         item.id === id ? { ...item, quantity: quantity } : item
+      )
+    );
+  };
+
+  const productPriceUnitary = (id, price) => {
+    setAddProduct((prevState) =>
+      prevState.map((item) =>
+        item.id === id ? { ...item, price: price } : item
       )
     );
   };
@@ -197,7 +206,7 @@ export const SalesProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => {},
+                action: () => { },
               },
               title: `La venta n°"${saleToDelete.saleId}" no pudo ser anulada`,
               message:
@@ -277,6 +286,7 @@ export const SalesProvider = ({ children }) => {
         formatId,
         totalCount,
         productAdjustment,
+        productPriceUnitary
       }}
     >
       {children}

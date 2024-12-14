@@ -1,9 +1,15 @@
 import { apiClient } from '../http-client/api-client';
 
-export const createInventory = async (description, products) => {
-  const productData = products.map(({ id, quantity }) => ({
+export const createInventory = async (
+  description,
+  products,
+  date_receipt,
+  receipt_number
+) => {
+  const productData = products.map(({ id, quantity, price }) => ({
     id_product: id,
     quantity: quantity,
+    price: price,
   }));
 
   const response = await apiClient({
@@ -12,6 +18,8 @@ export const createInventory = async (description, products) => {
     verb: 'post',
     dataSend: {
       products: productData,
+      date_receipt,
+      receipt_number,
       description,
     },
   });

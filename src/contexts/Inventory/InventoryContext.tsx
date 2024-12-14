@@ -6,12 +6,11 @@ import {
   getInventoryById,
 } from '../../services/inventory';
 import { mopsusIcons } from '../../icons';
-import { LoadingContext } from '../loading/LoadingContext';
 
 export const InventoryContext = createContext(null);
 
 export const INITIAL_FILTERS = {
-  date: '',
+  dateReceipt: '',
   isActive: null,
   include_adjustments: null,
   id: null,
@@ -26,6 +25,11 @@ export const InventoryProvider = ({ children }) => {
   const [incomes, setIncomes] = useState([]);
   const [editIncome, setEditIncome] = useState(null);
   const [totalIncomes, setTotalIncomes] = useState(null);
+  const [priceUnitary, setPriceUnitary] = useState(null);
+
+  const productPriceUnitary = async (price) => {
+    setPriceUnitary(price)
+  }
 
   const getPaginatedInventory = async (customFilters?) => {
     setIsLoading(true);
@@ -37,11 +41,11 @@ export const InventoryProvider = ({ children }) => {
       if (incomes) {
         const mappedInventorys = incomes.map((income) => ({
           id: income.id,
-          date: formatDate(income.date),
+          dateReceipt: income.date_receipt,
           description: income.description || 'Sin descripción',
           isActive: income.is_active ? 'Activo' : 'Inactivo',
           isAdjustment: income.is_adjustment ? 'Ajuste' : 'Ingreso',
-          formatId: formatId(income.id),
+          receiptNumber: income.receipt_number,
         }));
         setTotalIncomes(total_incomes);
         setIncomes(mappedInventorys);
@@ -67,10 +71,6 @@ export const InventoryProvider = ({ children }) => {
     const year = date.getFullYear();
 
     return `${day}/${month}/${year}`;
-  };
-
-  const formatId = (id) => {
-    return id.length > 5 ? id.slice(0, 5) : id;
   };
 
   const goToNextPage = () => {
@@ -129,7 +129,7 @@ export const InventoryProvider = ({ children }) => {
                     getPaginatedInventory();
                   },
                 },
-                title: `Ingreso/Egreso N° "${formatId(incomeToDelete.id)}" dado de baja exitosamente`,
+                title: `Ingreso/Egreso N° "${(incomeToDelete.receipt_number)}" dado de baja exitosamente`,
                 message:
                   'Puede restaurar los ingresos/egresos desde la tabla de inventario.',
               });
@@ -139,9 +139,9 @@ export const InventoryProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => {},
+                action: () => { },
               },
-              title: `Ingreso/Egreso N° "${formatId(incomeToDelete.id)}" no pudo darse de baja`,
+              title: `Ingreso/Egreso N° "${(incomeToDelete.receipt_number)}" no pudo darse de baja`,
               message:
                 'Lo sentimos, no pudimos concretar la opercion. Intente mas tarde',
             });
@@ -149,7 +149,7 @@ export const InventoryProvider = ({ children }) => {
           }
         },
       },
-      title: `Dar de baja Ingreso/Egreso N° "${formatId(incomeToDelete.id)}" `,
+      title: `Dar de baja Ingreso/Egreso N° "${(incomeToDelete.receipt_number)}" `,
       message: '¿Está seguro que desea dar de baja el Ingreso/Egreso?',
       icon: mopsusIcons.warning,
     });
@@ -164,7 +164,6 @@ export const InventoryProvider = ({ children }) => {
     }
     setIsLoadingDetails(true);
     try {
-      console.log('entro');
       const editIncome = await getInventoryById(incomeDetails.id);
       setEditIncome(editIncome);
     } catch (e) {
@@ -193,12 +192,13 @@ export const InventoryProvider = ({ children }) => {
         incomes,
         setIncomes,
         deleteIncomeFromTable,
-        formatId,
         handleSetIncomeToEdit,
         editIncome,
         formatDate,
         totalIncomes,
         isLoadingDetails,
+        productPriceUnitary,
+        priceUnitary
       }}
     >
       {children}

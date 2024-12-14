@@ -107,7 +107,7 @@ export const SummarySales = () => {
 
         <div>
           <div className={styles.resumenContent}>
-            <p className={styles.p}>Descuento %</p>
+            <p className={styles.p}>Descuento (%)</p>
             <input
               type="number"
               onChange={(e) => setDiscount(Number(e.target.value) / 100)}
@@ -135,6 +135,7 @@ export const SummarySales = () => {
                   title: 'Aceptar',
                   action: () => {
                     navigate('/ventas')
+                    setAddProduct([])
                   },
                 },
                 reject: {

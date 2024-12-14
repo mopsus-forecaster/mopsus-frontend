@@ -12,6 +12,8 @@ export const InventortSummary = () => {
   const { addProduct, setAddProduct } = useContext(SaleContext);
   const { handleModalChange, handleOpen } = useContext(ModalContext);
   const [description, setDescription] = useState('');
+  const [dateReceipt, setDateReceipt] = useState('')
+  const [receiptNumber, setReceiptNumber] = useState('')
   const navigate = useNavigate();
   const { setShowLoading } = useContext(LoadingContext);
 
@@ -33,7 +35,7 @@ export const InventortSummary = () => {
 
     try {
       setShowLoading(true);
-      const res = await createInventory(description, addProduct);
+      const res = await createInventory(description, addProduct, dateReceipt, receiptNumber);
       if (res) {
         setShowLoading(false);
         handleModalChange({
@@ -54,13 +56,14 @@ export const InventortSummary = () => {
       handleModalChange({
         accept: {
           title: 'Aceptar',
-          action: () => { },
+          action: () => { setAddProduct([]) },
         },
         title: 'Error técnico',
         message: 'No pudimos concretar su solicitud. Intente más tarde.',
         icon: mopsusIcons.error,
       });
       handleOpen();
+      setAddProduct([])
     }
   };
 
@@ -69,7 +72,7 @@ export const InventortSummary = () => {
       <div className={styles.tableContainer}>
         <header>
           <div className={styles.contentBox}>
-            <p className={styles.titleBox}>Productos Agregados</p>
+            <p className={styles.titleBox}>Productos Agregados al Ingreso</p>
             <hr className={styles.line2} />
           </div>
         </header>
@@ -81,6 +84,7 @@ export const InventortSummary = () => {
                   <th className={styles.category}>Artículo</th>
                   <th className={styles.category}>Unidad</th>
                   <th className={styles.category}>Cantidad</th>
+                  <th className={styles.category}>Precio Unitario <br />(ARS)</th>
                   <th className={styles.category}></th>
                 </tr>
               </thead>
@@ -104,16 +108,35 @@ export const InventortSummary = () => {
       <div className={styles.resumenContainer}>
         <header className={styles.marginHeader}>
           <div className={styles.contentBox}>
-            <p className={styles.titleBox}>Información del ingreso</p>
+            <div className={styles.resumen}>
+              <p className={styles.titleBox}>Información del ingreso</p>
+              <input
+                type="date"
+                name='date_receipt'
+                onChange={(e) => setDateReceipt(e.target.value)}
+                className={styles.inputDate}
+              />
+            </div>
             <hr className={styles.line2} />
           </div>
         </header>
+        <div className={styles.contentBox}>
+          <div className={styles.resumenContent}>
+            <p className={styles.p}>Nro de comprobante</p>
+            <input
+              type="number"
+              name='receiptNumber'
+              onChange={(e) => setReceiptNumber(e.target.value)}
+              className={styles.inputDesc}
+            />
+          </div>
+        </div>
         <div className={styles.contentBox}>
           <p className={styles.titleBox}>Descripción</p>
           <textarea
             id="comment"
             name="description"
-            rows={4}
+            rows={1}
             placeholder="Escriba su comentario..."
             maxLength={500}
             value={description}
@@ -124,7 +147,7 @@ export const InventortSummary = () => {
         <div className={styles.btnContainer}>
           <div>
             <button className={styles.buttonRegsiter} type='submit' onClick={onSubmit}>
-              Registrar Ajuste
+              Registrar Ingreso
             </button>
           </div>
           <div>
@@ -134,6 +157,7 @@ export const InventortSummary = () => {
                   title: 'Aceptar',
                   action: () => {
                     navigate('/inventario')
+                    setAddProduct([])
                   },
                 },
                 reject: {

@@ -16,6 +16,7 @@ export const MapNewProductTables = (title, settings, select) => {
             className={styles.icon}
             style={{ color: '#ffff', fontSize: '1.2rem' }}
             icon={mopsusIcons.no}
+            fontSize={30}
             onClick={() => {
                 handleSelectSetting(title, settings)
             }}
@@ -27,6 +28,7 @@ export const MapNewProductTables = (title, settings, select) => {
             className={styles.icon}
             style={{ color: '#ffff', fontSize: '1.2rem' }}
             icon={mopsusIcons.yes}
+            fontSize={30}
             onClick={() => {
                 handleNotSelectSetting(title)
             }}

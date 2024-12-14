@@ -3,16 +3,22 @@ import { Icon } from '@iconify/react/dist/iconify.cjs';
 import { mopsusIcons } from '../../../icons';
 import { useContext } from 'react';
 import { SaleContext } from '../../../contexts/Sales/SalesContext';
+import { InventoryContext } from '../../../contexts/Inventory/InventoryContext';
 
 export const RowAdjustmentSummary = ({ product }) => {
-  const { productName, category, measureUnitDescription, id } = product;
+  const { productName, category, measureUnitDescription, id, barcode } = product;
   const { removeProductFromSale, productQuantity, productAdjustment } =
     useContext(SaleContext);
   return (
     <>
       <tr className={styles.row}>
         <td className={styles.productName}>
-          {productName}
+          <div>
+            {productName}
+          </div>
+          <div>
+            codigo de barra
+          </div>
           <p className={styles.productCategory}>Categoría: {category}</p>
         </td>
 

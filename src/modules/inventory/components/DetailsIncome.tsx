@@ -5,12 +5,15 @@ import { RowDetailsIncome } from './RowDetailsIncome';
 import { CircularProgress } from '@mui/material';
 
 export const DetailsIncome = () => {
-  const { editIncome, formatDate, formatId, isLoadingDetails } =
-    useContext(InventoryContext);
-  const { id, date, description, is_adjustment } = editIncome || {};
+  const {
+    editIncome,
+    isLoadingDetails
+  } = useContext(InventoryContext);
+  const { date_receipt, description, is_adjustment, receipt_number } = editIncome || {};
 
-  useEffect(() => {}, [editIncome]);
+  useEffect(() => {
 
+  }, [editIncome])
   return (
     <section className={styles.boxInventoryProducts}>
       <header>
@@ -23,9 +26,9 @@ export const DetailsIncome = () => {
       </header>
       <section>
         <div className={styles.infoIncome}>
-          <p className={styles.dataIncome}>N° &nbsp;{id ? formatId(id) : ''}</p>
+          <p className={styles.dataIncome}>N° &nbsp;{receipt_number ? receipt_number : ''}</p>
           <p className={styles.dataIncome}>
-            Fecha:&nbsp;&nbsp;{date ? formatDate(date) : ''}
+            Fecha:&nbsp;&nbsp;{date_receipt ? date_receipt : ''}
           </p>
           {description && (
             <p className={styles.dataIncome}>
@@ -45,6 +48,7 @@ export const DetailsIncome = () => {
                 <tr className={styles.trIcomes}>
                   <th className={styles.thIcomesArticulo}>Artículo</th>
                   <th className={styles.thIcomesArticulo}>Cantidad</th>
+                  <th className={styles.thIcomesArticulo}>Precio</th>
                   {is_adjustment && (
                     <th className={styles.thIcomesArticulo}>Ingreso/Egreso</th>
                   )}

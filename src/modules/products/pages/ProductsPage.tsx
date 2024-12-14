@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { NewProduct } from '../components';
 import { Filter } from '../../../shared/filter';
 import { ProductsContext } from '../../../contexts/Products/ProductsContext';
-import { getCategories, getUnits } from '../../../services/products';
+import { getBrands, getCategories, getUnits } from '../../../services/products';
 import { INITIAL_FILTERS } from '../../../contexts/Products/ProductsContext';
 import { ModifyProduct } from '../components/ModifyProduct';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
@@ -14,6 +14,7 @@ import { productsTableColumns } from '../data/productsColumns';
 import { ProductFilters } from '../components/ProductFilters';
 import { MapProductTables } from '../utils/product-table-mapper';
 import { useNavigate } from 'react-router-dom';
+import { UpdatePrice } from '../components/UpdatePrice';
 
 export const ProductsPage = () => {
   const {
@@ -23,8 +24,6 @@ export const ProductsPage = () => {
     getProducts,
     setMappedProducts,
     filters,
-    handleSetProductToEdit,
-    editProduct,
     totalPages,
     goToLastPage,
     goToFirstPage,
@@ -33,13 +32,19 @@ export const ProductsPage = () => {
     totalCount,
   } = useContext(ProductsContext);
 
-  const [isOpenNewProduct, setIsOpenNewProduct] = useState(false);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [units, setUnits] = useState([]);
   const [firstLoad, setFirstLoad] = useState(true);
   const navigate = useNavigate()
+
+  const handleOpenUpdatePrice = (e) => {
+    e.preventDefault();
+    setIsOpenUpdate(true)
+  }
 
   const handleNewProduct = (e) => {
     e.preventDefault();
@@ -96,6 +101,18 @@ export const ProductsPage = () => {
         }
       };
 
+
+      const getBrandOptions = async () => {
+        try {
+          const { marcas } = await getBrands();
+          if (marcas) {
+            setBrands(marcas);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      getBrandOptions()
       getCategoriesOptions();
       getUnitsOptions();
       getProducts();
@@ -127,9 +144,15 @@ export const ProductsPage = () => {
             Filtros
           </button>
         </div>
-        <button className={styles.buttonAdd} onClick={handleNewProduct}>
-          Agregar producto
-        </button>
+        <div className={styles.btnContainerProd}>
+          <button className={styles.buttonAdd} onClick={handleNewProduct}>
+            Agregar producto
+          </button>
+          <button className={styles.buttonAdd} onClick={handleOpenUpdatePrice}>
+            Actualizar precios
+          </button>
+        </div>
+
       </section>
 
       <MopsusTable
@@ -168,8 +191,14 @@ export const ProductsPage = () => {
             filters={filters}
             setFilters={setFilters}
             units={units}
+            brands={brands}
           />
         </Filter>
+      )}
+
+
+      {isOpenUpdate && (
+        <UpdatePrice brand={brands} category={categories} setIsOpenUpdate={setIsOpenUpdate} />
       )}
 
     </Box>

@@ -36,7 +36,7 @@ export const NewAdjustment = () => {
                         value={search}
                         type="text"
                         className={styles.tableSearchInput}
-                        placeholder="Buscar por nombre..."
+                        placeholder="Buscar por nombre o código de barra..."
                     />
                 </div>
 

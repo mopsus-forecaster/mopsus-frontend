@@ -4,6 +4,7 @@ import {
   getAllProducts,
   getProductsAllAll,
   reactivateProduct,
+  updatePrice,
 } from '../../services/products';
 import { ModalContext } from '../modal/ModalContext';
 import { mopsusIcons } from '../../icons';
@@ -38,6 +39,7 @@ export const ProductsProvider = ({ children }) => {
   const [brandSelect, setBrandSelect] = useState(null);
   const [unitSelectName, setUnitSelectName] = useState(null);
   const [unitSelect, setUnitSelect] = useState(null);
+  const [stateFrom, setStateFrom] = useState('')
   const navigate = useNavigate()
   const {
     getCategory,
@@ -61,21 +63,13 @@ export const ProductsProvider = ({ children }) => {
     }
   }
 
-  const handleNotSelectSetting = async (title) => {
-    if (title === 'Categorías') {
-      setCategorySelect(null)
-      setCategorySelectName(null)
-      getCategory()
-    }
-    if (title === 'Marcas') {
-      setBrandSelectName(null)
-      setBrandSelect(null)
-      getBrand()
-    }
-    if (title === 'Unidades') {
-      setUnitSelectName(null)
-      setUnitSelect(null)
-    }
+  const handleNotSelectSetting = async () => {
+    setCategorySelect(null)
+    setCategorySelectName(null)
+    setBrandSelectName(null)
+    setBrandSelect(null)
+    setUnitSelectName(null)
+    setUnitSelect(null)
   }
   const getProducts = async (customFilters?) => {
     try {
@@ -148,6 +142,7 @@ export const ProductsProvider = ({ children }) => {
           brand: product.brand,
           brandId: product.id_brand,
           state: product.is_active ? 'Activo' : 'Inactivo',
+          barcode: product.barcode
         }));
         setMappedProducts(mapped);
       }
@@ -303,6 +298,7 @@ export const ProductsProvider = ({ children }) => {
     handleOpen();
   };
 
+
   return (
     <ProductsContext.Provider
       value={{
@@ -331,7 +327,9 @@ export const ProductsProvider = ({ children }) => {
         categorySelectName,
         brandSelectName,
         unitSelectName,
-        setEditProduct
+        setEditProduct,
+        setStateFrom,
+        stateFrom
       }}
     >
       {children}

@@ -17,15 +17,19 @@ export const ProductInfo = ({ producto }) => {
                     <div>
                         <p className={styles.infoName}>{productName}</p>
                     </div>
-                    <div>
-                        {
-                            barcode && (
-                                <p>Codigo: {barcode}</p>
-                            )
-                        }
-                    </div>
-                </div>
 
+                </div>
+                <div>
+                    {
+                        barcode && (
+                            <div className={styles.barcode}>
+                                <Icon fontSize={20} icon={mopsusIcons.barcode} />
+                                <p className={styles.pBarcode}>{barcode}</p>
+                            </div>
+
+                        )
+                    }
+                </div>
                 <p className={styles.infoUnit}>Unidad: {measureUnitDescription}</p>
                 <p className={styles.infoUnit}>Stock: {stock}</p>
                 <p className={styles.infoUnit}>Marca: {brand}</p>

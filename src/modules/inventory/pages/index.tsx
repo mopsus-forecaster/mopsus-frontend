@@ -38,13 +38,13 @@ export const Inventory = () => {
 
   const inventoryTableColums = [
     {
-      text: 'N°',
-      value: 'formatId',
+      text: 'N° Comprobante',
+      value: 'receiptNumber',
       sort: true,
     },
     {
       text: 'Fecha',
-      value: 'date',
+      value: 'dateReceipt',
       sort: true,
     },
     {
