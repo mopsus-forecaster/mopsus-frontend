@@ -9,8 +9,9 @@ export const useRefreshToken = () => {
       access_token: accessToken,
       refresh_token: refreshToken,
       name: companyName,
+      roles,
     } = await refreshUser(auth?.refreshToken);
-    onRefresh(accessToken, companyName, refreshToken);
+    onRefresh(accessToken, companyName, refreshToken, roles);
     return accessToken;
   };
   return refresh;

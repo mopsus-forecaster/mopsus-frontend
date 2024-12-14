@@ -14,16 +14,6 @@ export const addProduct = async (
   const reposition_point = Number(repositionPointNoCasted);
   const stock = Number(stockNoCasted);
 
-  console.log('Datos a enviar al API:', {
-    title,
-    price,
-    reposition_point,
-    stock,
-    category_id,
-    unidad_id,
-    id_brand,
-    barcode,
-  });
   const response = await apiClient({
     api: 'products',
     service: '',

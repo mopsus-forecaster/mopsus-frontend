@@ -21,12 +21,14 @@ const getUser = async (cookieRefreshToken: string) => {
       access_token: accessToken,
       refresh_token: refreshToken,
       name: companyName,
+      roles,
     } = await refreshUser(cookieRefreshToken);
 
     return {
       accessToken,
       refreshToken,
       companyName,
+      roles,
     };
   } catch (error) {
     return null;
@@ -38,6 +40,7 @@ const init = () => {
   return {
     logged: false,
     user: null,
+    roles: [],
   };
 };
 
@@ -90,7 +93,8 @@ export const AuthProvider = ({ children }) => {
   const login = (
     companyName: string,
     accessToken: string,
-    refreshToken: string
+    refreshToken: string,
+    roles: string[]
   ) => {
     Cookies.set('refreshToken', refreshToken, {
       secure: false,
@@ -100,12 +104,18 @@ export const AuthProvider = ({ children }) => {
       secure: false,
       sameSite: 'Strict',
     });
+    Cookies.set('roles', roles, {
+      secure: false,
+      sameSite: 'Strict',
+    });
+
     const action: Action = {
       type: actionTypes.login,
       payload: {
         companyName,
         accessToken,
         refreshToken,
+        roles,
       },
     };
     dispatch(action);
@@ -114,13 +124,18 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     Cookies.remove('refreshToken');
     Cookies.remove('accessToken');
+    Cookies.remove('roles');
     dispatch({ type: actionTypes.logout });
   };
 
-  const refresh = (accessToken: string, companyName: string) => {
+  const refresh = (
+    accessToken: string,
+    companyName: string,
+    roles: string[]
+  ) => {
     dispatch({
       type: actionTypes.refresh,
-      payload: { accessToken, companyName },
+      payload: { accessToken, companyName, roles },
     });
   };
 

@@ -85,7 +85,6 @@ export const Inventory = () => {
           };
 
           getPaginatedInventory(newFilters);
-          console.log(newFilters);
           return newFilters;
         });
       }

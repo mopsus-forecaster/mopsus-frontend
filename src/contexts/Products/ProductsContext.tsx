@@ -38,45 +38,42 @@ export const ProductsProvider = ({ children }) => {
   const [brandSelect, setBrandSelect] = useState(null);
   const [unitSelectName, setUnitSelectName] = useState(null);
   const [unitSelect, setUnitSelect] = useState(null);
-  const navigate = useNavigate()
-  const {
-    getCategory,
-    getBrand
-  } = useContext(SettingsContext)
+  const navigate = useNavigate();
+  const { getCategory, getBrand } = useContext(SettingsContext);
 
   const handleSelectSetting = async (title, settings) => {
     if (title === 'Categorías') {
-      setCategorySelect(settings.id)
-      setCategorySelectName(settings.name)
-      getCategory()
+      setCategorySelect(settings.id);
+      setCategorySelectName(settings.name);
+      getCategory();
     }
     if (title === 'Marcas') {
-      setBrandSelect(settings.id)
-      setBrandSelectName(settings.name)
-      getBrand()
+      setBrandSelect(settings.id);
+      setBrandSelectName(settings.name);
+      getBrand();
     }
     if (title === 'Unidades') {
-      setUnitSelect(settings.id)
-      setUnitSelectName(settings.name)
+      setUnitSelect(settings.id);
+      setUnitSelectName(settings.name);
     }
-  }
+  };
 
   const handleNotSelectSetting = async (title) => {
     if (title === 'Categorías') {
-      setCategorySelect(null)
-      setCategorySelectName(null)
-      getCategory()
+      setCategorySelect(null);
+      setCategorySelectName(null);
+      getCategory();
     }
     if (title === 'Marcas') {
-      setBrandSelectName(null)
-      setBrandSelect(null)
-      getBrand()
+      setBrandSelectName(null);
+      setBrandSelect(null);
+      getBrand();
     }
     if (title === 'Unidades') {
-      setUnitSelectName(null)
-      setUnitSelect(null)
+      setUnitSelectName(null);
+      setUnitSelect(null);
     }
-  }
+  };
   const getProducts = async (customFilters?) => {
     try {
       setIsLoading(true);
@@ -84,7 +81,6 @@ export const ProductsProvider = ({ children }) => {
         customFilters ? customFilters : filters
       );
       if (productos) {
-        console.log(productos);
         const mapped = productos.map((product) => ({
           id: product.id,
           measureUnitId: product.id_units,
@@ -98,9 +94,8 @@ export const ProductsProvider = ({ children }) => {
           state: product.is_active ? 'Activo' : 'Inactivo',
           brandId: product.id_brand,
           brand: product.brand,
-          barcode: product.barcode
+          barcode: product.barcode,
         }));
-        console.log(mapped)
         if (total_count) {
           setTotalCount(total_count);
         }
@@ -203,14 +198,14 @@ export const ProductsProvider = ({ children }) => {
       setEditProduct(null);
       return;
     }
-    setBrandSelect(product.brandId)
-    setBrandSelectName(product.brand)
-    setCategorySelect(product.categoryId)
-    setCategorySelectName(product.category)
-    setUnitSelect(product.measureUnitId)
-    setUnitSelectName(product.measureUnitDescription)
+    setBrandSelect(product.brandId);
+    setBrandSelectName(product.brand);
+    setCategorySelect(product.categoryId);
+    setCategorySelectName(product.category);
+    setUnitSelect(product.measureUnitId);
+    setUnitSelectName(product.measureUnitDescription);
     setEditProduct(product);
-    navigate('/modificar-producto')
+    navigate('/modificar-producto');
   };
 
   const deleteProductFromTable = (productToDelete) => {
@@ -241,7 +236,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${productToDelete.productName}" no pudo darse de baja`,
               message:
@@ -286,7 +281,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${productToReactivate.productName}" no pudo darse de alta`,
               message:
@@ -331,7 +326,7 @@ export const ProductsProvider = ({ children }) => {
         categorySelectName,
         brandSelectName,
         unitSelectName,
-        setEditProduct
+        setEditProduct,
       }}
     >
       {children}

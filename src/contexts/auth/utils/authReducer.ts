@@ -12,6 +12,7 @@ export const authReducer = (state: LoginState, action: Action) => {
         user: payload.companyName,
         accessToken: payload.accessToken,
         refreshToken: payload.refreshToken,
+        roles: payload.roles,
       };
 
     case refresh:
@@ -21,6 +22,7 @@ export const authReducer = (state: LoginState, action: Action) => {
         user: payload.companyName,
         accessToken: payload.accessToken,
         refreshToken: payload.refreshToken,
+        roles: payload.roles,
       };
 
     case logout:
