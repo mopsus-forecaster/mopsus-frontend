@@ -48,7 +48,7 @@ export const DetailsIncome = () => {
                 <tr className={styles.trIcomes}>
                   <th className={styles.thIcomesArticulo}>Artículo</th>
                   <th className={styles.thIcomesArticulo}>Cantidad</th>
-                  <th className={styles.thIcomesArticulo}>Precio</th>
+                  <th className={styles.thIcomesArticulo}>Precio (ARS)</th>
                   {is_adjustment && (
                     <th className={styles.thIcomesArticulo}>Ingreso/Egreso</th>
                   )}

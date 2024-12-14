@@ -241,6 +241,11 @@ export const ModifyProduct = () => {
                 className={styles.modalInput}
                 min="0"
                 step="0.01"
+                onKeyDown={(e) => {
+                  if (e.key === '-' || e.key === 'e') {
+                    e.preventDefault();
+                  }
+                }}
                 value={form.price}
                 onChange={handleChange}
 
@@ -256,6 +261,11 @@ export const ModifyProduct = () => {
                 name="reposition_point"
                 className={styles.modalInput}
                 min="0"
+                onKeyDown={(e) => {
+                  if (e.key === '-' || e.key === 'e') {
+                    e.preventDefault();
+                  }
+                }}
                 value={form.reposition_point}
                 onChange={handleChange}
 
@@ -269,8 +279,13 @@ export const ModifyProduct = () => {
               <input
                 type="number"
                 name="stock"
-                className={styles.modalInput}
+                className={styles.modalInputDesabled}
                 min="0"
+                onKeyDown={(e) => {
+                  if (e.key === '-' || e.key === 'e') {
+                    e.preventDefault();
+                  }
+                }}
                 value={form.stock}
                 onChange={handleChange}
                 readOnly

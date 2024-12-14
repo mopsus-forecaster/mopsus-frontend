@@ -33,8 +33,8 @@ export const SummarySales = () => {
               navigate(`/${routes.sales}`);
             },
           },
-          title: 'Venta registrada con exito',
-          message: 'Podra visualizarla en la tabla de ventas',
+          title: 'Venta registrada con éxito',
+          message: 'Podrá visualizarla en la tabla de ventas',
         });
         handleOpen();
       }
@@ -110,6 +110,11 @@ export const SummarySales = () => {
             <p className={styles.p}>Descuento (%)</p>
             <input
               type="number"
+              onKeyDown={(e) => {
+                if (e.key === '-' || e.key === 'e') {
+                  e.preventDefault();
+                }
+              }}
               onChange={(e) => setDiscount(Number(e.target.value) / 100)}
               className={styles.inputDesc}
             />
@@ -125,7 +130,7 @@ export const SummarySales = () => {
         <div className={styles.btnContainer}>
           <div>
             <button className={styles.buttonRegsiter} type='submit' onClick={onSubmit}>
-              Registrar Ajuste
+              Registrar Venta
             </button>
           </div>
           <div>

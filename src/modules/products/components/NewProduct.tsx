@@ -248,6 +248,11 @@ export const NewProduct = () => {
                 className={styles.modalInput}
                 min="0"
                 step="0.01"
+                onKeyDown={(e) => {
+                  if (e.key === '-' || e.key === 'e') {
+                    e.preventDefault();
+                  }
+                }}
                 value={form.price}
                 onChange={handleChange}
 
@@ -264,6 +269,11 @@ export const NewProduct = () => {
                 className={styles.modalInput}
                 min="0"
                 value={form.reposition_point}
+                onKeyDown={(e) => {
+                  if (e.key === '-' || e.key === 'e') {
+                    e.preventDefault();
+                  }
+                }}
                 onChange={handleChange}
 
               />
@@ -280,6 +290,11 @@ export const NewProduct = () => {
                 min="0"
                 value={form.stock}
                 onChange={handleChange}
+                onKeyDown={(e) => {
+                  if (e.key === '-' || e.key === 'e') {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
 
@@ -288,10 +303,15 @@ export const NewProduct = () => {
                 Codigo de Barra
               </label>
               <input
-                type="text"
+                type="number"
                 name="barcode"
                 className={styles.modalInput}
                 onChange={handleChange}
+                onKeyDown={(e) => {
+                  if (e.key === '-' || e.key === 'e') {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
 
@@ -419,7 +439,18 @@ export const NewProduct = () => {
           }
           {
             !(isCategories || isBrand || isUnits) && (
-              <div>Debe seleccionar alguna categoría, unidad o marca</div>
+              <TablelSelect
+                title={'Información sobre categorías, marcas y unidades'}
+                isLoading={null}
+                set={null}
+                totalPage={null}
+                totalCount={null}
+                setFilters={() => { }}
+                rows={mappedBrand}
+                filter={() => { }}
+                select={() => { }}
+                buscador={true}
+              />
             )
           }
         </section>

@@ -18,10 +18,30 @@ export const RowInventorySummary = ({ product }) => {
 
                 <td className={styles.category}>{measureUnitDescription}</td>
                 <td className={styles.category}>
-                    <input type="number" className={styles.inputQuantity} min={1} defaultValue={1} onChange={(e) => productQuantity(id, e.target.value)} />
+                    <input type="number"
+                        className={styles.inputQuantity}
+                        min={1}
+                        defaultValue={1}
+                        onChange={(e) => productQuantity(id, e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === '-' || e.key === 'e') {
+                                e.preventDefault();
+                            }
+                        }}
+                    />
                 </td>
                 <td className={styles.category}>
-                    <input type="number" name="priceUnitary" className={styles.inputQuantity} onChange={(e) => productPriceUnitary(id, e.target.value)} />
+                    <input
+                        type="number"
+                        name="priceUnitary"
+                        className={styles.inputQuantity}
+                        onKeyDown={(e) => {
+                            if (e.key === '-' || e.key === 'e') {
+                                e.preventDefault();
+                            }
+                        }}
+                        onChange={(e) => productPriceUnitary(id, e.target.value)}
+                    />
                 </td>
                 <td className={styles.category}>
                     <button onClick={() => removeProductFromSale(product.id)} className={styles.buttonReset}>
