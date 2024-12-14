@@ -164,7 +164,6 @@ export const InventoryProvider = ({ children }) => {
     }
     setIsLoadingDetails(true);
     try {
-      console.log('entro');
       const editIncome = await getInventoryById(incomeDetails.id);
       setEditIncome(editIncome);
     } catch (e) {

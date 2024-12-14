@@ -117,15 +117,6 @@ export const Home = () => {
             isLoading={loadings.productsForecastByAppearances}
             onApplyFilters={getProductsForecast}
           />
-
-          <VerticalChartWithDate
-            data={forecastByProductByMoney}
-            title="Prediciones de producto"
-            subtitle="Por unidades monetarias"
-            isLoading={loadings.productsForecastByMoney}
-            onApplyFilters={getProductsForecast}
-            isMoney
-          />
         </div>
       </div>
     </Box>

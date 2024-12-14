@@ -27,7 +27,6 @@ interface FormData {
 
 export const ModifyProduct = () => {
   const { getProducts, editProduct } = useContext(ProductsContext);
-  console.log(editProduct)
   const { form, errors, handleChange } = useForm<FormData>({
     title: editProduct.productName,
     price: editProduct.price,

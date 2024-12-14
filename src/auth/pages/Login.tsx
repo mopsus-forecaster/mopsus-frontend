@@ -12,6 +12,7 @@ import { resendCode, userLogin } from '../../services';
 import { MfaFlow } from '../../types';
 import { CircularProgress } from '@mui/material';
 import { LoadingContext } from '../../contexts/loading/LoadingContext';
+import { defaultRouteByRole } from '../../router/utils/routeUtils';
 
 interface FormData {
   email: string;
@@ -48,9 +49,10 @@ export const Login = () => {
     setSession,
   } = useContext(AuthContext);
   const { setShowLoading } = useContext(LoadingContext);
+  const { auth } = useContext(AuthContext);
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
-  const from = comesFrom || routes.home;
 
   const { form, errors, handleChange, handleSubmit } = useForm<FormData>(
     {
@@ -109,9 +111,10 @@ export const Login = () => {
         access_token: accessToken,
         name,
         refresh_token: refreshToken,
+        roles,
       } = await userLogin(form.email, form.password);
-      login(name, accessToken, refreshToken);
-      navigate(from, {
+      login(name, accessToken, refreshToken, roles);
+      navigate(`/${defaultRouteByRole(auth)}`, {
         replace: true,
       });
     } catch (error) {

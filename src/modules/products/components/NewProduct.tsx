@@ -108,7 +108,6 @@ export const NewProduct = () => {
 
     try {
       setShowLoading(true);
-      console.log(unitSelect, categorySelect, brandSelect)
       const res = await addProduct(
         form.title,
         form.price,

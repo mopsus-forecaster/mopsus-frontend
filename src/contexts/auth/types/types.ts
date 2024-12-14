@@ -4,6 +4,7 @@ export type Action = {
     companyName: string;
     accessToken: string;
     refreshToken?: string;
+    roles: string[];
   };
 };
 

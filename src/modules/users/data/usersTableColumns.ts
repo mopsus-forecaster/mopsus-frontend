@@ -10,7 +10,7 @@ export const usersTableColumns = [
     sort: true,
   },
   {
-    text: 'Habilitado',
+    text: 'Estado',
     value: 'enabled',
     sort: true,
   },
@@ -26,7 +26,7 @@ export const usersTableColumns = [
   },
 
   {
-    text: 'Estado',
+    text: 'Activación',
     value: 'status',
     sort: true,
   },

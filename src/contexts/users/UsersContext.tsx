@@ -26,7 +26,6 @@ export const UsersProvider = ({ children }) => {
   const getEnterpriseUsers = async (customFilters?) => {
     try {
       setIsLoading(true);
-      console.log(customFilters);
       const { users, total_pages, total_count } = await getUsers(
         customFilters || filters
       );

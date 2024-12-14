@@ -16,6 +16,17 @@
   font-weight: bold;
 }
 
+.buttonAdd {
+  color: $color-white;
+  background-color: $color-primary;
+  border: 1px solid $color-primary;
+  border-radius: 20px;
+  padding: 0.5% 1.5%;
+  font-weight: 600;
+  transition: all 0.4s;
+  padding: 0.5rem 1rem;
+}
+
 .saleInformationContainer {
   display: flex;
   margin-left: 0.5%;

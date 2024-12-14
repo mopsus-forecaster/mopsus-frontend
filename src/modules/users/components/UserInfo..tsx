@@ -94,12 +94,12 @@ export const UserInfo = ({ user, onClose }) => {
           </div>
 
           <div className={styles.informationGroup}>
-            <label className={styles.informationLabel}>Estado</label>
+            <label className={styles.informationLabel}>Activación</label>
             <p className={styles.informationParagraph}>{status}</p>
           </div>
 
           <div className={styles.informationGroup}>
-            <label className={styles.informationLabel}>Habilitado</label>
+            <label className={styles.informationLabel}>Estado</label>
             <p className={styles.informationParagraph}>
               {user.enabled ? 'Si' : 'No'}
             </p>
