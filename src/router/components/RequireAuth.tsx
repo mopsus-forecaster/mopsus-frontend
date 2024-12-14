@@ -1,30 +1,25 @@
 import { useContext } from 'react';
-import { useLocation, Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { useLocation, Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
 import { defaultRouteByRole } from '../utils/routeUtils';
 
 export const RequireAuth = ({ allowedRoles }) => {
   const { auth } = useContext(AuthContext);
-  const navigate = useNavigate();
-
   const location = useLocation();
-  const isRoleAllowed = (roles) => {
-    let isAllowed = false;
 
-    roles.forEach((role) => {
-      if (allowedRoles.includes(role)) {
-        isAllowed = true;
-        return;
-      }
-    });
-    return isAllowed;
-  };
+  const defaultRoute = defaultRouteByRole(auth?.roles);
 
-  if (auth?.logged && isRoleAllowed(auth.roles)) {
+  const isRoleAllowed = auth?.roles?.some((role) =>
+    allowedRoles.includes(role)
+  );
+
+  if (auth?.logged && isRoleAllowed) {
     return <Outlet />;
-  } else if (auth?.logged) {
-    navigate(`/${defaultRouteByRole(auth.roles)}`);
-  } else {
-    <Navigate to="/login" state={{ from: location }} replace />;
   }
+
+  if (auth?.logged) {
+    return <Navigate to={`/${defaultRoute}`} replace />;
+  }
+
+  return <Navigate to="/login" state={{ from: location }} replace />;
 };
