@@ -137,6 +137,11 @@ export const ProductFilters = ({ filters, categories, setFilters, units, brands 
             id="price_min"
             name="price_min"
             placeholder="Mínimo"
+            onKeyDown={(e) => {
+              if (e.key === '-' || e.key === 'e') {
+                e.preventDefault();
+              }
+            }}
             min={0}
             className={styles.inputPrice}
             value={filters.price_min || ''}
@@ -153,6 +158,11 @@ export const ProductFilters = ({ filters, categories, setFilters, units, brands 
             id="price_max"
             name="price_max"
             placeholder="Máximo"
+            onKeyDown={(e) => {
+              if (e.key === '-' || e.key === 'e') {
+                e.preventDefault();
+              }
+            }}
             min={0}
             className={styles.inputPrice}
             value={filters.price_max || ''}

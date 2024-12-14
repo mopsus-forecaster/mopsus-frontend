@@ -145,10 +145,10 @@ export const ProductsPage = () => {
           </button>
         </div>
         <div className={styles.btnContainerProd}>
-          <button className={styles.buttonAdd} onClick={handleNewProduct}>
+          <button className={`${styles.buttonAdd} `} onClick={handleNewProduct}>
             Agregar producto
           </button>
-          <button className={styles.buttonAdd} onClick={handleOpenUpdatePrice}>
+          <button className={` ${styles.buttonAdd} `} onClick={handleOpenUpdatePrice}>
             Actualizar precios
           </button>
         </div>

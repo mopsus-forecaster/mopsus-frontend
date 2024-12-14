@@ -17,7 +17,11 @@ export const RowAdjustmentSummary = ({ product }) => {
             {productName}
           </div>
           <div>
-            codigo de barra
+            {product.barcode && (
+              <p className={styles.tdDetailsCate}>
+                <Icon fontSize={20} icon={mopsusIcons.barcode} /> {product.barcode}
+              </p>
+            )}
           </div>
           <p className={styles.productCategory}>Categoría: {category}</p>
         </td>
@@ -26,6 +30,11 @@ export const RowAdjustmentSummary = ({ product }) => {
         <td className={styles.category}>
           <input
             type="number"
+            onKeyDown={(e) => {
+              if (e.key === '-' || e.key === 'e') {
+                e.preventDefault();
+              }
+            }}
             className={styles.inputQuantity}
             min={1}
             defaultValue={1}
