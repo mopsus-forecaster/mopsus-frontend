@@ -1,20 +1,21 @@
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import styles from '../../styles/home.module.scss';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
-import { CircularProgress } from '@mui/material';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
@@ -31,15 +32,13 @@ interface ChartProps {
   isMoney?: boolean;
   title: string;
   subtitle: string;
-  isLoading: boolean;
 }
 
-export const HorizontalChart = ({
+export const LineChart = ({
   data,
   isMoney = false,
   title,
   subtitle,
-  isLoading,
 }: ChartProps) => {
   const colors = [
     '#5A52C3',
@@ -65,25 +64,26 @@ export const HorizontalChart = ({
     '#2A3748',
   ];
 
-  const chartData = (data) => {
-    return {
-      labels: data.labels,
-      datasets: data.dataset.map((ds) => ({
-        ...ds,
-        backgroundColor: colors.slice(0, data.labels.length),
-        borderRadius: 8,
-      })),
-    };
+  const chartData = {
+    labels: data.labels,
+    datasets: data.dataset.map((ds, index) => ({
+      ...ds,
+      borderColor: colors[index % colors.length], // Color de la línea
+      backgroundColor: `${colors[index % colors.length]}80`, // Color con opacidad
+      fill: 'start', // Pintar el área bajo la curva desde el eje
+      tension: 0.4, // Suavizado de la curva
+      pointRadius: 4, // Tamaño de los puntos
+      pointHoverRadius: 6, // Tamaño de los puntos al pasar el cursor
+    })),
   };
 
   const options = {
-    indexAxis: 'y' as const,
     plugins: {
       legend: {
         position: 'top' as const,
         labels: {
           font: {
-            size: 0,
+            size: 12,
             family: 'Inter',
           },
           color: '#DFE3E8',
@@ -109,6 +109,18 @@ export const HorizontalChart = ({
     maintainAspectRatio: false,
     scales: {
       x: {
+        ticks: {
+          font: {
+            size: 14,
+            family: 'Inter',
+          },
+          color: '#A0AEC0',
+        },
+        grid: {
+          display: false,
+        },
+      },
+      y: {
         beginAtZero: true,
         ticks: {
           font: {
@@ -122,18 +134,6 @@ export const HorizontalChart = ({
             }
             return isMoney ? `$${value}` : value;
           },
-        },
-        grid: {
-          display: false,
-        },
-      },
-      y: {
-        ticks: {
-          font: {
-            size: 14,
-            family: 'Inter',
-          },
-          color: '#A0AEC0',
         },
         grid: {
           display: false,
@@ -162,20 +162,8 @@ export const HorizontalChart = ({
     >
       <h2 className={styles.graphicTitle}>{title}</h2>
       <p className={styles.graphicSubtitle}>{subtitle}</p>
-      <div
-        style={{
-          height: '100%',
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {!isLoading && data ? (
-          <Bar data={chartData(data)} options={options} />
-        ) : (
-          <CircularProgress sx={{ color: '#fff' }} size="4rem" />
-        )}
+      <div style={{ height: '100%', width: '100%' }}>
+        <Line data={chartData} options={options} />
       </div>
     </div>
   );

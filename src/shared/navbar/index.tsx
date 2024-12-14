@@ -23,7 +23,7 @@ export const Navbar = () => {
         >
           <div className={styles.navItem}>
             <Icon icon={mopsusIcons.stats} />
-            <span>Inicio</span>
+            <span className={styles.span}>Inicio</span>
           </div>
         </NavLink>
         <NavLink
@@ -34,7 +34,7 @@ export const Navbar = () => {
         >
           <div className={styles.navItem}>
             <Icon icon={mopsusIcons.sale} />
-            <span>Ventas</span>
+            <span className={styles.span}>Ventas</span>
           </div>
         </NavLink>
         <NavLink
@@ -45,7 +45,7 @@ export const Navbar = () => {
         >
           <div className={styles.navItem}>
             <Icon icon={mopsusIcons.products} />
-            <span>Productos</span>
+            <span className={styles.span}>Productos</span>
           </div>
         </NavLink>
         <NavLink
@@ -56,7 +56,7 @@ export const Navbar = () => {
         >
           <div className={styles.navItem}>
             <Icon icon={mopsusIcons.inventory} />
-            <span>Stock</span>
+            <span className={styles.span}>Stock</span>
           </div>
         </NavLink>
 
@@ -68,7 +68,7 @@ export const Navbar = () => {
         >
           <div className={styles.navItem}>
             <Icon icon={mopsusIcons.settings} />
-            <span>Opciones</span>
+            <span className={styles.span}>Opciones</span>
           </div>
         </NavLink>
 
@@ -80,7 +80,7 @@ export const Navbar = () => {
         >
           <div className={styles.navItem}>
             <Icon icon={mopsusIcons.user} />
-            <span>Usuarios</span>
+            <span className={styles.span}>Usuarios</span>
           </div>
         </NavLink>
 
@@ -92,7 +92,7 @@ export const Navbar = () => {
         >
           <div className={styles.navItem}>
             <Icon icon={mopsusIcons.logOut} />
-            <span>Cerrar sesion</span>
+            <span className={styles.span}>Cerrar sesion</span>
           </div>
         </NavLink>
       </div>

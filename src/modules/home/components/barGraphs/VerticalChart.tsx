@@ -9,7 +9,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { CircularProgress } from '@mui/material';
 
 ChartJS.register(
   CategoryScale,
@@ -31,15 +30,13 @@ interface ChartProps {
   isMoney?: boolean;
   title: string;
   subtitle: string;
-  isLoading: boolean;
 }
 
-export const HorizontalChart = ({
+export const VerticalChart = ({
   data,
   isMoney = false,
   title,
   subtitle,
-  isLoading,
 }: ChartProps) => {
   const colors = [
     '#5A52C3',
@@ -65,25 +62,23 @@ export const HorizontalChart = ({
     '#2A3748',
   ];
 
-  const chartData = (data) => {
-    return {
-      labels: data.labels,
-      datasets: data.dataset.map((ds) => ({
-        ...ds,
-        backgroundColor: colors.slice(0, data.labels.length),
-        borderRadius: 8,
-      })),
-    };
+  const chartData = {
+    labels: data.labels,
+    datasets: data.dataset.map((ds, index) => ({
+      ...ds,
+      backgroundColor: colors[index % colors.length], // Asigna colores secuenciales
+      borderRadius: 8,
+    })),
   };
 
   const options = {
-    indexAxis: 'y' as const,
+    indexAxis: 'x' as const,
     plugins: {
       legend: {
         position: 'top' as const,
         labels: {
           font: {
-            size: 0,
+            size: 12,
             family: 'Inter',
           },
           color: '#DFE3E8',
@@ -95,9 +90,9 @@ export const HorizontalChart = ({
           label: (tooltipItem: any) => {
             const value = tooltipItem.raw;
             if (isMoney) {
-              return `$${value}`;
+              return `$${value.toLocaleString()}`;
             }
-            return value;
+            return value.toLocaleString();
           },
         },
         backgroundColor: '#2D3748',
@@ -109,6 +104,18 @@ export const HorizontalChart = ({
     maintainAspectRatio: false,
     scales: {
       x: {
+        ticks: {
+          font: {
+            size: 14,
+            family: 'Inter',
+          },
+          color: '#A0AEC0',
+        },
+        grid: {
+          display: false,
+        },
+      },
+      y: {
         beginAtZero: true,
         ticks: {
           font: {
@@ -117,26 +124,15 @@ export const HorizontalChart = ({
           },
           color: '#A0AEC0',
           callback: (value: any) => {
-            if (value >= 1000) {
-              return isMoney ? `$${value / 1000}K` : `${value / 1000}K`;
+            if (isMoney) {
+              return `$${value.toLocaleString()}`;
             }
-            return isMoney ? `$${value}` : value;
+            return value.toLocaleString();
           },
         },
         grid: {
-          display: false,
-        },
-      },
-      y: {
-        ticks: {
-          font: {
-            size: 14,
-            family: 'Inter',
-          },
-          color: '#A0AEC0',
-        },
-        grid: {
-          display: false,
+          display: true,
+          color: '#2D3748',
         },
       },
     },
@@ -162,20 +158,8 @@ export const HorizontalChart = ({
     >
       <h2 className={styles.graphicTitle}>{title}</h2>
       <p className={styles.graphicSubtitle}>{subtitle}</p>
-      <div
-        style={{
-          height: '100%',
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {!isLoading && data ? (
-          <Bar data={chartData(data)} options={options} />
-        ) : (
-          <CircularProgress sx={{ color: '#fff' }} size="4rem" />
-        )}
+      <div style={{ height: '100%', width: '100%' }}>
+        <Bar data={chartData} options={options} />
       </div>
     </div>
   );
