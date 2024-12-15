@@ -12,10 +12,17 @@ export const InventortSummary = () => {
   const { addProduct, setAddProduct } = useContext(SaleContext);
   const { handleModalChange, handleOpen } = useContext(ModalContext);
   const [description, setDescription] = useState('');
-  const [dateReceipt, setDateReceipt] = useState('')
-  const [receiptNumber, setReceiptNumber] = useState('')
+  const [dateReceipt, setDateReceipt] = useState('');
+  const [receiptNumber, setReceiptNumber] = useState('');
   const navigate = useNavigate();
   const { setShowLoading } = useContext(LoadingContext);
+
+  // Función para formatear la fecha
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const formattedDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    return formattedDate;
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +42,8 @@ export const InventortSummary = () => {
 
     try {
       setShowLoading(true);
-      const res = await createInventory(description, addProduct, dateReceipt, receiptNumber);
+      const formattedDate = formatDate(dateReceipt); // Formatear la fecha antes de enviarla
+      const res = await createInventory(description, addProduct, formattedDate, receiptNumber);
       if (res) {
         setShowLoading(false);
         handleModalChange({
@@ -63,7 +71,7 @@ export const InventortSummary = () => {
         icon: mopsusIcons.error,
       });
       handleOpen();
-      setAddProduct([])
+      setAddProduct([]);
     }
   };
 
@@ -115,6 +123,7 @@ export const InventortSummary = () => {
                 name='date_receipt'
                 onChange={(e) => setDateReceipt(e.target.value)}
                 className={styles.inputDate}
+                max={new Date().toISOString().split("T")[0]}
               />
             </div>
             <hr className={styles.line2} />

@@ -12,6 +12,7 @@ import {
 } from '../../../contexts/Inventory/InventoryContext';
 import { DetailsIncome } from '../components/DetailsIncome';
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
+import { MapInventoryTable } from '../utils/inventory-table-mapper';
 
 export const Inventory = () => {
   const [isOpenFilter, setIsOpenFilter] = useState(false);
@@ -38,13 +39,18 @@ export const Inventory = () => {
 
   const inventoryTableColums = [
     {
-      text: 'N° Comprobante',
-      value: 'receiptNumber',
+      text: 'Identificador',
+      value: 'formatId',
       sort: true,
     },
     {
       text: 'Fecha',
-      value: 'dateReceipt',
+      value: 'date',
+      sort: true,
+    },
+    {
+      text: 'N° Comprobante',
+      value: 'receiptNumber',
       sort: true,
     },
     {
@@ -63,18 +69,6 @@ export const Inventory = () => {
       sort: false,
     },
   ];
-
-  const options = [
-    {
-      icon: mopsusIcons.details,
-      onClick: handleSetIncomeToEdit,
-    },
-    {
-      icon: mopsusIcons.trash,
-      onClick: deleteIncomeFromTable,
-    },
-  ];
-
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (!firstLoad) {
@@ -113,7 +107,7 @@ export const Inventory = () => {
             onChange={(e) => setSearch(e.target.value)}
             value={search}
             className={styles.tableSearchInput}
-            placeholder="Buscar por N° comprobante..."
+            placeholder="Buscar por identificador..."
             type="text"
           />
           <button
@@ -149,15 +143,14 @@ export const Inventory = () => {
           </header>
           <MopsusTable
             columns={inventoryTableColums}
-            rows={incomes}
+            rows={incomes.map((income) => MapInventoryTable(income))}
             goToFirstPage={goToFirstPage}
             goToLastPage={goToLastPage}
             goToNextPage={goToNextPage}
             goToPreviousPage={goToPreviousPage}
-            includeOptions={true}
+            includeOptions={false}
             includePagination={true}
             isLoading={isLoading}
-            options={options}
             page={filters.page}
             setRows={setIncomes}
             totalPages={totalPages}

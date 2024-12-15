@@ -10,7 +10,7 @@ export const INITIAL_FILTERS = {
   id: null,
   name: '',
   description: '',
-  is_active: null,
+  is_active: true,
   page: 1,
 }
 export const SettingsProvider = ({ children }) => {

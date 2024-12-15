@@ -7,13 +7,16 @@ import { CircularProgress } from '@mui/material';
 export const DetailsIncome = () => {
   const {
     editIncome,
-    isLoadingDetails
+    isLoadingDetails,
+    formatDate,
+    formatId
   } = useContext(InventoryContext);
-  const { date_receipt, description, is_adjustment, receipt_number } = editIncome || {};
+
+
+  const { date_receipt, description, is_adjustment, receipt_number, id, date } = editIncome || {};
 
   useEffect(() => {
-
-  }, [editIncome])
+  }, [editIncome,])
   return (
     <section className={styles.boxInventoryProducts}>
       <header>
@@ -25,17 +28,23 @@ export const DetailsIncome = () => {
         </div>
       </header>
       <section>
-        <div className={styles.infoIncome}>
-          <p className={styles.dataIncome}>N° &nbsp;{receipt_number ? receipt_number : ''}</p>
-          <p className={styles.dataIncome}>
-            Fecha:&nbsp;&nbsp;{date_receipt ? date_receipt : ''}
-          </p>
-          {description && (
+        {editIncome && (
+          <div className={styles.infoIncome}>
+
+            <p className={styles.dataIncome}>N° &nbsp;{receipt_number ? receipt_number : formatId(id)}</p>
             <p className={styles.dataIncome}>
-              Descripción: &nbsp;{description}
+              Fecha:&nbsp;&nbsp;{date_receipt ? formatDate(date_receipt) : formatDate(date)}
             </p>
-          )}
-        </div>
+            {description && (
+              <p className={styles.dataIncome}>
+                Descripción: &nbsp;{description}
+              </p>
+            )}
+          </div>
+        )
+
+        }
+
       </section>
       <div className={styles.contentBoxInventory}>
         <hr className={styles.line2} />
