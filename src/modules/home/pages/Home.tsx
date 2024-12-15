@@ -50,14 +50,14 @@ export const Home = () => {
         <div className={styles.graphicsContainer}>
           <DoughnutChart
             data={totalSaleByCategoryAppearances}
-            title="Ventas por categoría"
+            title="Cantidad de ventas por categoría"
             subtitle="Según número de apariciones en el último mes"
             isLoading={loadings.totalSaleByCategoryAppearances}
           />
 
           <DoughnutChart
             data={totalSaleByCategoryMoney}
-            title="Ventas por categoría"
+            title="Ingresos por categoría"
             subtitle="Según ingresos generados en el último mes"
             isMoney
             isLoading={loadings.totalSaleByCategoryMoney}
@@ -65,14 +65,14 @@ export const Home = () => {
 
           <HorizontalChart
             data={topSalesByAppearances}
-            title="Top ventas"
+            title="Top productos con más ventas"
             subtitle="Según número de apariciones en el último mes"
             isLoading={loadings.topSalesByAppearances}
           />
 
           <HorizontalChart
             data={topSalesByMoney}
-            title="Top ventas"
+            title="Top productos que generaron más ingresos"
             subtitle="Según ingresos generados en el último mes"
             isMoney
             isLoading={loadings.topSalesByMoney}
@@ -80,22 +80,22 @@ export const Home = () => {
 
           <SalesForecastingGraph
             data={salesForecastingByAppareances}
-            title="Prediccion de ventas"
+            title="Predicción de cantidad ventas"
             subtitle="Por apariciones"
             isLoading={loadings.salesForecastByAppareances}
           />
 
           <SalesForecastingGraph
             data={salesForecastingByMoney}
-            title="Prediccion de ventas"
-            subtitle="Por unidades monetarias"
+            title="Predicción de ingresos"
+            subtitle="Medidos en ARS"
             isMoney
             isLoading={loadings.salesForecastByMoney}
           />
 
           <VerticalChartWithDate
             data={incomesAndSalesByHourByAppareances}
-            title="Ventas e ingresos por hora"
+            title="Cantidad de ventas por horas"
             subtitle="Por apariciones"
             isLoading={loadings.salesAndIncomesForecastByAppearances}
             onApplyFilters={getSalesAndIncomesForecast}
@@ -103,8 +103,8 @@ export const Home = () => {
 
           <VerticalChartWithDate
             data={incomesAndSalesByHourByMoney}
-            title="Ventas e ingresos por hora"
-            subtitle="Por unidades monetarias"
+            title="Ingresos generados por ventas por hora"
+            subtitle="Medida en ARS"
             isLoading={loadings.salesAndIncomesForecastByMoney}
             onApplyFilters={getSalesAndIncomesForecast}
             isMoney
@@ -112,7 +112,7 @@ export const Home = () => {
 
           <VerticalChartWithDate
             data={forecastByProductByAppareances}
-            title="Prediciones de producto"
+            title="Predicciones de producto"
             subtitle="Por apariciones"
             isLoading={loadings.productsForecastByAppearances}
             onApplyFilters={getProductsForecast}
