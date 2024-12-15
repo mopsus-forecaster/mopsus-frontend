@@ -12,6 +12,7 @@ import {
 import { Filter } from '../../../shared/filter';
 import { SalesFilter } from '../components/SalesFilter';
 import { SaleDetails } from '../components/SaleDateils';
+import { MapSalesTable } from '../utils/sales-table-mapper';
 
 export const Sales = () => {
   const {
@@ -67,16 +68,6 @@ export const Sales = () => {
     },
   ];
 
-  const options = [
-    {
-      icon: mopsusIcons.details,
-      onClick: handleSetSaleToDetails,
-    },
-    {
-      icon: mopsusIcons.trash,
-      onClick: deleteSaleFromTable,
-    },
-  ];
   const navigate = useNavigate();
   useEffect(() => {
     if (firstLoad) {
@@ -141,12 +132,13 @@ export const Sales = () => {
         goToLastPage={goToLastPage}
         goToNextPage={goToNextPage}
         goToPreviousPage={goToPreviousPage}
-        includeOptions={true}
+        includeOptions={false}
         includePagination={true}
         isLoading={isLoading}
-        options={options}
         page={filters.page}
-        rows={sales}
+        rows={sales.map((sale) =>
+          MapSalesTable(sale, deleteSaleFromTable, handleSetSaleToDetails)
+        )}
         setRows={setSales}
         totalPages={totalPages}
         totalElements={totalCount}

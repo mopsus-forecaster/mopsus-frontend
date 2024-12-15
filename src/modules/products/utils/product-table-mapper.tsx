@@ -3,6 +3,7 @@ import { mopsusIcons } from '../../../icons';
 import styles from '../../../shared/mopsusTable/styles/table.module.scss';
 import { useContext } from 'react';
 import { ProductsContext } from '../../../contexts/Products/ProductsContext';
+import { Tooltip } from '@mui/material';
 export const MapProductTables = (product) => {
   const {
     deleteProductFromTable,
@@ -11,36 +12,42 @@ export const MapProductTables = (product) => {
   } = useContext(ProductsContext);
 
   const editProduct = (
-    <Icon
-      className={styles.icon}
-      style={{ color: '#ffff', fontSize: '1.2rem' }}
-      icon={mopsusIcons.edit}
-      onClick={() => {
-        handleSetProductToEdit(product);
-      }}
-    />
+    <Tooltip title="Editar producto">
+      <Icon
+        className={styles.icon}
+        style={{ color: '#ffff', fontSize: '1.2rem' }}
+        icon={mopsusIcons.edit}
+        onClick={() => {
+          handleSetProductToEdit(product);
+        }}
+      />
+    </Tooltip>
   );
 
   const deleteProduct = (
-    <Icon
-      className={styles.icon}
-      style={{ color: '#ffff', fontSize: '1.2rem' }}
-      icon={mopsusIcons.trash}
-      onClick={() => {
-        deleteProductFromTable(product);
-      }}
-    />
+    <Tooltip title="Dar de baja producto">
+      <Icon
+        className={styles.icon}
+        style={{ color: '#ffff', fontSize: '1.2rem' }}
+        icon={mopsusIcons.trash}
+        onClick={() => {
+          deleteProductFromTable(product);
+        }}
+      />
+    </Tooltip>
   );
 
   const reactivateProduct = (
-    <Icon
-      className={styles.icon}
-      style={{ color: '#ffff', fontSize: '1.2rem' }}
-      icon={mopsusIcons.undo}
-      onClick={() => {
-        reactivateProductFromTable(product);
-      }}
-    />
+    <Tooltip title="Dar de alta producto">
+      <Icon
+        className={styles.icon}
+        style={{ color: '#ffff', fontSize: '1.2rem' }}
+        icon={mopsusIcons.undo}
+        onClick={() => {
+          reactivateProductFromTable(product);
+        }}
+      />
+    </Tooltip>
   );
 
   const options = (

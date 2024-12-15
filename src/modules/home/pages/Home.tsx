@@ -24,7 +24,17 @@ export const Home = () => {
     incomesAndSalesByHourByAppareances,
     incomesAndSalesByHourByMoney,
     forecastByProductByAppareances,
-    forecastByProductByMoney,
+    setLoadings,
+    setForecastByProductByAppareances,
+    setForecastByProductByMoney,
+    setIncomesAndSalesByHourByAppareances,
+    setIncomesAndSalesByHourByMoney,
+    setSalesForecastingByMoney,
+    setTopSalesByAppearances,
+    setTopSalesByMoney,
+    settotalSaleByCategoryAppearances,
+    settotalSaleByCategoryMoney,
+
     loadings,
   } = useContext(HomeContext);
 
@@ -39,6 +49,31 @@ export const Home = () => {
     getSalesAndIncomesForecast('money');
     getProductsForecast('appearances');
     getProductsForecast('money');
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      setLoadings({
+        totalSalesByMoney: true,
+        totalSalesByAppareances: true,
+        topSalesByMoney: true,
+        salesForecastByAppareances: true,
+        salesForecastByMoney: true,
+        salesAndIncomesForecastByMoney: true,
+        productsForecastByAppareances: true,
+        productsForecastByMoney: true,
+      });
+      setForecastByProductByAppareances(null);
+      setForecastByProductByMoney(null);
+      setIncomesAndSalesByHourByAppareances(null);
+      setIncomesAndSalesByHourByMoney(null);
+      setSalesForecastingByMoney(null);
+      setIncomesAndSalesByHourByAppareances(null);
+      setTopSalesByAppearances(null);
+      setTopSalesByMoney(null);
+      settotalSaleByCategoryAppearances(null);
+      settotalSaleByCategoryMoney(null);
+    };
   }, []);
 
   return (

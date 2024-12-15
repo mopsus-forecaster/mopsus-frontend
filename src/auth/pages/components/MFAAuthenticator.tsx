@@ -137,7 +137,9 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => {
+                setErrors('Código Incorrecto');
+              },
             },
             title: 'Código Incorrecto',
             message:
@@ -186,7 +188,9 @@ export const MFAAuthenticator = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => {},
+              action: () => {
+                setErrors('Código Incorrecto');
+              },
             },
             title: 'Código Incorrecto',
             message:

@@ -177,8 +177,7 @@ export const SalesProvider = ({ children }) => {
     }
   };
 
-  const deleteSaleFromTable = (index) => {
-    const saleToDelete = sales[index];
+  const deleteSaleFromTable = (saleToDelete) => {
     handleModalChange({
       accept: {
         title: 'Aceptar',
@@ -205,10 +204,11 @@ export const SalesProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `La venta n° "${formatId(saleToDelete.saleId)}" no pudo ser anulada`,
-              message: 'Lo sentimos, no pudimos concretar la operción. Intente más tarde',
+              message:
+                'Lo sentimos, no pudimos concretar la operción. Intente más tarde',
             });
             handleOpen();
           }
@@ -220,7 +220,7 @@ export const SalesProvider = ({ children }) => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { },
+              action: () => {},
             },
             title: 'Operación cancelada',
             message: 'No se realizaron cambios en las ventas.',
@@ -235,18 +235,15 @@ export const SalesProvider = ({ children }) => {
     handleOpen();
   };
 
-
   const formatId = (id) => {
     return id.length > 5 ? id.slice(0, 5) : id;
   };
 
-  const handleSetSaleToDetails = async (index = null) => {
-    if (!index && index !== 0) {
+  const handleSetSaleToDetails = async (saleDetails) => {
+    if (!saleDetails) {
       setSaleDetails(null);
       return;
     }
-
-    const saleDetails = sales[index];
 
     try {
       setShowLoading(true);
@@ -299,7 +296,7 @@ export const SalesProvider = ({ children }) => {
         formatId,
         totalCount,
         productAdjustment,
-        productPriceUnitary
+        productPriceUnitary,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import {
   salesAndIncmesForecastByHour,
   salesForecast,
@@ -210,6 +210,16 @@ export const HomeProvider = ({ children }) => {
         forecastByProductByAppareances,
         forecastByProductByMoney,
         loadings,
+        setLoadings,
+        setForecastByProductByAppareances,
+        setForecastByProductByMoney,
+        setIncomesAndSalesByHourByAppareances,
+        setIncomesAndSalesByHourByMoney,
+        setSalesForecastingByMoney,
+        setTopSalesByAppearances,
+        setTopSalesByMoney,
+        settotalSaleByCategoryAppearances,
+        settotalSaleByCategoryMoney,
       }}
     >
       {children}
