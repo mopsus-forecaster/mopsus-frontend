@@ -52,7 +52,11 @@ export const ModifyProduct = () => {
     totalCountCat,
     mappedCategory,
     mappedBrand,
-    setMappedUnits
+    setMappedUnits,
+    getCategory,
+    getBrand,
+    filtersBrand,
+    filtersCat
   } = useContext(SettingsContext)
 
   const [isCategories, setIsCategories] = useState(false)
@@ -399,12 +403,13 @@ export const ModifyProduct = () => {
               <TablelSelect
                 title={'Categorías'}
                 isLoading={isLoadingCat}
+                get={getCategory}
                 set={setMappedCategory}
                 totalPage={totalPagesCategory}
                 totalCount={totalCountCat}
                 setFilters={setFiltersCat}
                 rows={mappedCategory}
-                filter={() => { }}
+                filters={filtersCat}
                 select={categorySelect}
                 buscador={true}
               />
@@ -417,12 +422,13 @@ export const ModifyProduct = () => {
               <TablelSelect
                 title={'Marcas'}
                 isLoading={isLoadingBrand}
+                get={getBrand}
                 set={setMappedBrand}
                 totalPage={totalPagesBrand}
                 totalCount={totalCountBrand}
                 setFilters={setFiltersBrand}
                 rows={mappedBrand}
-                filter={() => { }}
+                filters={filtersBrand}
                 select={brandSelect}
                 buscador={true}
               />
@@ -433,12 +439,13 @@ export const ModifyProduct = () => {
               <TablelSelect
                 title={'Unidades'}
                 isLoading={isLoadingUnits}
+                get={() => { }}
                 set={setMappedUnits}
                 totalPage={totalPagesUnits}
                 totalCount={totalCountUnits}
                 setFilters={() => { }}
                 rows={unidades}
-                filter={() => { }}
+                filters={() => { }}
                 select={unitSelect}
                 buscador={false}
               />
@@ -446,7 +453,19 @@ export const ModifyProduct = () => {
           }
           {
             !(isCategories || isBrand || isUnits) && (
-              <div>Debe seleccionar alguna categoría, unidad o marca</div>
+              <TablelSelect
+                title={'Información sobre categorías, marcas y unidades'}
+                isLoading={null}
+                get={() => { }}
+                set={null}
+                totalPage={null}
+                totalCount={null}
+                setFilters={() => { }}
+                rows={mappedBrand}
+                filters={() => { }}
+                select={() => { }}
+                buscador={true}
+              />
             )
           }
         </section>

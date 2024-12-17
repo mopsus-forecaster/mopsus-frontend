@@ -10,7 +10,6 @@ export const MapInventoryTable = (income) => {
         formatId,
         formatDate
     } = useContext(InventoryContext);
-    console.log(income)
     const detailsIncome = (
         <Icon
             className={styles.icon}

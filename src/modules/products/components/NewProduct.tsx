@@ -29,7 +29,6 @@ interface FormData {
 }
 
 export const NewProduct = () => {
-  const { getProducts } = useContext(ProductsContext);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const { setShowLoading } = useContext(LoadingContext);
   const navigate = useNavigate()
@@ -69,7 +68,11 @@ export const NewProduct = () => {
     totalCountCat,
     mappedCategory,
     mappedBrand,
-    setMappedUnits
+    setMappedUnits,
+    filtersBrand,
+    filtersCat,
+    getCategories,
+    getBrand
   } = useContext(SettingsContext)
 
   const handleNavigation = () => {
@@ -80,8 +83,10 @@ export const NewProduct = () => {
       case 'S':
         navigate('/nueva-venta');
         break;
-      default:
-        getProducts();
+      case 'A':
+        navigate('/nuevo-ajuste');
+        break;
+      case 'P':
         navigate('/productos');
         break;
     }
@@ -94,7 +99,8 @@ export const NewProduct = () => {
     categorySelectName,
     brandSelectName,
     unitSelectName,
-    stateFrom
+    stateFrom,
+    setStateFrom
   } = useContext(ProductsContext)
   const [selectionError, setSelectionError] = useState('');
 
@@ -141,6 +147,7 @@ export const NewProduct = () => {
             action: () => {
               handleNavigation()
               handleNotSelectSetting();
+              setStateFrom('')
             },
           },
           title: 'Producto registrado con éxito',
@@ -155,7 +162,11 @@ export const NewProduct = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { handleNotSelectSetting() },
+              action: () => {
+                handleNotSelectSetting()
+                handleNavigation()
+                setStateFrom('')
+              },
             },
             title: 'Error en el registro',
             message: 'Ya existe un producto con dicho nombre.',
@@ -167,7 +178,10 @@ export const NewProduct = () => {
           handleModalChange({
             accept: {
               title: 'Aceptar',
-              action: () => { handleNotSelectSetting() },
+              action: () => {
+                handleNotSelectSetting()
+                setStateFrom('')
+              },
             },
             title: 'Error técnico',
             message:
@@ -176,6 +190,8 @@ export const NewProduct = () => {
           });
           handleOpen();
           handleNotSelectSetting();
+          handleNavigation()
+          setStateFrom('')
           break;
       }
     }
@@ -183,7 +199,7 @@ export const NewProduct = () => {
   const handleCloseNewProduct = (e) => {
     e.preventDefault();
     handleNotSelectSetting()
-    navigate('/productos')
+    handleNavigation()
   }
 
   const handleCategories = () => {
@@ -392,12 +408,13 @@ export const NewProduct = () => {
               <TablelSelect
                 title={'Categorías'}
                 isLoading={isLoadingCat}
+                get={getCategories}
                 set={setMappedCategory}
                 totalPage={totalPagesCategory}
                 totalCount={totalCountCat}
                 setFilters={setFiltersCat}
                 rows={mappedCategory}
-                filter={() => { }}
+                filters={filtersCat}
                 select={categorySelect}
                 buscador={true}
               />
@@ -410,12 +427,13 @@ export const NewProduct = () => {
               <TablelSelect
                 title={'Marcas'}
                 isLoading={isLoadingBrand}
+                get={getBrand}
                 set={setMappedBrand}
                 totalPage={totalPagesBrand}
                 totalCount={totalCountBrand}
                 setFilters={setFiltersBrand}
                 rows={mappedBrand}
-                filter={() => { }}
+                filters={filtersBrand}
                 select={brandSelect}
                 buscador={true}
               />
@@ -426,12 +444,13 @@ export const NewProduct = () => {
               <TablelSelect
                 title={'Unidades'}
                 isLoading={isLoadingUnits}
+                get={() => { }}
                 set={setMappedUnits}
                 totalPage={totalPagesUnits}
                 totalCount={totalCountUnits}
                 setFilters={() => { }}
                 rows={unidades}
-                filter={() => { }}
+                filters={() => { }}
                 select={unitSelect}
                 buscador={false}
               />
@@ -442,12 +461,13 @@ export const NewProduct = () => {
               <TablelSelect
                 title={'Información sobre categorías, marcas y unidades'}
                 isLoading={null}
+                get={() => { }}
                 set={null}
                 totalPage={null}
                 totalCount={null}
                 setFilters={() => { }}
                 rows={mappedBrand}
-                filter={() => { }}
+                filters={() => { }}
                 select={() => { }}
                 buscador={true}
               />

@@ -6,14 +6,15 @@ import { SaleContext } from '../../../contexts/Sales/SalesContext';
 import { InventoryContext } from '../../../contexts/Inventory/InventoryContext';
 
 export const RowInventorySummary = ({ product }) => {
-    const { productName, category, measureUnitDescription, id } = product;
+    const { productName, measureUnitDescription, id, brand, barcode, quantity, priceUnitary } = product;
     const { removeProductFromSale, productQuantity } = useContext(SaleContext)
     const { productPriceUnitary } = useContext(InventoryContext)
     return (
         <>
             <tr className={styles.row}>
                 <td className={styles.productName}>{productName}
-                    <p className={styles.productCategory}>Categoría: {category}</p>
+                    <p className={styles.productCategory}>Marca: {brand}</p>
+                    <p className={styles.productCategory}><Icon fontSize={20} icon={mopsusIcons.barcode} />&nbsp;&nbsp;{barcode}</p>
                 </td>
 
                 <td className={styles.category}>{measureUnitDescription}</td>
@@ -21,7 +22,7 @@ export const RowInventorySummary = ({ product }) => {
                     <input type="number"
                         className={styles.inputQuantity}
                         min={1}
-                        defaultValue={1}
+                        defaultValue={quantity}
                         onChange={(e) => productQuantity(id, e.target.value)}
                         onKeyDown={(e) => {
                             if (e.key === '-' || e.key === 'e') {
@@ -35,6 +36,7 @@ export const RowInventorySummary = ({ product }) => {
                         type="number"
                         name="priceUnitary"
                         className={styles.inputQuantity}
+                        defaultValue={priceUnitary}
                         onKeyDown={(e) => {
                             if (e.key === '-' || e.key === 'e') {
                                 e.preventDefault();

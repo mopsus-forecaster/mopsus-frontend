@@ -16,6 +16,7 @@ import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable';
 import { MapInventoryTable } from '../utils/inventory-table-mapper';
 import { AuthContext } from '../../../contexts';
 import { ROLES_ENUM } from '../../../router/PrivateRoutes';
+import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 
 
 export const Inventory = () => {
@@ -41,6 +42,10 @@ export const Inventory = () => {
     setFilters,
     totalIncomes,
   } = useContext(InventoryContext);
+
+  const {
+    setStateFrom
+  } = useContext(ProductsContext)
 
   const inventoryTableColums = [
     {
@@ -74,6 +79,17 @@ export const Inventory = () => {
       sort: false,
     },
   ];
+
+  const handleInventory = () => {
+    navigate('/nuevo-ingreso')
+    setStateFrom('I')
+  }
+
+  const handleAjuste = () => {
+    navigate('/nuevo-ajuste')
+    setStateFrom('A')
+  }
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (!firstLoad) {
@@ -127,7 +143,7 @@ export const Inventory = () => {
           {auth.roles.includes(ROLES_ENUM.admin) && (
             <button
               className={styles.buttonAdd}
-              onClick={() => navigate('/nuevo-ajuste')}
+              onClick={handleAjuste}
             >
               Agregar Ajuste
             </button>
@@ -135,7 +151,7 @@ export const Inventory = () => {
 
           <button
             className={styles.buttonAdd}
-            onClick={() => navigate('/nuevo-ingreso')}
+            onClick={handleInventory}
           >
             Agregar inventario
           </button>

@@ -30,8 +30,11 @@ export const ProductsPage = () => {
     goToPreviousPage,
     goToNextPage,
     totalCount,
+    setStateFrom,
+    stateFrom
   } = useContext(ProductsContext);
 
+  console.log(stateFrom)
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [search, setSearch] = useState('');
@@ -48,6 +51,7 @@ export const ProductsPage = () => {
 
   const handleNewProduct = (e) => {
     e.preventDefault();
+    setStateFrom('P')
     navigate('/nuevo-producto')
   };
 
@@ -146,7 +150,7 @@ export const ProductsPage = () => {
         </div>
         <div className={styles.btnContainerProd}>
           <button className={`${styles.buttonAdd} `} onClick={handleNewProduct}>
-            Agregar producto
+            Registrar producto
           </button>
           <button className={` ${styles.buttonAdd} `} onClick={handleOpenUpdatePrice}>
             Actualizar precios

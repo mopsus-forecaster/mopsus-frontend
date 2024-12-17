@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { MopsusTable } from '../../../shared/mopsusTable/MopsusTable'
 import styles from '../styles/styles.module.scss'
 import { NewOption } from './NewOption';
-import { SettingsContext } from '../../../contexts/settings/SettingsContext';
+import { INITIAL_FILTERS, SettingsContext } from '../../../contexts/settings/SettingsContext';
 import { mopsusIcons } from '../../../icons';
 import { Filter } from '../../../shared/filter/Filter';
 import { FilterSettings } from './FilterSettings';
@@ -116,9 +116,8 @@ export const TableSettings = ({ rows, title, optionsTableColumns, isLoading, set
                         setIsOpenFilter(false);
                     }}
                     onDeleteFilters={() => {
-                        setFilters();
-                        get();
                         setIsOpenFilter(false);
+                        get(INITIAL_FILTERS);
                     }}
                 >
                     <FilterSettings filters={filter} setFilters={setFilters} />

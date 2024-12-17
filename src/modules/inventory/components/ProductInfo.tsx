@@ -6,7 +6,6 @@ import { SaleContext } from '../../../contexts/Sales/SalesContext';
 
 export const ProductInfo = ({ producto }) => {
     const { productName, price, measureUnitDescription, stock, brand, barcode } = producto;
-    console.log(producto)
     const { addProductToSale } = useContext(SaleContext)
 
 
