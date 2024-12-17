@@ -9,7 +9,6 @@ export const MapNewProductTables = (title, settings, select) => {
     handleSelectSetting,
     handleNotSelectSetting
   } = useContext(ProductsContext);
-  console.log(select)
   const addSetting = (
     <Icon
       className={styles.icon}

@@ -116,12 +116,12 @@ export const SettingsProvider = ({ children }) => {
   };
 
   const goToLastPage = (totalPages, filters, setFilters, get) => {
-    if (totalPages.current !== null) {
+    if (totalPages !== null) {
       setFilters((prevFilters) => ({
         ...prevFilters,
-        page: totalPages.current,
+        page: totalPages,
       }));
-      get({ ...filters, page: totalPages.current });
+      get({ ...filters, page: totalPages });
     }
   };
 

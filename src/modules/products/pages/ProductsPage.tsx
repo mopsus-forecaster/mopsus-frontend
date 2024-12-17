@@ -30,6 +30,7 @@ export const ProductsPage = () => {
     goToPreviousPage,
     goToNextPage,
     totalCount,
+    setStateForm
   } = useContext(ProductsContext);
 
   const [isOpenFilter, setIsOpenFilter] = useState(false);
@@ -146,7 +147,7 @@ export const ProductsPage = () => {
         </div>
         <div className={styles.btnContainerProd}>
           <button className={`${styles.buttonAdd} `} onClick={handleNewProduct}>
-            Agregar producto
+            Registrar producto
           </button>
           <button className={` ${styles.buttonAdd} `} onClick={handleOpenUpdatePrice}>
             Actualizar precios

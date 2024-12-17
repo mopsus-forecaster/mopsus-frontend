@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { SettingsContext } from "../../../contexts/settings/SettingsContext";
 import { MapNewProductTables } from "../utils/newproduct-table-mapper";
 
-export const TablelSelect = ({ setFilters, isLoading, rows, set, totalPage, totalCount, filter, title, select, buscador }) => {
+export const TablelSelect = ({ setFilters, isLoading, rows, set, totalPage, totalCount, filters, title, select, buscador, get }) => {
     const optionsTableColumns = [
         {
             text: 'Nombre',
@@ -84,14 +84,14 @@ export const TablelSelect = ({ setFilters, isLoading, rows, set, totalPage, tota
             <div className={styles.tabla}>
                 <MopsusTable
                     columns={optionsTableColumns}
-                    goToFirstPage={() => { goToFirstPage(filter, setFilters) }}
-                    goToLastPage={() => { goToLastPage(totalPage, filter, setFilters) }}
-                    goToNextPage={() => { goToNextPage(totalPage, filter, setFilters) }}
-                    goToPreviousPage={() => { goToPreviousPage(filter, setFilters) }}
+                    goToFirstPage={() => { goToFirstPage(filters, setFilters, get) }}
+                    goToLastPage={() => { goToLastPage(totalPage, filters, setFilters, get) }}
+                    goToNextPage={() => { goToNextPage(totalPage, filters, setFilters, get) }}
+                    goToPreviousPage={() => { goToPreviousPage(filters, setFilters, get) }}
                     includeOptions={false}
                     includePagination={true}
                     isLoading={isLoading}
-                    page={filter.page}
+                    page={filters.page}
                     rows={rows.map((settings) => MapNewProductTables(title, settings, select))}
                     setRows={set}
                     totalPages={totalPage}

@@ -92,6 +92,7 @@ export const ProductsProvider = ({ children }) => {
           brandId: product.id_brand,
           brand: product.brand,
           barcode: product.barcode,
+          is_income: product.is_income,
         }));
         if (total_count) {
           setTotalCount(total_count);

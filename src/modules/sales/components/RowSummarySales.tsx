@@ -6,15 +6,17 @@ import { useContext } from 'react';
 import { SaleContext } from '../../../contexts/Sales/SalesContext';
 
 export const RowSummarySales = ({ product }) => {
-    const { productName, price, category, quantity } = product;
-    const { increaseProductQuantity, decreaseProductQuantity, removeProductFromSale, productQuantity } = useContext(SaleContext)
+    const { productName, price, quantity, brand, measureUnitDescription } = product;
+    const { removeProductFromSale, productQuantity } = useContext(SaleContext)
     const subtotal = price * quantity;
+
 
     return (
         <>
             <tr className={styles.row}>
                 <td className={styles.category}>{productName}
-                    <p className={styles.productCategory}>Categoría: {category}</p>
+                    <p className={styles.productCategory}>Marca: {brand}</p>
+                    <p className={styles.productCategory}>Unidad: {measureUnitDescription}</p>
                 </td>
 
                 <td className={styles.category}>$ {price}</td>
@@ -23,7 +25,7 @@ export const RowSummarySales = ({ product }) => {
                         type="number"
                         className={stylesInventory.inputQuantity}
                         min={1}
-                        defaultValue={1}
+                        defaultValue={quantity}
                         onKeyDown={(e) => {
                             if (e.key === '-' || e.key === 'e') {
                                 e.preventDefault();

@@ -194,7 +194,7 @@ export const UpdatePrice = ({ brand = [], category = [], setIsOpenUpdate }) => {
 
                     <div className={styles.formGroup}>
                         <label htmlFor="isIncrease" className={styles.modalLabel}>
-                            Tipo de cambio
+                            Tipo de actualización
                         </label>
                         <select
                             name="isIncrease"

@@ -6,9 +6,10 @@ import { SaleContext } from '../../../contexts/Sales/SalesContext';
 import { InventoryContext } from '../../../contexts/Inventory/InventoryContext';
 
 export const RowAdjustmentSummary = ({ product }) => {
-  const { productName, category, measureUnitDescription, id, barcode } = product;
+  const { productName, category, measureUnitDescription, id, quantity, is_income } = product;
   const { removeProductFromSale, productQuantity, productAdjustment } =
     useContext(SaleContext);
+
   return (
     <>
       <tr className={styles.row}>
@@ -37,13 +38,14 @@ export const RowAdjustmentSummary = ({ product }) => {
             }}
             className={styles.inputQuantity}
             min={1}
-            defaultValue={1}
+            defaultValue={quantity}
             onChange={(e) => productQuantity(id, e.target.value)}
           />
         </td>
         <td className={styles.category}>
           <select
             className={styles.selectFilterAdjustment}
+            defaultValue={is_income}
             onChange={(e) => productAdjustment(id, e.target.value)}
           >
             <option value="">Seleccione una opcion</option>

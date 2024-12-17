@@ -6,14 +6,12 @@ import { CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export const ProductFind = () => {
-    const { mappedProducts, isLoading, setStateFrom, stateFrom } = useContext(ProductsContext);
+    const { mappedProducts, isLoading } = useContext(ProductsContext);
 
     const navigate = useNavigate()
 
     const handleNewProduct = () => {
         navigate('/nuevo-producto')
-        setStateFrom('I')
-        console.log('estado', stateFrom)
     }
     return (
         <div className={styles.box}>

@@ -8,7 +8,7 @@ export const MapSalesTable = (
   deleteSaleFromTable,
   handleSetSaleToDetails
 ) => {
-  console.log(sale);
+
   const deleteSale = (
     <Tooltip title="Anular venta">
       <Icon
