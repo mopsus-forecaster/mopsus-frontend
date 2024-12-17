@@ -79,46 +79,47 @@ export const Body = ({
           </TableCell>
         </TableRow>
       ) : rows && rows.length > 0 ? (
-        stableSort(rows, getComparator(orderDirection, valueToOrderBy)).map(
-          (row, index) => (
-            <TableRow key={index}>
-              {columns.map((column) => (
-                <TableCell
-                  sx={{
-                    border: 'none',
-                    color: '#ffff',
-                    fontFamily: 'Montserrat',
-                  }}
-                  align="center"
-                  key={column.value}
-                >
-                  {includeOptions && column.value === 'options' ? (
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: '1rem',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      {options.map((option) => (
-                        <Icon
-                          className={styles.icon}
-                          style={{ color: '#ffff', fontSize: '1.2rem' }}
-                          icon={option.icon}
-                          onClick={() => option.onClick(index)}
-                        />
-                      ))}
-                    </div>
-                  ) : actions === true && column.value === 'actions' ? (
-                    <ActionsVert options={row['actions']} />
-                  ) : (
-                    row[column.value]
-                  )}
-                </TableCell>
-              ))}
-            </TableRow>
-          )
-        )
+        stableSort(
+          rows,
+          getComparator(orderDirection, valueToOrderBy as never)
+        ).map((row, index) => (
+          <TableRow key={index}>
+            {columns.map((column) => (
+              <TableCell
+                sx={{
+                  border: 'none',
+                  color: '#ffff',
+                  fontFamily: 'Montserrat',
+                }}
+                align="center"
+                key={column.value}
+              >
+                {includeOptions && column.value === 'options' ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: '1rem',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {options.map((option) => (
+                      <Icon
+                        className={styles.icon}
+                        style={{ color: '#ffff', fontSize: '1.2rem' }}
+                        icon={option.icon}
+                        onClick={() => option.onClick(index)}
+                      />
+                    ))}
+                  </div>
+                ) : actions === true && column.value === 'actions' ? (
+                  <ActionsVert options={row['actions']} />
+                ) : (
+                  row[column.value]
+                )}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))
       ) : (
         <TableRow>
           <TableCell

@@ -1,6 +1,13 @@
 import { createContext, useContext, useState } from 'react';
 import { _descriptors } from 'chart.js/helpers';
-import { deleteBrand, deleteCategory, getBrands, getCategories, onEditCat, reactivateBrand, reactivateCat } from '../../services/settings';
+import {
+  deleteBrand,
+  deleteCategory,
+  getBrands,
+  getCategories,
+  reactivateBrand,
+  reactivateCat,
+} from '../../services/settings';
 import { mopsusIcons } from '../../icons';
 import { ModalContext } from '../modal/ModalContext';
 import { LoadingContext } from '../loading/LoadingContext';
@@ -12,11 +19,11 @@ export const INITIAL_FILTERS = {
   description: '',
   is_active: true,
   page: 1,
-}
+};
 export const SettingsProvider = ({ children }) => {
   const [firstLoad, setFirstLoad] = useState(true);
-  const [mappedCategory, setMappedCategory] = useState([])
-  const [mappedBrand, setMappedBrand] = useState([])
+  const [mappedCategory, setMappedCategory] = useState([]);
+  const [mappedBrand, setMappedBrand] = useState([]);
   const [filtersCat, setFiltersCat] = useState(INITIAL_FILTERS);
   const [filtersBrand, setFiltersBrand] = useState(INITIAL_FILTERS);
   const [isLoadingCat, setIsLoadingCat] = useState(false);
@@ -26,11 +33,10 @@ export const SettingsProvider = ({ children }) => {
   const [totalCountCat, setTotalCountCat] = useState(null);
   const [totalCountBrand, setTotalCountBrand] = useState(null);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
-  const [editOptionCat, setEditOptionCat] = useState(null)
-  const [editOptionBrand, setEditOptionBrand] = useState(null)
+  const [editOptionCat, setEditOptionCat] = useState(null);
+  const [editOptionBrand, setEditOptionBrand] = useState(null);
   const { setShowLoading } = useContext(LoadingContext);
-  const [mappedUnits, setMappedUnits] = useState([])
-
+  const [mappedUnits, setMappedUnits] = useState([]);
 
   const getCategory = async (customFilters?) => {
     try {
@@ -48,12 +54,11 @@ export const SettingsProvider = ({ children }) => {
         if (total_count) {
           setTotalCountCat(total_count);
         }
-        setTotalPagesCategory(total_pages)
+        setTotalPagesCategory(total_pages);
         setMappedCategory(mapped);
       }
-
     } catch ({ errors }) {
-      console.error('error' + errors)
+      console.error('error' + errors);
     } finally {
       setIsLoadingCat(false);
     }
@@ -62,7 +67,9 @@ export const SettingsProvider = ({ children }) => {
   const getBrand = async (customFilters?) => {
     try {
       setIsLoadingBrand(true);
-      const { marcas, total_pages, total_count } = await getBrands(customFilters ? customFilters : filtersBrand);
+      const { marcas, total_pages, total_count } = await getBrands(
+        customFilters ? customFilters : filtersBrand
+      );
 
       if (marcas) {
         const mapped = marcas.map((marca) => ({
@@ -74,16 +81,15 @@ export const SettingsProvider = ({ children }) => {
         if (total_count) {
           setTotalCountBrand(total_count);
         }
-        setTotalPagesBrand(total_pages)
+        setTotalPagesBrand(total_pages);
         setMappedBrand(mapped);
       }
-
     } catch ({ errors }) {
-      console.error('error' + errors)
+      console.error('error' + errors);
     } finally {
       setIsLoadingBrand(false);
     }
-  }
+  };
 
   const goToNextPage = (totalPages, filters, setFilters, get) => {
     const nextPage =
@@ -169,7 +175,7 @@ export const SettingsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${optionToDelete.name}" no pudo darse de baja`,
               message:
@@ -204,8 +210,7 @@ export const SettingsProvider = ({ children }) => {
                   },
                 },
                 title: `"${optionToDelete.name}" dado de baja exitosamente`,
-                message:
-                  'Puede restaurar la marca desde la tabla de marcas.',
+                message: 'Puede restaurar la marca desde la tabla de marcas.',
               });
               handleOpen();
             }
@@ -214,7 +219,7 @@ export const SettingsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${optionToDelete.name}" no pudo darse de baja`,
               message:
@@ -230,7 +235,6 @@ export const SettingsProvider = ({ children }) => {
     });
     handleOpen();
   };
-
 
   const reactivateSettingFromTableCat = (settingToReactivate) => {
     handleModalChange({
@@ -260,7 +264,7 @@ export const SettingsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${settingToReactivate.name}" no pudo darse de alta`,
               message:
@@ -276,7 +280,6 @@ export const SettingsProvider = ({ children }) => {
     });
     handleOpen();
   };
-
 
   const reactivateSettingFromTableBrand = (settingToReactivate) => {
     handleModalChange({
@@ -296,8 +299,7 @@ export const SettingsProvider = ({ children }) => {
                   },
                 },
                 title: `"${settingToReactivate.name}" dado de alta exitosamente`,
-                message:
-                  'Puede consultar la marca desde la tabla de marcas.',
+                message: 'Puede consultar la marca desde la tabla de marcas.',
               });
               handleOpen();
             }
@@ -306,7 +308,7 @@ export const SettingsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${settingToReactivate.name}" no pudo darse de alta`,
               message:

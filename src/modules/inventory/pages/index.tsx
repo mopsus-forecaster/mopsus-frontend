@@ -36,8 +36,6 @@ export const Inventory = () => {
     incomes,
     setIncomes,
     getPaginatedInventory,
-    handleSetIncomeToEdit,
-    deleteIncomeFromTable,
     setFilters,
     totalIncomes,
   } = useContext(InventoryContext);

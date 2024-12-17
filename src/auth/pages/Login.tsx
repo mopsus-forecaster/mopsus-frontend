@@ -42,7 +42,6 @@ const validateForm = (form: FormData) => {
 export const Login = () => {
   const {
     login,
-    comesFrom,
     handleSetRecoverEmail,
     handlesetPrevRoute,
     setCurrentMfaFlow,

@@ -4,7 +4,6 @@ import {
   getAllProducts,
   getProductsAllAll,
   reactivateProduct,
-  updatePrice,
 } from '../../services/products';
 import { ModalContext } from '../modal/ModalContext';
 import { mopsusIcons } from '../../icons';
@@ -39,12 +38,9 @@ export const ProductsProvider = ({ children }) => {
   const [brandSelect, setBrandSelect] = useState(null);
   const [unitSelectName, setUnitSelectName] = useState(null);
   const [unitSelect, setUnitSelect] = useState(null);
-  const [stateFrom, setStateFrom] = useState('')
-  const navigate = useNavigate()
-  const {
-    getCategory,
-    getBrand
-  } = useContext(SettingsContext)
+  const [stateFrom, setStateFrom] = useState('');
+  const navigate = useNavigate();
+  const { getCategory, getBrand } = useContext(SettingsContext);
 
   const handleSelectSetting = async (title, settings) => {
     if (title === 'Categorías') {
@@ -64,13 +60,13 @@ export const ProductsProvider = ({ children }) => {
   };
 
   const handleNotSelectSetting = async () => {
-    setCategorySelect(null)
-    setCategorySelectName(null)
-    setBrandSelectName(null)
-    setBrandSelect(null)
-    setUnitSelectName(null)
-    setUnitSelect(null)
-  }
+    setCategorySelect(null);
+    setCategorySelectName(null);
+    setBrandSelectName(null);
+    setBrandSelect(null);
+    setUnitSelectName(null);
+    setUnitSelect(null);
+  };
   const getProducts = async (customFilters?) => {
     try {
       setIsLoading(true);
@@ -141,7 +137,7 @@ export const ProductsProvider = ({ children }) => {
           brand: product.brand,
           brandId: product.id_brand,
           state: product.is_active ? 'Activo' : 'Inactivo',
-          barcode: product.barcode
+          barcode: product.barcode,
         }));
         setMappedProducts(mapped);
       }
@@ -235,7 +231,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${productToDelete.productName}" no pudo darse de baja`,
               message:
@@ -280,7 +276,7 @@ export const ProductsProvider = ({ children }) => {
             handleModalChange({
               accept: {
                 title: 'Aceptar',
-                action: () => { },
+                action: () => {},
               },
               title: `"${productToReactivate.productName}" no pudo darse de alta`,
               message:
@@ -296,7 +292,6 @@ export const ProductsProvider = ({ children }) => {
     });
     handleOpen();
   };
-
 
   return (
     <ProductsContext.Provider
@@ -328,7 +323,7 @@ export const ProductsProvider = ({ children }) => {
         unitSelectName,
         setEditProduct,
         setStateFrom,
-        stateFrom
+        stateFrom,
       }}
     >
       {children}

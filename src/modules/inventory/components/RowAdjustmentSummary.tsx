@@ -3,10 +3,16 @@ import { Icon } from '@iconify/react/dist/iconify.cjs';
 import { mopsusIcons } from '../../../icons';
 import { useContext } from 'react';
 import { SaleContext } from '../../../contexts/Sales/SalesContext';
-import { InventoryContext } from '../../../contexts/Inventory/InventoryContext';
 
 export const RowAdjustmentSummary = ({ product }) => {
-  const { productName, category, measureUnitDescription, id, quantity, is_income } = product;
+  const {
+    productName,
+    category,
+    measureUnitDescription,
+    id,
+    quantity,
+    is_income,
+  } = product;
   const { removeProductFromSale, productQuantity, productAdjustment } =
     useContext(SaleContext);
 
@@ -14,13 +20,12 @@ export const RowAdjustmentSummary = ({ product }) => {
     <>
       <tr className={styles.row}>
         <td className={styles.productName}>
-          <div>
-            {productName}
-          </div>
+          <div>{productName}</div>
           <div>
             {product.barcode && (
               <p className={styles.tdDetailsCate}>
-                <Icon fontSize={20} icon={mopsusIcons.barcode} /> {product.barcode}
+                <Icon fontSize={20} icon={mopsusIcons.barcode} />{' '}
+                {product.barcode}
               </p>
             )}
           </div>
