@@ -30,9 +30,11 @@ export const ProductsPage = () => {
     goToPreviousPage,
     goToNextPage,
     totalCount,
-    setStateForm
+    setStateFrom,
+    stateFrom
   } = useContext(ProductsContext);
 
+  console.log(stateFrom)
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [search, setSearch] = useState('');
@@ -49,6 +51,7 @@ export const ProductsPage = () => {
 
   const handleNewProduct = (e) => {
     e.preventDefault();
+    setStateFrom('P')
     navigate('/nuevo-producto')
   };
 

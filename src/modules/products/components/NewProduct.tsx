@@ -29,7 +29,6 @@ interface FormData {
 }
 
 export const NewProduct = () => {
-  const { setStateFrom } = useContext(ProductsContext);
   const { handleOpen, handleModalChange } = useContext(ModalContext);
   const { setShowLoading } = useContext(LoadingContext);
   const navigate = useNavigate()
@@ -100,7 +99,8 @@ export const NewProduct = () => {
     categorySelectName,
     brandSelectName,
     unitSelectName,
-    stateFrom
+    stateFrom,
+    setStateFrom
   } = useContext(ProductsContext)
   const [selectionError, setSelectionError] = useState('');
 
@@ -199,7 +199,7 @@ export const NewProduct = () => {
   const handleCloseNewProduct = (e) => {
     e.preventDefault();
     handleNotSelectSetting()
-    navigate('/productos')
+    handleNavigation()
   }
 
   const handleCategories = () => {
