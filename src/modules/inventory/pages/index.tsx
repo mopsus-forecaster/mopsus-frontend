@@ -18,7 +18,6 @@ import { AuthContext } from '../../../contexts';
 import { ROLES_ENUM } from '../../../router/PrivateRoutes';
 import { ProductsContext } from '../../../contexts/Products/ProductsContext';
 
-
 export const Inventory = () => {
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [search, setSearch] = useState(null);
@@ -43,9 +42,7 @@ export const Inventory = () => {
     totalIncomes,
   } = useContext(InventoryContext);
 
-  const {
-    setStateFrom
-  } = useContext(ProductsContext)
+  const { setStateFrom } = useContext(ProductsContext);
 
   const inventoryTableColums = [
     {
@@ -81,14 +78,14 @@ export const Inventory = () => {
   ];
 
   const handleInventory = () => {
-    navigate('/nuevo-ingreso')
-    setStateFrom('I')
-  }
+    navigate('/nuevo-ingreso');
+    setStateFrom('I');
+  };
 
   const handleAjuste = () => {
-    navigate('/nuevo-ajuste')
-    setStateFrom('A')
-  }
+    navigate('/nuevo-ajuste');
+    setStateFrom('A');
+  };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -119,7 +116,7 @@ export const Inventory = () => {
   return (
     <Box>
       <header className={`${styles.header}`}>
-        <h1 className={`${styles.title}`}>Inventario</h1>
+        <h1 className={`${styles.title}`}>Stock</h1>
       </header>
 
       <section className={styles.tableActionsContainer}>
@@ -141,19 +138,13 @@ export const Inventory = () => {
         </div>
         <div className={styles.btnContainerPage}>
           {auth.roles.includes(ROLES_ENUM.admin) && (
-            <button
-              className={styles.buttonAdd}
-              onClick={handleAjuste}
-            >
+            <button className={styles.buttonAdd} onClick={handleAjuste}>
               Agregar Ajuste
             </button>
           )}
 
-          <button
-            className={styles.buttonAdd}
-            onClick={handleInventory}
-          >
-            Agregar inventario
+          <button className={styles.buttonAdd} onClick={handleInventory}>
+            Registrar Ingreso
           </button>
         </div>
       </section>
@@ -161,7 +152,7 @@ export const Inventory = () => {
         <section className={styles.boxInventory}>
           <header>
             <div className={styles.contentBoxInventory}>
-              <p className={styles.titleBoxInventory}>Ingresos/Egresos</p>
+              <p className={styles.titleBoxInventory}>Ingresos/Ajustes</p>
               <hr className={styles.line2} />
             </div>
           </header>

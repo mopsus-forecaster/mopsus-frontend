@@ -1,13 +1,11 @@
-import { mopsusIcons } from '../../../icons'
-import styles from '../../sales/styles/sales.module.scss'
-import { Icon } from '@iconify/react/dist/iconify.js'
+import { mopsusIcons } from '../../../icons';
+import styles from '../../sales/styles/sales.module.scss';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
 export const InventoryFilter = ({ filters, setFilters }) => {
-
   return (
     <>
       <form className={styles.formFilter}>
-
         <div className={styles.formGroup}>
           <label htmlFor="start_date" className={styles.modalLabel}>
             Fecha
@@ -44,7 +42,7 @@ export const InventoryFilter = ({ filters, setFilters }) => {
 
         <div className={styles.formGroup}>
           <label htmlFor="is_adjustment" className={styles.modalLabel}>
-            Ajustes
+            Tipo
           </label>
           <select
             id="is_adjustment"
@@ -89,5 +87,5 @@ export const InventoryFilter = ({ filters, setFilters }) => {
         </div>
       </form>
     </>
-  )
-}
+  );
+};
